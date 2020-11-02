@@ -1,0 +1,68 @@
+body{
+	display: flex;
+	flex-direction: column;
+	padding: 0px;
+	margin: 0px;
+}
+nav{
+	display: flex;
+	width: 100%;
+	background-color: #303036;
+	margin: 0px;
+	padding-left: 40px;
+	justify-content: flex-start;
+	border-bottom: 2px solid grey;
+}
+nav *{
+  	background-color: #303036;
+  	color: white;
+	text-decoration: none;
+	font-size: 24px;
+	line-height: 28px;
+	height: 30px;
+	display: block;
+	padding: 10px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+nav *:hover{
+	background-color: #0c0c0d;
+}
+#main_container{
+	display: flex;
+	width: 100%;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-content: stretch;
+	height: auto;
+}
+
+#left_bar, #right_bar{
+	width: 250px;
+	display: block;
+	background-color: green;
+}
+
+#center{
+	flex-grow: 1;
+	display: block;
+	background-color: red;
+	box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.26);
+}
+
+table{
+	color: red;
+	width: 50%;
+	border-collapse: collapse; 
+	box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.26);
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 50px;
+}
+
+tr:nth-child(odd) td:nth-child(odd),tr:nth-child(even) td:nth-child(even)  {
+  background: white;
+}
+tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
+  background: black;
+}
