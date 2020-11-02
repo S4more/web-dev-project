@@ -32,17 +32,6 @@ nav *:hover{
 	border-bottom: 2px solid grey;
 	height:38px;
 }
-
-#left{
-	grid-column-start: 1;
-	grid-column-end: 2;
-}
-#right{
-	grid-column-start: 3;
-	grid-column-end: 4;
-	background-color: green;
-}
-
 #center{
 	grid-column-start: 2;
 	grid-column-end: 3;
