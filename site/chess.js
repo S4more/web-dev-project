@@ -35,7 +35,7 @@ function square(cords){
     this.elem = document.createElement("TD");
     this.piece = null;
     this.cords = cords;
-    this.elem.innerHTML = this.cords;
+    this.elem.innerHTML = getRandPiece();
     this.clicked = function(){
     }
 }
@@ -44,7 +44,6 @@ function toAB(x, y){
     var code = "";
     code += (String.fromCharCode(x + 97));
     code += (y+1);
-    console.log(code);
     return code;
 }
 
@@ -72,6 +71,24 @@ function getCharCode(color, piece){
         if(piece == "PAWN")return "&#9823";
     }
 }
+
+function getRandPiece(){
+    var pieces = 
+    ["&#9812",
+    "&#9813",
+    "&#9814",
+    "&#9815",
+    "&#9816",
+    "&#9817",
+    "&#9818",
+    "&#9819",
+    "&#9820",
+    "&#9821",
+    "&#9822",
+    "&#9823"]
+    return pieces[Math.floor(Math.random()*pieces.length)];
+}
+
 
 myBoard = new chessBoard();
 myBoard.initalize();
