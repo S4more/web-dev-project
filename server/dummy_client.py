@@ -26,5 +26,3 @@ class Network:
 
 if __name__ == '__main__':
     n = Network()
-    print(n.send("I'm alive!"))
-    print(n.send("hello world"))
