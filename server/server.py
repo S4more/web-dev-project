@@ -31,13 +31,14 @@ class Server:
         return message
 
     def threaded_connection_killer(self, conn):
-        conn.send(str.encode("success"))
         try:
-            data = conn.recv(1024).decode()
+            data = conn.recv(2048).decode()
+            data = data.split("\n")[0].split("?" #Get arguments from post request
             if data:
-                print("received: ", data)
-        except:
-            print("?")
+                )
+               # print("received: ", data)
+        except Exception as e:
+            print(e)
         print("closing connection!")
         conn.close()
 
