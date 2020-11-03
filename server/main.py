@@ -1,6 +1,6 @@
 import socket
 from _thread import start_new_thread
-import sys
+import sys, traceback
 
 #Simple Socket server for chess web-admin project.
 #
@@ -19,38 +19,65 @@ class Server:
 
         self.s.listen(2)
 
-    def threaded_client_handler(self, conn):
-        conn.send(str.encode("Connected successfuly"))
-        while True:
-            try:
-                data = conn.recv(2048)
-                reply = "message received"
-                
-                #If there's no answer, close the connection.
-                if not data:
-                    break
+    def client_handler(self, conn, addr):
+        if addr[0] not in self.matches:
+            #Each IP will be associated with a Player object.
+            #And ideally with a chess board object as well.
+            self.matches[addr[0]] = "Dummy Object" 
+            message = "0"
+        else:
+            message = "1"
 
-                else:
-                    print(f"Received: {reply}")
+        return message
 
-                conn.sendall(str.encode(reply))
-            except:
-                break
-
-        print("Connection lost.")
+    def threaded_connection_killer(self, conn):
+        conn.send(str.encode("success"))
+        try:
+            data = conn.recv(1024).decode()
+            if data:
+                print("received: ", data)
+        except:
+            print("?")
+        print("closing connection!")
         conn.close()
 
 
+
+    def generateResponse(self, msg):
+        '''Creates the right headers so javascript will accept the informations.'''
+        msg = f"\"{msg}\""
+        response_headers = {
+                'Content-Type': 'text/html; encoding=ut8',
+                'Content-Length': len(msg),
+                'Connection': 'close',
+                'Access-Control-Allow-Origin' : '*'
+                }
+        response_headers_raw = ''.join('%s: %s\r\n' % (k, v) for k, v in response_headers.items())
+        response_proto = 'HTTP/1.1'
+        response_status = '200'
+        response_status_text = 'OK'
+        r = '%s %s %s\r\n' % (response_proto, response_status, response_status_text)
+        return [r, response_headers_raw, '\r\n', msg]
+
 if __name__ == '__main__':
-    server = Server("192.168.2.19", 5555)
+    server = Server("localhost", 5555)
     #For some reason, I can't listen inside class. Maybe it's some thread/self problem 
     while True:
         try:
             '''listen for new connections'''
             conn, addr = server.s.accept()
+            message = server.client_handler(conn, addr)
+            response = server.generateResponse("{'thing':'another-thing'}")
             print(f"new connection from {addr}")
-            conn.send(str.encode("welcome"))
-            start_new_thread(server.threaded_client_handler, (conn, ))
-        except e:
+
+            for m in response:
+                conn.send(str.encode(m))
+            
+            start_new_thread(server.threaded_connection_killer, (conn, ))
+
+           
+        except Exception as e:
             print(e)
+            traceback.print_exc(file=sys.stdout)
+            conn.close()
             break
