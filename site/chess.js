@@ -1,0 +1,77 @@
+
+function chessBoard(){
+    this.table = document.getElementById('chess_board');
+    this.board = [];
+    this.initalize = function(){
+        for (let i = 0; i < 8; i++) {
+            let row = document.createElement("TR");
+            this.board.push([]);
+            for (let j = 0; j < 8; j++) {
+                this.board[i].push(new square(toAB(i, j)));
+                row.appendChild(this.board[i][j].elem);
+            }
+            this.table.appendChild(row);
+        }
+        console.log(this.board);
+    }
+
+    this.getPiece = function(cords){
+        cords = cords.toLowerCase();
+        if(96 < cords.charCodeAt(0) < 105){
+            var x = cords.charCodeAt(0) - 97;
+        } else{
+            return 0;
+        }
+        if(0 < Number(cords.charAt(1)) < 9){
+            var y = Number(cords.charAt(1)) -1;
+        } else{
+            return 0;
+        }
+        return this.board[x][y];
+    }
+}
+
+function square(cords){
+    this.elem = document.createElement("TD");
+    this.piece = null;
+    this.cords = cords;
+    this.elem.innerHTML = this.cords;
+    this.clicked = function(){
+    }
+}
+
+function toAB(x, y){
+    var code = "";
+    code += (String.fromCharCode(x + 97));
+    code += (y+1);
+    console.log(code);
+    return code;
+}
+
+function piece(name, color){
+    this.name = name;
+    this.color = color;
+    this.charCode = getCharCode(this.color, this.name);
+}
+
+//Get char code corrisponding to the chess piece based on name and color
+function getCharCode(color, piece){
+    if(color == "black"){
+        if(piece == "KING")return "&#9812";
+        if(piece == "QUEEN")return "&#9813";
+        if(piece == "ROOK")return "&#9814";
+        if(piece == "BISHOP")return "&#9815";
+        if(piece == "KNIGHT")return "&#9816";
+        if(piece == "PAWN")return "&#9817";
+    } else{
+        if(piece == "KING")return "&#9818";
+        if(piece == "QUEEN")return "&#9819";
+        if(piece == "ROOK")return "&#9820";
+        if(piece == "BISHOP")return "&#9821";
+        if(piece == "KNIGHT")return "&#9822";
+        if(piece == "PAWN")return "&#9823";
+    }
+}
+
+myBoard = new chessBoard();
+myBoard.initalize();

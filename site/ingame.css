@@ -54,9 +54,15 @@ footer{
 	background-color: lightpink;
 }
 
+td{
+	text-align: center;
+	font-size: 25px;
+	text-transform: uppercase;
+}
+
 tr:nth-child(odd) td:nth-child(odd),tr:nth-child(even) td:nth-child(even)  {
   background: white;
 }
 tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
-  background: black;
+  background: rgb(102, 140, 163)
 }
