@@ -66,16 +66,16 @@ td{
 
 
 tr:nth-child(odd):not(:last-child) td:nth-child(odd):not(:first-child), tr:nth-child(even) td:nth-child(even){
-	background: whitesmoke;
+	background: rgb(102, 140, 163);
 }
 tr:nth-child(odd):not(:last-child) td:nth-child(odd):not(:first-child):hover, tr:nth-child(even) td:nth-child(even):hover{
-	background: rgb(187, 187, 187);
+	background: rgb(90, 122, 143);
 }
 tr:nth-child(odd):not(:last-child) td:nth-child(even), tr:nth-child(even) td:nth-child(odd):not(:first-child){
-  	background: rgb(102, 140, 163);
+	background: whitesmoke;
 }
 tr:nth-child(odd):not(:last-child) td:nth-child(even):hover, tr:nth-child(even) td:nth-child(odd):not(:first-child):hover{
-	background: rgb(90, 122, 143);
+	background: rgb(187, 187, 187);
 }
 
 tr:last-child *, td:first-child{
