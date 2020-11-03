@@ -5,6 +5,10 @@ function chessBoard(){
     this.initalize = function(){
         for (let i = 0; i < 8; i++) {
             let row = document.createElement("TR");
+            testChild = document.createElement("TD");
+            testChild.innerHTML = toAB(i,2)[0];
+            testChild.class = "letter_marker"
+            row.appendChild(testChild);
             this.board.push([]);
             for (let j = 0; j < 8; j++) {
                 this.board[i].push(new square(toAB(i, j)));
@@ -12,8 +16,18 @@ function chessBoard(){
             }
             this.table.appendChild(row);
         }
+        let row = document.createElement("TR");
+        row.appendChild(document.createElement("TD"));
+        for (let i = 1; i <= 8; i++) {
+            td = document.createElement("TD");
+            td.innerHTML = i;
+            td.class = "number_marker"
+            row.appendChild(td);
+        }
+        this.table.appendChild(row); 
         console.log(this.board);
     }
+
 
     this.getPiece = function(cords){
         cords = cords.toLowerCase();
@@ -35,10 +49,12 @@ function square(cords){
     this.elem = document.createElement("TD");
     this.piece = null;
     this.cords = cords;
-    this.elem.innerHTML = getRandPiece();
-    this.clicked = function(){
+    //this.elem.innerHTML = this.cords;
+    this.elem.onclick = function(){
+            this.innerHTML = getRandPiece();
+        };
     }
-}
+
 
 function toAB(x, y){
     var code = "";
@@ -50,27 +66,28 @@ function toAB(x, y){
 function piece(name, color){
     this.name = name;
     this.color = color;
-    this.charCode = getCharCode(this.color, this.name);
+    this.charCode = this.getCharCode(this.color, this.name);
+    this.getCharCode = function(color, piece){
+        if(color == "black"){
+            if(piece == "KING")return "&#9812";
+            if(piece == "QUEEN")return "&#9813";
+            if(piece == "ROOK")return "&#9814";
+            if(piece == "BISHOP")return "&#9815";
+            if(piece == "KNIGHT")return "&#9816";
+            if(piece == "PAWN")return "&#9817";
+        } else{
+            if(piece == "KING")return "&#9818";
+            if(piece == "QUEEN")return "&#9819";
+            if(piece == "ROOK")return "&#9820";
+            if(piece == "BISHOP")return "&#9821";
+            if(piece == "KNIGHT")return "&#9822";
+            if(piece == "PAWN")return "&#9823";
+        }
+    }
 }
 
 //Get char code corrisponding to the chess piece based on name and color
-function getCharCode(color, piece){
-    if(color == "black"){
-        if(piece == "KING")return "&#9812";
-        if(piece == "QUEEN")return "&#9813";
-        if(piece == "ROOK")return "&#9814";
-        if(piece == "BISHOP")return "&#9815";
-        if(piece == "KNIGHT")return "&#9816";
-        if(piece == "PAWN")return "&#9817";
-    } else{
-        if(piece == "KING")return "&#9818";
-        if(piece == "QUEEN")return "&#9819";
-        if(piece == "ROOK")return "&#9820";
-        if(piece == "BISHOP")return "&#9821";
-        if(piece == "KNIGHT")return "&#9822";
-        if(piece == "PAWN")return "&#9823";
-    }
-}
+
 
 function getRandPiece(){
     var pieces = 

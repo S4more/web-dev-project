@@ -40,7 +40,7 @@ nav *:hover{
 }
 
 table{
-	width: 50%;
+	width: 60%;
 	border-collapse: collapse; 
 	box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.26);
 	margin-left: auto;
@@ -56,14 +56,36 @@ footer{
 
 td{
 	text-align: center;
-	font-size: 2.5em;
+	font-size: 50px;
 	text-transform: uppercase;
 	padding: 0px;
+	text-shadow: 1px 1px 2px #0000004d;
+	width: calc(200%/19);
+	height: calc(200%/19);
 }
 
-tr:nth-child(odd) td:nth-child(odd),tr:nth-child(even) td:nth-child(even)  {
-  background: white;
+
+tr:nth-child(odd):not(:last-child) td:nth-child(odd):not(:first-child), tr:nth-child(even) td:nth-child(even){
+	background: whitesmoke;
 }
-tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
-  background: rgb(102, 140, 163)
+tr:nth-child(odd):not(:last-child) td:nth-child(odd):not(:first-child):hover, tr:nth-child(even) td:nth-child(even):hover{
+	background: rgb(187, 187, 187);
+}
+tr:nth-child(odd):not(:last-child) td:nth-child(even), tr:nth-child(even) td:nth-child(odd):not(:first-child){
+  	background: rgb(102, 140, 163);
+}
+tr:nth-child(odd):not(:last-child) td:nth-child(even):hover, tr:nth-child(even) td:nth-child(odd):not(:first-child):hover{
+	background: rgb(90, 122, 143);
+}
+
+tr:last-child *, td:first-child{
+	background: lightsalmon;
+	font-size: 25px;
+	
+}
+td:first-child{
+	width: calc(100%/19);
+}
+tr:last-child *{
+	height: calc(100%/19);
 }
