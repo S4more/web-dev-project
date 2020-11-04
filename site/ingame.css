@@ -62,6 +62,12 @@ td{
 	text-shadow: 1px 1px 2px #0000004d;
 	width: calc(200%/19);
 	height: calc(200%/19);
+	user-select: none;
+	outline: none;
+}
+
+td.selected{
+	outline:3px outset rgb(165, 94, 94);
 }
 
 

@@ -89,15 +89,21 @@ function square(cords, board){
     }
     this.click = function(){
         if(!this.board.selectedSquare){
-            console.log("Chosen");
             this.board.selectedSquare = this;
+            this.elem.classList.add('selected');
+            console.log(this.elem);
         } else{
-            console.log("placed");
-            this.setPiece(this.board.selectedSquare.piece);
-            this.board.selectedSquare.setPiece(null);
-            this.board.selectedSquare = null;
+            if(this.piece){
+                this.board.selectedSquare.elem.classList.remove('selected');
+                this.board.selectedSquare = null;
+                console.log("invalid move");
+            } else{
+                this.setPiece(this.board.selectedSquare.piece);
+                this.board.selectedSquare.setPiece(null);
+                this.board.selectedSquare.elem.classList.remove('selected');
+                this.board.selectedSquare = null;
+            }
         }
-        
     }
     this.elem.onclick = function(){
         this.parentSquare.click();
