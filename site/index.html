@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Online Chess</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="ingame.css">
+</head>
+<body>
+	<nav>
+		<a href="index.html">Home</a>
+		<a href="index.html">Find a Match</a>
+		<a href="index.html">Ongoing Matches</a>
+		<a href="index.html">About</a>
+	</nav>
+	<div id="center">
+	<table id="chess_board">
+	</table>
+	</div>
+	<footer>
+		Footer
+	</footer>
+</body>
+<script type="text/javascript" src="chess2.0.js"></script>
+<script>
+	var board = document.getElementById('chess_board');
+	board.style.height = board.offsetWidth + "px";
+		if(window.addEventListener) {
+			window.addEventListener('resize', function() {
+			board.style.height = board.offsetWidth + "px";
+		}, true);
+		}
+		else {
+			console.log("your browser does not support window resize events, the site may display strangly if you resize the window");
+		}
+</script>
+</html>
