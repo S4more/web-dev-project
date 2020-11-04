@@ -8,16 +8,14 @@ It is important to send the right data
 
   | Variables  | Type |
   | ------------- | ------------- |
-  | `id` | integer | 
-  | `board`  | integer |
-  | `square`  | string `a-h` `1-8`|
-  | `piece` | string |
-
+  |`make_move`| from:string, to:string |
+  |`join_game`| id:string |
+  |`create_game`| id:string |
 ## Get parms
 
   | Variable  | Type |
   | ------------- | ------------- |
-  | `status`  | string - ok / wrongTurn / fullBoard / missingOpponent |
-  | `square`  | strinh `a-h` `1-8` |
-  | `piece`   | string |
+  |`get_moves`| from: cords, to: cords |
+  |`get_matches`| matches:[id:string, next:one] |
+
   
