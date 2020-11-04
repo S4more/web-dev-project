@@ -1,4 +1,8 @@
+from player import Player
 class WrongTurn(Exception):
+    pass
+
+class InsuficientPlayers(Exception):
     pass
 
 class FullBoardError(Exception):
@@ -25,7 +29,7 @@ class Board:
         # Player 0 will be white and player 1 will be black.
         self.pieces = [0, 1]
         self.moves = 0
-        self.lastIp = 0
+        self.lastIp = None
         self.players = []
         self.cols = [letter for letter in char_range('a', 'h')]
         self.rows = [str(number) for number in range(1,9)]
@@ -38,19 +42,41 @@ class Board:
             for col in range(0,8):
                 self.board[7-row].append(self.cols[col] + self.rows[row])
     
+    def handlePost(self, data):
+        try:
+            self.addPlayer(Player(data['id'], 'w', self))
+            return f"You are now in board {self.id}"
+        except FullBoardError:
+            return "There are already two players on this board."
+
+        # All the turn logic happens here
+        except PlayerAlreadyInBoard:
+            try:
+                self.addPiece(data['square'], data['piece'], data['id'])
+                return "piece moved" 
+            except WrongTurn:
+                return "It's not your turn. Please wait"
+
+            except InsuficientPlayers:
+                return "Please wait for another player to join."
+
+    
     def addPlayer(self, player):
+        '''add player to board'''
+        if player.ip in [player.ip for player in self.players]:
+            raise PlayerAlreadyInBoard
         if len(self.players) >= 2: # If there are two players, make sure that no one else is added
-                                   # And that no one else can connect to the board.
-            if player.ip in [player.ip for player in self.players]:
-                raise PlayerAlreadyInBoard
             raise FullBoardError
         self.players.append(player)
-        print("player added to board")
 
     def addPiece(self, squarePos, piece, ip):
         '''Adds a piece at an specific square'''
+        if self.lastIp == None and self.players[0].ip != ip:
+            raise WrongTurn
         if ip == self.lastIp:
-            raise WrongTurn 
+            raise WrongTurn
+        if len(self.players) < 2:
+            raise InsuficientPlayers
         self.lastIp = ip
         piece += 'w' if self.moves % 2 == 0 else 'b'
         self.board[8-int(squarePos[1])][letterToNumber(squarePos[0])] = piece

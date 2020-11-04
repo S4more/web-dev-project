@@ -1,6 +1,6 @@
 import json
 from player import Player
-from board import Board, FullBoardError, PlayerAlreadyInBoard, WrongTurn  
+from board import Board, FullBoardError, PlayerAlreadyInBoard, WrongTurn, InsuficientPlayers
 import socket
 from _thread import start_new_thread
 import sys, traceback
@@ -38,29 +38,14 @@ class Server:
             data = conn.recv(2048).decode()
             data = data.split("\n")[-1] #post request
             data = json.loads(data)
-
             #If the board does not exist, creates it and then put player inside of it.
             if data['board'] not in self.matches:
                 self.matches[data['board']] = Board([data['board']])
-            self.matches[data['board']].addPlayer(Player(data['id'], 'white', data['board']))
-
-        except FullBoardError:
-            message = "There are already two players on this board."
-
-        # All the turn logic happens here
-        except PlayerAlreadyInBoard:
-            try:
-                self.matches[data['board']].addPiece(data['square'], data['piece'], data['id'])
-                message = "..." 
-            except WrongTurn:
-                message = "It's not your turn. Please wait"
+            message = self.matches[data['board']].handlePost(data)
+            print(message)
 
         except Exception as e:
             traceback.print_exc(file=sys.stdout)
-        
-        else: 
-            #message = self.client_handler(conn, addr)
-            message = "here"
 
         response = self.generateResponse("{'answer':'%s'}" % message)
         for info in response:
