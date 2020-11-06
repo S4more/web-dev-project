@@ -1,7 +1,7 @@
 from player import Player
 class WrongTurn(Exception):
-    pass
-
+    def __init__(self):
+        self.message = "board.WrongTurn"
 class InsuficientPlayers(Exception):
     pass
 
@@ -29,6 +29,7 @@ class Board:
         # Player 0 will be white and player 1 will be black.
         self.pieces = [0, 1]
         self.moves = 0
+        self.lastMove = []
         self.lastIp = None
         self.players = []
         self.cols = [letter for letter in char_range('a', 'h')]
@@ -69,7 +70,7 @@ class Board:
             raise FullBoardError
         self.players.append(player)
 
-    def addPiece(self, squarePos, piece, ip):
+    def movePiece(self, piece, ip):
         '''Adds a piece at an specific square'''
         if self.lastIp == None and self.players[0].ip != ip:
             raise WrongTurn
@@ -78,10 +79,10 @@ class Board:
         if len(self.players) < 2:
             raise InsuficientPlayers
         self.lastIp = ip
-        piece += 'w' if self.moves % 2 == 0 else 'b'
-        self.board[8-int(squarePos[1])][letterToNumber(squarePos[0])] = piece
+        #piece += 'w' if self.moves % 2 == 0 else 'b'
+        #self.board[8-int(squarePos[1])][letterToNumber(squarePos[0])] = piece
+        self.lastMove = piece
         self.moves += 1
-        self.printBoard()
 
     def getPiecePosition(self, piece):
         for row in range(0, 8):

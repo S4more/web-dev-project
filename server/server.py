@@ -14,6 +14,7 @@ class Server:
         self.ip = ip
         self.port = port
         self.matches = {}
+        self.connections = []
 
         #Tries to open the server at the specified port
         try:
@@ -31,18 +32,75 @@ class Server:
             return "registered"
         else:
             return "already in game"
+    
+    def request_validation(self, data):
+        #get_moves : [from, to] -> [str, str]
+        if "get_moves" in data:
+             player = self.connections[1]
+             return player.board.lastMove
+
+        elif "get_matches" in data:
+            message = {}
+            for match in self.matches:
+                message[match] = len(self.matches[match].players)
+
+            return message
+
+        #make_move : [from, to] -> [str,str]
+        elif "make_move" in data:
+            try:
+                player = self.connections[0]
+                move = data["make_move"]
+                player.board.movePiece(move, player.ip)
+                return 1
+            except Exception as e:
+                print(e.message)
+                return -1
+
+        #join_game : id -> str
+        elif "join_game" in data:
+            try:
+                print(data)
+                id = data["join_game"]
+                if id in self.matches:
+                    self.connections.append(Player(1, 'black', self.matches[id]))
+                    return 1
+                else:
+                    print("The game does not exist")
+                    return -1
+
+            except Exception as e:
+                print(e)
+                return -1
+
+        #create_game : id -> str
+        elif "create_game" in data:
+            print(data)
+            id = data['create_game']
+            if id  not in self.matches:
+                board = Board(id)
+                self.matches[id] = board 
+                self.connections.append(Player(0, 'white', board))
+                return 1
+            else:
+                print("Player is already in match")
+                return -1
+
+        else:
+            print("here")
 
     def threaded_handle_connection(self, conn, addr):
-        print(f"new connection from {addr}")
+
         try:
             data = conn.recv(2048).decode()
             data = data.split("\n")[-1] #post request
             data = json.loads(data)
+            message = self.request_validation(data)
             #If the board does not exist, creates it and then put player inside of it.
-            if data['board'] not in self.matches:
-                self.matches[data['board']] = Board([data['board']])
-            message = self.matches[data['board']].handlePost(data)
+            #message = self.matches[data['board']].handlePost(data)
+            
             print(message)
+
 
         except Exception as e:
             traceback.print_exc(file=sys.stdout)

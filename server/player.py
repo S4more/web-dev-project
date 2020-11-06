@@ -4,8 +4,9 @@ class Player:
         self.board = board
         self.isTurn = False
         self.color = 'w'
+        self.board.addPlayer(self)
 
     def __str__(self):
         return self.ip
     def __repr__(self):
-        return self.ip
+        return str(self.ip)
