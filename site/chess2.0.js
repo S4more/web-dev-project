@@ -77,7 +77,6 @@ function square(cords, board){
     this.elem = document.createElement("TD");
     this.elem.parentSquare = this;
     this.board = board;
-
     this.setPiece = function(piece){
         this.piece = piece;
         if(this.piece){
@@ -88,12 +87,14 @@ function square(cords, board){
         
     }
     this.click = function(){
-        if(!this.board.selectedSquare){
+        console.log("Clicked cords are: " + this.cords);
+        this.getValidMoves();
+        if (!this.board.selectedSquare){
             this.board.selectedSquare = this;
             this.elem.classList.add('selected');
             console.log(this.elem);
         } else{
-            if(this.piece){
+            if (this.piece){
                 this.board.selectedSquare.elem.classList.remove('selected');
                 this.board.selectedSquare = null;
                 console.log("invalid move");
@@ -105,10 +106,49 @@ function square(cords, board){
             }
         }
     }
+
     this.elem.onclick = function(){
         this.parentSquare.click();
     }
-}
+
+    this.getValidMoves = function(){
+        let movesList = [];
+        if (this.piece) {
+            if (this.piece.name == "ROOK") {
+                let directions = [[1,0],[-1,0],[0,1],[0,-1]];
+                for(let i = 0; i < directions.length - 1; i ++){
+                    for(let j = 1; j <= 7; j++){
+                        try {
+                            toCheck = this.board.squares[this.pos.x + (j * directions[i][0])] [this.pos.y + (j * directions[i][1])];
+                        }
+                        catch(error) {
+                            break;
+                        }
+                        if(toCheck){
+                            if(toCheck.piece){
+                                console.log("hit: " + toCheck.piece.name);
+                                console.log("at: " + toCheck.cords);
+                                if(toCheck.piece.color == this.piece.color){
+                                    break;
+                                } else{
+                                    movesList.push(toAB(this.pos.x + j*directions[i][0], this.pos.y + j*directions[i][1]));
+                                    break;
+                                }
+                            } else{
+                                movesList.push(toAB(this.pos.x + j*directions[i][0], this.pos.y + j*directions[i][1]));
+                            }
+                        } else{
+                            break;
+                        }
+                    }
+                }
+                console.log(movesList);
+            }
+        }
+    }
+}    
+
+
 function toAB(x, y){
     var code = "";
     code += (String.fromCharCode(x + 97));
@@ -116,7 +156,7 @@ function toAB(x, y){
     return code;
 }
 
-//Convers from letter:number notation to indexes on the board: Returns null if the position is invalid
+//Converts from letter:number notation to indexes on the board: Returns null if the position is invalid
 function toXY(cords){
     if(96 < cords.charCodeAt(0) < 105){
         var x = cords.charCodeAt(0) - 97;
@@ -190,5 +230,4 @@ setupPieces = function(){
     return pieces;
 }
 
-
-myBoard = new board("black");
+myBoard = new board("white");
