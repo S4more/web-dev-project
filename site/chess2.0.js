@@ -7,152 +7,308 @@ function client(name, ip){
 
     }
 }
-function board(color){
-    this.status = "none";
-    this.selectedSquare = null;
-    this.squares = [];
-    this.gui = document.getElementById("chess_board");
+
+const pieces = {
+    white_pawn: {color: "white", type: "pawn", charcode: "&#9817"},
+    white_rook: {color: "white", type: "rook", charcode: "&#9814"},
+    white_knight: {color: "white", type: "knight", charcode: "&#9816"},
+    white_bishop: {color: "white", type: "bishop", charcode: "&#9815"},
+    white_queen: {color: "white", type: "queen", charcode: "&#9813"},
+    white_king: {color: "white", type: "king", charcode: "&#9812"},
+
+    black_pawn: {color: "black", type: "pawn", charcode: "&#9823"},
+    black_rook: {color: "black", type: "rook", charcode: "&#9820"},
+    black_knight: {color: "black", type: "knight", charcode: "&#9822"},
+    black_bishop: {color: "black", type: "bishop", charcode: "&#9821"},
+    black_queen: {color: "black", type: "queen", charcode: "&#9819"},
+    black_king: {color: "black", type: "king", charcode: "&#9818"},
+}
+
+const initalState = [
+    {piece: pieces.white_pawn, x:0, y:1},
+    {piece: pieces.white_pawn, x:1, y:1},
+    {piece: pieces.white_pawn, x:2, y:1},
+    {piece: pieces.white_pawn, x:3, y:1},
+    {piece: pieces.white_pawn, x:4, y:1},
+    {piece: pieces.white_pawn, x:5, y:1},
+    {piece: pieces.white_pawn, x:6, y:1},
+    {piece: pieces.white_pawn, x:7, y:1},
+    {piece: pieces.white_rook, x:0, y:0},
+    {piece: pieces.white_rook, x:7, y:0},
+    {piece: pieces.white_knight, x:1, y:0},
+    {piece: pieces.white_knight, x:6, y:0},
+    {piece: pieces.white_bishop, x:2, y:0},
+    {piece: pieces.white_bishop, x:5, y:0},
+    {piece: pieces.white_queen, x:3, y:0},
+    {piece: pieces.white_king, x:4, y:0},
+    {piece: pieces.black_pawn, x:0, y: 6},
+    {piece: pieces.black_pawn, x:1, y: 6},
+    {piece: pieces.black_pawn, x:2, y: 6},
+    {piece: pieces.black_pawn, x:3, y: 6},
+    {piece: pieces.black_pawn, x:4, y: 6},
+    {piece: pieces.black_pawn, x:5, y: 6},
+    {piece: pieces.black_pawn, x:6, y: 6},
+    {piece: pieces.black_pawn, x:7, y: 6},
+    {piece: pieces.black_rook, x:0, y: 7},
+    {piece: pieces.black_rook, x:7, y: 7},
+    {piece: pieces.black_knight, x:1, y: 7},
+    {piece: pieces.black_knight, x:6, y: 7},
+    {piece: pieces.black_bishop, x:2, y: 7},
+    {piece: pieces.black_bishop, x:5, y: 7},
+    {piece: pieces.black_queen, x:3, y: 7},
+    {piece: pieces.black_king, x:4, y: 7}];
+
+const toLetter = ['a','b','c','d','e','f','g','h'];
+
+function game(color){
     this.color = color;
-    this.getSquare = function(cords){
-        if(this.color == "black"){
-            var vOffset = 0;
-            var hOffset = 7;
-        } else{
-            var vOffset = 7;
-            var hOffset = 0;
-        }
-        let pos = toXY(cords);
-        pos.x = Math.abs(hOffset-pos.x);
-        pos.y = Math.abs(vOffset-pos.y);
-        return this.squares[pos.x][pos.y];
-    }
-
-
-    this.initalizeBoard = function(color){
-        if(this.color == "black"){
-            var vOffset = 7;
-            var hOffset = 0;
-        } else{
-            var vOffset = 0;
-            var hOffset = 7;
-        }
-        //Define row
-        for (let i = 0; i < 8; i++) {
+    this.selectedSquare = null;
+    
+    this.initalizeGui = function(){
+        guiSquares = [];
+        container = document.getElementById("chess_board");
+        for (let i = 0; i < 9; i++) {
             let row = document.createElement("TR");
-            let verticalMarker = document.createElement("TD");
-            verticalMarker.innerHTML = Math.abs(hOffset-i)+1;
-            verticalMarker.class = "number_marker";
-            row.appendChild(verticalMarker);
-            this.squares.push([]);
-            //Define cell in row
-            for (let j = 0; j < 8; j++) {
-                let newSquare = new square(toAB(Math.abs(vOffset-j), Math.abs(hOffset-i)), this);
-                this.squares[i].push(newSquare);
-                row.appendChild(this.squares[i][j].elem);
+            guiSquares.push([]);
+            for (let j = 0; j < 9; j++) {
+                cell = document.createElement("TD");
+                row.appendChild(cell);
+                guiSquares[i].push(cell);
             }
-            this.gui.appendChild(row);
+            container.appendChild(row);
         }
-        //Create bottom letter marker row
-        row = document.createElement("TR");
-        row.appendChild(document.createElement("TD"));
-        for (let i = 0; i < 8; i++) {
-            let cell = document.createElement("TD");
-            cell.class = "letter_marker";
-            cell.innerHTML = toAB(Math.abs(vOffset-i), 0)[0];
-            row.appendChild(cell);
-        }
-        this.gui.appendChild(row);
+        return guiSquares;
     }
-    this.initalizeBoard(this.color);
 
-    tempPieces = setupPieces();
-    for (let i = 0; i < tempPieces.length; i++) {
-        this.getSquare(tempPieces[i].cords).setPiece(tempPieces[i]);
+    this.initalizeSquares = function(){
+        squares = [];
+        for (let i = 0; i < 8; i++) {
+            squares.push([]);
+            for (let j = 0; j < 8; j++) {
+                squares[i].push(new square(this, j, i));
+            }
+        }
+        return squares;
+    }
+
+    this.linkGameBoard = function(squares, boardGUI, color){
+        for(let i = 0; i < 8; i++){
+            for(let j = 0; j < 8; j++){
+                if(color == "white"){
+                    squares[i][j].cell = boardGUI[(8-(i+1))][j+1];
+                } else{
+                    //Black
+                    squares[i][j].cell = boardGUI[i][(8-(j))];
+                }
+                squares[i][j].cell.square = squares[i][j];
+                squares[i][j].cell.onclick = function(){
+                    this.square.board.clickOn(this.square);
+                }
+            }
+        }
+    }
+
+    this.setMarkers = function(boardGUI, color){
+        console.log(boardGUI);
+        for(let i = 0; i < 8; i++){
+            if(color == "white"){
+                boardGUI[i][0].innerHTML = 8-i;
+            } else{
+                boardGUI[i][0].innerHTML = i+1;
+            }
+        }
+        for(let i = 1; i < 9; i++){
+            if(color == "white"){
+                boardGUI[8][i].innerHTML = toLetter[i-1];
+            } else{
+                boardGUI[8][i].innerHTML = toLetter[8-i];
+            }
+        }
+    }
+
+
+    this.clickOn = function(square){
+        if(this.selectedSquare){
+            this.move(this.selectedSquare, square);
+            this.selectedSquare.unselect();
+            this.selectedSquare = null;
+        } else {
+            this.selectedSquare = square;
+            square.select();
+        }
+    }
+
+    this.placePieces = function(squares, piecelist){
+        for (let i = 0; i < piecelist.length; i++) {
+            squares[piecelist[i].y][piecelist[i].x].setPiece(piecelist[i].piece);
+        }
+    }
+
+    this.boardGUI = this.initalizeGui();
+    this.setMarkers(this.boardGUI, this.color);
+    this.squares = this.initalizeSquares();
+    this.linkGameBoard(this.squares, this.boardGUI, this.color);
+    this.placePieces(this.squares, initalState);
+
+    this.move = function(from, to){
+        validMoves = this.getValidMoves(from);
+        if(from.piece){
+            for (let i = 0; i < validMoves.length; i++) {
+                if(validMoves[i] == to){
+                    to.setPiece(from.piece);
+                    from.clear();
+                }
+            }           
+        }
+    }
+
+    this.getValidMoves = function(square){
+        validMoves = [];
+        if(square.piece == null){
+            return false;
+        }
+        if(square.piece.type == "rook"){
+            directions = [[1,0], [-1,0], [0,1], [0,-1]];
+        }
+        else if(square.piece.type == "bishop"){
+            directions = [[1,1], [-1,-1], [-1,1], [1,-1]];
+        }
+        else if(square.piece.type == "queen"){
+            directions = [[1,1], [-1,-1], [-1,1], [1,-1], [1,0], [-1,0], [0,1], [0,-1]];
+        } 
+        else if(square.piece.type == "knight"){
+            moveOptions = [[2,1], [2,-1], [-2,-1], [-2,1], [1,2], [1,-2], [-1,2], [-1,-2]];
+            for (let i = 0; i < moveOptions.length; i++) {
+                x = square.x + (moveOptions[i][0]);
+                y = square.y + (moveOptions[i][1]);
+
+                if (this.squareExists(x, y)){
+                    if(squares[y][x].piece){
+                        if(squares[y][x].piece.color != square.piece.color){
+                            validMoves.push(squares[y][x]);
+                        } 
+                    } else{
+                        validMoves.push(squares[y][x]);
+                    }
+                }
+            }
+            return validMoves;
+        }
+        else if(square.piece.type == "king"){
+            moveOptions = [[1,1], [-1,-1], [-1,1], [1,-1], [1,0], [-1,0], [0,1], [0,-1]];
+            for (let i = 0; i < moveOptions.length; i++) {
+                x = square.x + (moveOptions[i][0]);
+                y = square.y + (moveOptions[i][1]);
+
+                if (this.squareExists(x, y)){
+                    if(squares[y][x].piece){
+                        if(squares[y][x].piece.color != square.piece.color){
+                            validMoves.push(squares[y][x]);
+                        } 
+                    } else{
+                        validMoves.push(squares[y][x]);
+                    }
+                }
+            }
+            return validMoves;
+
+        } else if(square.piece.type == "pawn"){
+            if(square.piece.color == "white"){
+                dir = 1;
+            } else{
+                dir = -1;
+            }
+
+            if(this.squareExists(square.y + dir,square.x)){
+                if(!squares[square.y + dir][square.x].piece){
+                    validMoves.push(squares[square.y + dir][square.x]);
+                }
+            }
+
+            if(this.squareExists(square.y + dir,square.x + 1)){
+                if(squares[square.y + dir][square.x + 1].piece){
+                    if(squares[square.y + dir][square.x + 1].piece.color != square.piece.color){
+                        validMoves.push(squares[square.y+dir][square.x+1]);
+                    }
+                }
+            }
+
+            if(this.squareExists(square.y + dir,square.x - 1)){
+                if(squares[square.y + dir][square.x - 1].piece){
+                    if(squares[square.y + dir][square.x - 1].piece.color != square.piece.color){
+                        validMoves.push(squares[square.y + dir][square.x-1]);
+                    }
+                }
+            }
+
+
+            return validMoves;
+        } else{
+            return validMoves;
+        }
+
+        for (let j = 0; j < directions.length; j++) {
+            for (let i = 1; i < 8; i++) {
+                x = square.x+(directions[j][0] * i);
+                y = square.y+(directions[j][1] * i);
+                if (this.squareExists(x, y)){
+                    if(squares[y][x].piece){
+                        if(squares[y][x].piece.color != square.piece.color){
+                            validMoves.push(squares[y][x]);
+                        } 
+                        break;
+                    } else{
+                        validMoves.push(squares[y][x]);
+                    }
+                } else{
+                    break;
+                }
+            }
+        }
+        return validMoves;
+    }
+
+    this.squareExists = function(x, y){
+        if((x <= 7)&&(x >= 0)&&(y <= 7)&&(y >= 0)){
+            return true;
+        } else{
+            return false;
+        }
     }
 }
-function square(cords, board){
-    this.cords = cords;
-    this.pos = toXY(cords);
-    this.piece;
-    this.elem = document.createElement("TD");
-    this.elem.parentSquare = this;
+
+
+function square(board, x, y){
+    //New and improved square method
     this.board = board;
+
+    this.x = x;
+    this.y = y;
+
     this.setPiece = function(piece){
         this.piece = piece;
         if(this.piece){
-            this.elem.innerHTML = this.piece.charCode;
+            this.cell.innerHTML = this.piece.charcode;
         } else{
-            this.elem.innerHTML = "";
-        }
-        
-    }
-    this.click = function(){
-        console.log("Clicked cords are: " + this.cords);
-        this.getValidMoves();
-        if (!this.board.selectedSquare){
-            this.board.selectedSquare = this;
-            this.elem.classList.add('selected');
-            console.log(this.elem);
-        } else{
-            if (this.piece){
-                this.board.selectedSquare.elem.classList.remove('selected');
-                this.board.selectedSquare = null;
-                console.log("invalid move");
-            } else{
-                this.setPiece(this.board.selectedSquare.piece);
-                this.board.selectedSquare.setPiece(null);
-                this.board.selectedSquare.elem.classList.remove('selected');
-                this.board.selectedSquare = null;
-            }
+            this.cell.innerHTML = "";
         }
     }
 
-    this.elem.onclick = function(){
-        this.parentSquare.click();
+    this.clear = function(){
+        this.setPiece(null);
     }
-
-    this.getValidMoves = function(){
-        let movesList = [];
-        if (this.piece) {
-            if (this.piece.name == "ROOK") {
-                let directions = [[1,0],[-1,0],[0,1],[0,-1]];
-                for(let i = 0; i < directions.length - 1; i ++){
-                    for(let j = 1; j <= 7; j++){
-                        try {
-                            toCheck = this.board.squares[this.pos.x + (j * directions[i][0])] [this.pos.y + (j * directions[i][1])];
-                        }
-                        catch(error) {
-                            break;
-                        }
-                        if(toCheck){
-                            if(toCheck.piece){
-                                console.log("hit: " + toCheck.piece.name);
-                                console.log("at: " + toCheck.cords);
-                                if(toCheck.piece.color == this.piece.color){
-                                    break;
-                                } else{
-                                    movesList.push(toAB(this.pos.x + j*directions[i][0], this.pos.y + j*directions[i][1]));
-                                    break;
-                                }
-                            } else{
-                                movesList.push(toAB(this.pos.x + j*directions[i][0], this.pos.y + j*directions[i][1]));
-                            }
-                        } else{
-                            break;
-                        }
-                    }
-                }
-                console.log(movesList);
-            }
-        }
+    this.select = function(){
+        this.cell.classList.add('selected');
     }
-}    
-
-
+    this.unselect = function(){
+        this.cell.classList.remove('selected');
+    }
+    
+}
 function toAB(x, y){
     var code = "";
     code += (String.fromCharCode(x + 97));
-    code += (y+1);
+    code += (y + 1);
     return code;
 }
 
@@ -171,63 +327,4 @@ function toXY(cords){
     return {x:x, y:y};
 }
 
-piece = function(color, name, cords){
-    this.name = name;
-    this.color = color;
-    this.cords = cords;
-    if(this.color == "black"){
-        if(this.name == "KING")this.charCode = "&#9818";
-        if(this.name == "QUEEN")this.charCode = "&#9819";
-        if(this.name == "ROOK")this.charCode = "&#9820";
-        if(this.name == "BISHOP")this.charCode = "&#9821";
-        if(this.name == "KNIGHT")this.charCode = "&#9822";
-        if(this.name == "PAWN")this.charCode = "&#9823";
-    } else{
-        if(this.name == "KING")this.charCode = "&#9812";
-        if(this.name == "QUEEN")this.charCode = "&#9813";
-        if(this.name == "ROOK")this.charCode = "&#9814";
-        if(this.name == "BISHOP")this.charCode = "&#9815";
-        if(this.name == "KNIGHT")this.charCode = "&#9816";
-        if(this.name == "PAWN")this.charCode = "&#9817";
-    }
-}
-
-setupPieces = function(){
-    let pieces = [];
-    pieces.push(new piece("white", "PAWN", "g1"));
-    pieces.push(new piece("white", "PAWN", "g2"));
-    pieces.push(new piece("white", "PAWN", "g3"));
-    pieces.push(new piece("white", "PAWN", "g4"));
-    pieces.push(new piece("white", "PAWN", "g5"));
-    pieces.push(new piece("white", "PAWN", "g6"));
-    pieces.push(new piece("white", "PAWN", "g7"));
-    pieces.push(new piece("white", "PAWN", "g8"));
-    pieces.push(new piece("white", "ROOK", "h1"));
-    pieces.push(new piece("white", "ROOK", "h8"));
-    pieces.push(new piece("white", "KNIGHT", "h2"));
-    pieces.push(new piece("white", "KNIGHT", "h7"));
-    pieces.push(new piece("white", "BISHOP", "h3"));
-    pieces.push(new piece("white", "BISHOP", "h6"));
-    pieces.push(new piece("white", "QUEEN", "h4"));
-    pieces.push(new piece("white", "KING", "h5"));
-
-    pieces.push(new piece("black", "PAWN", "b1"));
-    pieces.push(new piece("black", "PAWN", "b2"));
-    pieces.push(new piece("black", "PAWN", "b3"));
-    pieces.push(new piece("black", "PAWN", "b4"));
-    pieces.push(new piece("black", "PAWN", "b5"));
-    pieces.push(new piece("black", "PAWN", "b6"));
-    pieces.push(new piece("black", "PAWN", "b7"));
-    pieces.push(new piece("black", "PAWN", "b8"));
-    pieces.push(new piece("black", "ROOK", "a1"));
-    pieces.push(new piece("black", "ROOK", "a8"));
-    pieces.push(new piece("black", "KNIGHT", "a2"));
-    pieces.push(new piece("black", "KNIGHT", "a7"));
-    pieces.push(new piece("black", "BISHOP", "a3"));
-    pieces.push(new piece("black", "BISHOP", "a6"));
-    pieces.push(new piece("black", "QUEEN", "a4"));
-    pieces.push(new piece("black", "KING", "a5"));
-    return pieces;
-}
-
-myBoard = new board("white");
+myGame = new game("black");
