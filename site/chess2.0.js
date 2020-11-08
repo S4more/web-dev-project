@@ -1,13 +1,3 @@
-function client(name, ip){
-    this.status = "starting"
-    joinGame = function(playerName, color){
-        return;
-    }  
-    this.initalizeGame = function(color){
-
-    }
-}
-
 const pieces = {
     white_pawn: {color: "white", type: "pawn", charcode: "&#9817"},
     white_rook: {color: "white", type: "rook", charcode: "&#9814"},
@@ -213,10 +203,14 @@ function game(color){
             return validMoves;
 
         } else if(square.piece.type == "pawn"){
-            if(square.piece.color == "white"){
-                dir = 1;
-            } else{
-                dir = -1;
+
+            if(square.piece.color == "white"){dir = 1}
+            else{ dir = -1};
+
+            if((this.squareExists(square.y + dir*2,square.x)) && (square.y == 6) || (square.y == 1)){
+                if(!squares[square.y + dir*2][square.x].piece){
+                    validMoves.push(squares[square.y + dir*2][square.x]);
+                }
             }
 
             if(this.squareExists(square.y + dir,square.x)){
@@ -277,7 +271,6 @@ function game(color){
     }
 }
 
-
 function square(board, x, y){
     //New and improved square method
     this.board = board;
@@ -293,7 +286,7 @@ function square(board, x, y){
             this.cell.innerHTML = "";
         }
     }
-
+    
     this.clear = function(){
         this.setPiece(null);
     }
@@ -303,28 +296,5 @@ function square(board, x, y){
     this.unselect = function(){
         this.cell.classList.remove('selected');
     }
-    
 }
-function toAB(x, y){
-    var code = "";
-    code += (String.fromCharCode(x + 97));
-    code += (y + 1);
-    return code;
-}
-
-//Converts from letter:number notation to indexes on the board: Returns null if the position is invalid
-function toXY(cords){
-    if(96 < cords.charCodeAt(0) < 105){
-        var x = cords.charCodeAt(0) - 97;
-    } else{
-        return null;
-    }
-    if(0 < Number(cords.charAt(1)) < 9){
-        var y = Number(cords.charAt(1)) -1;
-    } else{
-        return null;
-    }
-    return {x:x, y:y};
-}
-
 myGame = new game("black");
