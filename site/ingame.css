@@ -63,8 +63,7 @@ nav *:hover{
 }
 
 table{
-	min-width: 400px;
-	max-width: 850px;
+	height: 90%;
 	width: 90%;
 	border-collapse: collapse; 
 	box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.26);
