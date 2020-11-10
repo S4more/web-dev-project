@@ -33,17 +33,24 @@ function API(){
 	}
 
 	this.getMoves = function() {
-		this.xmlhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				var response = JSON.parse(this.responseText);
-				if (response.answer != -1) {
-					console.log(response.answer);
-					var from = this.gameInstance.squares[response.answer.from[1]][response.answer.from[0]];
-					var to = this.gameInstance.squares[response.answer.to[1]][response.answer.to[0]];	
-                    this.gameInstance.move(from, to, true);
-                    this.gameInstance.startTurn();
-				}
-            }}
+        try{
+            this.xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var response = JSON.parse(this.responseText);
+                    if (response.answer != -1) {
+                        console.log(response.answer);
+                        var from = this.gameInstance.squares[response.answer.from[1]][response.answer.from[0]];
+                        var to = this.gameInstance.squares[response.answer.to[1]][response.answer.to[0]];	
+                        this.gameInstance.move(from, to, true);
+                        this.gameInstance.startTurn();
+                    }
+                }
+                this.getMoves();
+            }
+        } catch{
+            console.log("Could not connect to server");
+        }
+		
             
 		this.xmlhttp.open("POST", this.url, true);
 		this.xmlhttp.send(JSON.stringify({"player_id":player_id, "get_moves": "0"}));
@@ -170,8 +177,8 @@ function game(color, id){
 		}
 	}
 	//Starts loop waiting for other player of first move.
-	this.manageInterval(true);
-
+	//this.manageInterval(true);
+    this.api.getMoves(id);
 
     this.initalizeSquares = function(){
         squares = [];
@@ -294,6 +301,60 @@ function game(color, id){
         }
     }
 
+
+    this.validateCheck = function(from, to){
+        kingSquare;
+        mighty_king_moves = [];
+        for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
+                if(board[i][j].piece){
+                    if(board[i][j].piece.type = "king"){
+                        kingSquare = board[i][j];
+                    }
+                }
+            }
+        }
+        if(!kingSquare) return 0;
+
+        directions = [[1,1], [-1,-1], [-1,1], [1,-1], [1,0], [-1,0], [0,1], [0,-1]];
+        moveOptions = [[2,1], [2,-1], [-2,-1], [-2,1], [1,2], [1,-2], [-1,2], [-1,-2]];
+
+        for (let i = 0; i < moveOptions.length; i++) {
+            x = square.x + (moveOptions[i][0]);
+            y = square.y + (moveOptions[i][1]);
+
+            if (this.squareExists(x, y)){
+                if(squares[y][x].piece){
+                    if(squares[y][x].piece.color != square.piece.color){
+                        validMoves.push(squares[y][x]);
+                    } 
+                } else{
+                    validMoves.push(squares[y][x]);
+                }
+            }
+        }
+        return validMoves;
+        for (let j = 0; j < directions.length; j++) {
+            for (let i = 1; i < 8; i++) {
+                x = square.x+(directions[j][0] * i);
+                y = square.y+(directions[j][1] * i);
+                if (this.squareExists(x, y)){
+                    if(squares[y][x].piece){
+                        if(squares[y][x].piece.color != square.piece.color){
+                            mighty_king_moves.push(squares[y][x])
+                        } 
+                        break;
+                    } else{
+                        mighty_king_moves.push(squares[y][x])
+                    }
+                } else{
+                    break;
+                }
+            }
+        }
+        return validMoves;
+    }
+
     this.getValidMoves = function(square){
         validMoves = [];
         if(square.piece == null){
@@ -411,10 +472,6 @@ function game(color, id){
             return false;
         }
     }
-
-
-
-    
 }
 
 function square(board, x, y){
