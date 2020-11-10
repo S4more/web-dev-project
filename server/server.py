@@ -36,8 +36,12 @@ class Server:
     def request_validation(self, data):
         #get_moves : [from, to] -> [str, str]
         if "get_moves" in data:
-             player = self.connections[1]
-             return player.board.lastMove
+            try:
+                player = self.connections[data['player_id']]
+                return player.board.getMoves(player.ip)
+            except Exception as e:
+                print(data['player_id'], e.message)
+                return -1
 
         elif "get_matches" in data:
             message = {}
@@ -49,7 +53,7 @@ class Server:
         #make_move : [from, to] -> [str,str]
         elif "make_move" in data:
             try:
-                player = self.connections[0]
+                player = self.connections[data['player_id']]
                 move = data["make_move"]
                 player.board.movePiece(move, player.ip)
                 return 1
@@ -63,7 +67,7 @@ class Server:
                 print(data)
                 id = data["join_game"]
                 if id in self.matches:
-                    self.connections.append(Player(1, 'black', self.matches[id]))
+                    self.connections.append(Player(data['player_id'], 'black', self.matches[id]))
                     return 1
                 else:
                     print("The game does not exist")
@@ -80,14 +84,15 @@ class Server:
             if id  not in self.matches:
                 board = Board(id)
                 self.matches[id] = board 
-                self.connections.append(Player(0, 'white', board))
+                self.connections.append(Player(data['player_id'], 'white', board))
                 return 1
             else:
                 print("Player is already in match")
                 return -1
 
         else:
-            print("here")
+            print("non-identified POST")
+            print(data)
 
     def threaded_handle_connection(self, conn, addr):
 
@@ -105,14 +110,16 @@ class Server:
         except Exception as e:
             traceback.print_exc(file=sys.stdout)
 
-        response = self.generateResponse("{'answer':'%s'}" % message)
+        response = self.generateResponse(message)
         for info in response:
             conn.send(str.encode(info))
         conn.close()
     
     def generateResponse(self, msg):
         '''Creates the right headers so javascript will accept the informations.'''
-        msg = f"\"{msg}\""
+        #msg = "\"{\"answer\":\"{}\"}\"".format(msg)
+        msg = {"answer":msg}
+        msg = json.dumps(msg)
         response_headers = {
                 'Content-Type': 'text/html; encoding=ut8',
                 'Content-Length': len(msg),

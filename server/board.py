@@ -3,13 +3,18 @@ class WrongTurn(Exception):
     def __init__(self):
         self.message = "board.WrongTurn"
 class InsuficientPlayers(Exception):
-    pass
+    def __init__(self):
+        self.message = "board.insuficientPlayers"
 
 class FullBoardError(Exception):
     pass
 
 class PlayerAlreadyInBoard(Exception):
     pass
+
+class moveNotYetMade(Exception):
+    def __init__(self):
+        self.message = "board.moveNotYetMade"
 
 def char_range(char1, char2):
     '''Generator to loop through characters'''
@@ -29,13 +34,29 @@ class Board:
         # Player 0 will be white and player 1 will be black.
         self.pieces = [0, 1]
         self.moves = 0
-        self.lastMove = []
+        self._lastMove = []
         self.lastIp = None
         self.players = []
         self.cols = [letter for letter in char_range('a', 'h')]
         self.rows = [str(number) for number in range(1,9)]
         self.board = [[] for i in range(0, 8)]
         self.start()
+    
+    def flipSide(self):
+        lastMove = self._lastMove
+        print(lastMove)
+        for key in self._lastMove:
+            for cord in self._lastMove[key]:
+                lastMove[key][0] = 8 - cord
+
+        return lastMove
+
+    def getMoves(self, ip):
+        if len(self.players) < 2:
+            raise InsuficientPlayers
+        if self.lastIp == ip or self._lastMove == []:
+            raise moveNotYetMade
+        return self._lastMove
 
     def start(self):
         '''Populates the board with cols-rows list'''
@@ -70,9 +91,11 @@ class Board:
             raise FullBoardError
         self.players.append(player)
 
-    def movePiece(self, piece, ip):
+    def movePiece(self, move, ip):
         '''Adds a piece at an specific square'''
-        if self.lastIp == None and self.players[0].ip != ip:
+        print(f"ip {ip}, lastIp {self.lastIp}")
+        # If there is no ip and it is not players[0] 
+        if self.lastIp == None and not self.players[0].ip == ip:
             raise WrongTurn
         if ip == self.lastIp:
             raise WrongTurn
@@ -81,7 +104,7 @@ class Board:
         self.lastIp = ip
         #piece += 'w' if self.moves % 2 == 0 else 'b'
         #self.board[8-int(squarePos[1])][letterToNumber(squarePos[0])] = piece
-        self.lastMove = piece
+        self._lastMove = move
         self.moves += 1
 
     def getPiecePosition(self, piece):
