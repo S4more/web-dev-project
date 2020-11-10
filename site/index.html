@@ -15,6 +15,13 @@
 	<div id="center">
 	<table id="chess_board">
 	</table>
+
+	<div style="display:flex; flex-direction: row; justify-content:center;" id="Buttons">
+		<button style="margin: 20px; "onclick="api.createGame(1)"> Create game 0 (white)</button>
+		<button style="margin: 20px; "onclick="api.joinGame(1)"> Join game 0 (black)</button>
+	</div>
+	
+
 	</div>
 	<footer>
 		Footer
@@ -33,7 +40,4 @@
 			console.log("your browser does not support window resize events, the site may display strangly if you resize the window");
 		}
 </script>
-
-	<button onclick="api.createGame(1)"> Create game 0 (white)</button>
-	<button onclick="api.joinGame(1)"> Join game 0 (black)</button>
 </html>

@@ -43,6 +43,7 @@ class Board:
         self.start()
     
     def flipSide(self):
+        '''What is the this function for?'''
         lastMove = self._lastMove
         print(lastMove)
         for key in self._lastMove:

@@ -4,6 +4,7 @@ from board import Board, FullBoardError, PlayerAlreadyInBoard, WrongTurn, Insufi
 import socket
 from _thread import start_new_thread
 import sys, traceback
+import uuid
 
 #Simple Socket server for chess web-admin project.
 #
@@ -29,6 +30,7 @@ class Server:
             #Each IP will be associated with a Player object.
             #And ideally with a chess board object as well.
             self.matches[addr[0]] = "k"
+            #Don't understand what defining it as k does
             return "registered"
         else:
             return "already in game"
