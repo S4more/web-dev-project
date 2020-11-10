@@ -18,7 +18,41 @@ xmlhttp.onreadystatechange = function() {
 		console.log(myArr);
 	}}
 xmlhttp.open("POST", url, true);
-	xmlhttp.send(JSON.stringify({ "id": `${ip}`, "board" : "1", "square":`a${i}`, "piece":"rook"}));
+	xmlhttp.send(JSON.stringify( {"create_game": "0"}));
+	i = i + 1;
+};
+
+
+function myMove(ip) {
+xmlhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+		var myArr = JSON.parse(this.responseText);
+		console.log(myArr);
+	}}
+xmlhttp.open("POST", url, true);
+	xmlhttp.send(JSON.stringify({ "make_move": ["a1", "a2"]}));
+	i = i + 1;
+};
+
+function myGet(ip) {
+xmlhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+		var myArr = JSON.parse(this.responseText);
+		console.log(myArr);
+	}}
+xmlhttp.open("POST", url, true);
+	xmlhttp.send(JSON.stringify({ "get_matches": "_"}));
+	i = i + 1;
+};
+
+function myConnection(ip) {
+xmlhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+		var myArr = JSON.parse(this.responseText);
+		console.log(myArr);
+	}}
+xmlhttp.open("POST", url, true);
+	xmlhttp.send(JSON.stringify({ "join_game": "0"}));
 	i = i + 1;
 };
 
@@ -26,7 +60,8 @@ xmlhttp.open("POST", url, true);
 		<h1>Connection python test</h1>
 
 		<button onclick="myFunction(0)">Click me </button>
-		<button onclick="myFunction(1)">Click me </button>
-
+		<button onclick="myMove(1)"> Move </button>
+		<button onclick="myConnection(1)">Click me </button>
+		<button onclick="myGet(0)"> Get info </button>
 </body>
 </html> 
