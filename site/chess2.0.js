@@ -1,3 +1,88 @@
+var player_id = null;
+api = new API();
+
+
+function API(){
+	this.xmlhttp = new XMLHttpRequest();
+	this.url = "http://localhost:5555";
+	//Should API have a board instance? API is a static class but I don't know how
+	//to use it in JS properly. I think it will be ok to use it for now.
+	this.gameInstance;
+
+	this.sendMoves = function(args){	
+		this.xmlhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var response = JSON.parse(this.responseText);
+				console.log(response);
+				return response;
+			}}
+
+		// I HATE JAVASCRIPT
+		// IT'S HORRENDOUS. WHY DO I NEED TO DO ALL THIS STUFF
+
+		var withMethod = {};
+		withMethod["player_id"] = player_id;
+		withMethod["make_move"] = {}
+		withMethod["make_move"]["from"] = [args[0].x, args[0].y];
+		withMethod["make_move"]["to"] =  [args[1].x, args[1].y];
+
+		this.xmlhttp.open("POST", this.url, true);
+		this.xmlhttp.send(JSON.stringify(withMethod));
+
+	}
+
+	this.getMoves = function() {
+		this.xmlhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var response = JSON.parse(this.responseText);
+				if (response.answer != -1) {
+					console.log(response.answer);
+					var from = this.gameInstance.squares[response.answer.from[1]][response.answer.from[0]];
+					var to = this.gameInstance.squares[response.answer.to[1]][response.answer.to[0]];	
+
+					this.gameInstance.move(from, to, true);
+				}
+			}}
+
+		this.xmlhttp.open("POST", this.url, true);
+		this.xmlhttp.send(JSON.stringify({"player_id":player_id, "get_moves": "0"}));
+	}
+
+	this.createGame = function(id) {
+		//player_id is set to 0 purely for test purposes.
+		player_id = 0;
+		this.xmlhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var response = JSON.parse(this.responseText);
+				if (response.answer == 1) {
+					this.gameInstance = new game("white", 0);
+				};
+			}}
+
+		this.xmlhttp.open("POST", this.url, true);
+		this.xmlhttp.send(JSON.stringify({"player_id":player_id, "create_game": "0"}));
+	}
+	
+	this.joinGame = function(id) {
+		this.xmlhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var response = JSON.parse(this.responseText);
+				if (response.answer == 1){
+					this.gameInstance = new game("black", 1);
+				};
+			}}
+		
+		player_id = 1;
+		this.xmlhttp.open("POST", this.url, true);
+		this.xmlhttp.send(JSON.stringify({"player_id": player_id, "join_game": "0"}));
+	}
+
+}
+
+
+
+
+
 const pieces = {
     white_pawn: {color: "white", type: "pawn", charcode: "&#9817"},
     white_rook: {color: "white", type: "rook", charcode: "&#9814"},
@@ -50,11 +135,10 @@ const initalState = [
 
 const toLetter = ['a','b','c','d','e','f','g','h'];
 
-function game(color){
+function game(color, id){
     this.color = color;
     this.selectedSquare = null;
-    
-    this.initalizeGui = function(){
+	this.initalizeGui = function(){
         guiSquares = [];
         container = document.getElementById("chess_board");
         for (let i = 0; i < 9; i++) {
@@ -69,6 +153,17 @@ function game(color){
         }
         return guiSquares;
     }
+
+	this.manageInterval = function(flag){
+		if (flag) {
+			getInterval = setInterval(function(){this.api.getMoves(id);}, 1000)
+		} else {
+			clearInterval(getInterval);
+		}
+	}
+	//Starts loop waiting for other player of first move.
+	this.manageInterval(true);
+
 
     this.initalizeSquares = function(){
         squares = [];
@@ -90,16 +185,15 @@ function game(color){
                     //Black
                     squares[i][j].cell = boardGUI[i][(8-(j))];
                 }
-                squares[i][j].cell.square = squares[i][j];
+				var that = this;
                 squares[i][j].cell.onclick = function(){
-                    this.square.board.clickOn(this.square);
+                    that.clickOn(squares[i][j]);
                 }
             }
         }
     }
 
     this.setMarkers = function(boardGUI, color){
-        console.log(boardGUI);
         for(let i = 0; i < 8; i++){
             if(color == "white"){
                 boardGUI[i][0].innerHTML = 8-i;
@@ -124,7 +218,7 @@ function game(color){
             this.selectedSquare = null;
         } else {
             this.selectedSquare = square;
-            square.select();
+			square.select();
         }
     }
 
@@ -140,16 +234,34 @@ function game(color){
     this.linkGameBoard(this.squares, this.boardGUI, this.color);
     this.placePieces(this.squares, initalState);
 
-    this.move = function(from, to){
-        validMoves = this.getValidMoves(from);
-        if(from.piece){
-            for (let i = 0; i < validMoves.length; i++) {
-                if(validMoves[i] == to){
-                    to.setPiece(from.piece);
-                    from.clear();
-                }
-            }           
-        }
+    this.move = function(from, to, isEnemy = false){
+		if (isEnemy) {
+			// If it is the enemy move that the board is handling,
+			// set off the get_move loop and don't send it back to the
+			// server.
+			this.manageInterval(false);
+			console.log(from, to);
+			to.setPiece(from.piece);
+			from.clear();
+		} else {
+			//Noah, i honestly hope this never finds you.
+			//I'm canceling the interval before making a move just because
+			//otherwise white would always have the first loop running.
+			//It is def not the optimal way of doing it but I'm too tired
+			//to do anything better.
+			this.manageInterval(false);
+			validMoves = this.getValidMoves(from);
+			if(from.piece){
+				for (let i = 0; i < validMoves.length; i++) {
+					if(validMoves[i] == to){
+						this.manageInterval(true);
+						api.sendMoves([from, to]);
+						to.setPiece(from.piece);
+						from.clear();
+					}
+				}           
+			}
+		}
     }
 
     this.getValidMoves = function(square){
@@ -273,8 +385,6 @@ function game(color){
 
 function square(board, x, y){
     //New and improved square method
-    this.board = board;
-
     this.x = x;
     this.y = y;
 
@@ -286,7 +396,9 @@ function square(board, x, y){
             this.cell.innerHTML = "";
         }
     }
-    
+
+
+
     this.clear = function(){
         this.setPiece(null);
     }
@@ -297,4 +409,3 @@ function square(board, x, y){
         this.cell.classList.remove('selected');
     }
 }
-myGame = new game("black");
