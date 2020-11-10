@@ -4,6 +4,7 @@ from board import Board, FullBoardError, PlayerAlreadyInBoard, WrongTurn, Insufi
 import socket
 from _thread import start_new_thread
 import sys, traceback
+import time
 
 #Simple Socket server for chess web-admin project.
 #
@@ -15,6 +16,7 @@ class Server:
         self.port = port
         self.matches = {}
         self.connections = []
+        self.timeoutTime = 20
 
         #Tries to open the server at the specified port
         try:
@@ -36,12 +38,23 @@ class Server:
     def request_validation(self, data):
         #get_moves : [from, to] -> [str, str]
         if "get_moves" in data:
-            try:
-                player = self.connections[data['player_id']]
-                return player.board.getMoves(player.ip)
-            except Exception as e:
-                print(data['player_id'], e.message)
-                return -1
+            for i in range(0, self.timeoutTime):
+                try:
+                    player = self.connections[data['player_id']]
+                    return player.board.getMoves(player.ip)
+                except Exception as e:
+                    print(data['player_id'], e.message)
+                    time.sleep(1)
+            return -1
+            
+        elif "get_status" in data:
+            for i in range(0, self.timeoutTime):
+                if len(player.board.players) != 2: 
+                    print("waiting for player")
+                    time.sleep(2)
+                else:
+                    return 1
+            return -1
 
         elif "get_matches" in data:
             message = {}
