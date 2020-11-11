@@ -326,14 +326,14 @@ function game(color, id){
             if (this.squareExists(x, y)){
                 if(squares[y][x].piece){
                     if(squares[y][x].piece.color != square.piece.color){
-                        validMoves.push(squares[y][x]);
+                        mighty_king_moves.push(squares[y][x]);
                     } 
                 } else{
-                    validMoves.push(squares[y][x]);
+                    mighty_king_moves.push(squares[y][x]);
                 }
             }
         }
-        return validMoves;
+
         for (let j = 0; j < directions.length; j++) {
             for (let i = 1; i < 8; i++) {
                 x = square.x+(directions[j][0] * i);
@@ -352,7 +352,9 @@ function game(color, id){
                 }
             }
         }
-        return validMoves;
+        
+        console.log(mighty_king_moves);
+        
     }
 
     this.getValidMoves = function(square){
