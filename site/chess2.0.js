@@ -7,9 +7,10 @@ function API(){
 	this.url = "http://localhost:5555";
 	//Should API have a board instance? API is a static class but I don't know how
 	//to use it in JS properly. I think it will be ok to use it for now.
-	this.gameInstance;
+    this.gameInstance;
+    
 
-	this.sendMoves = function(args){	
+	this.sendMoves = function(args){
 		this.xmlhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
 				var response = JSON.parse(this.responseText);
@@ -32,18 +33,25 @@ function API(){
 	}
 
 	this.getMoves = function() {
-		this.xmlhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				var response = JSON.parse(this.responseText);
-				if (response.answer != -1) {
-					console.log(response.answer);
-					var from = this.gameInstance.squares[response.answer.from[1]][response.answer.from[0]];
-					var to = this.gameInstance.squares[response.answer.to[1]][response.answer.to[0]];	
-
-					this.gameInstance.move(from, to, true);
-				}
-			}}
-
+        try{
+            this.xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var response = JSON.parse(this.responseText);
+                    if (response.answer != -1) {
+                        console.log(response.answer);
+                        var from = this.gameInstance.squares[response.answer.from[1]][response.answer.from[0]];
+                        var to = this.gameInstance.squares[response.answer.to[1]][response.answer.to[0]];	
+                        this.gameInstance.move(from, to, true);
+                        this.gameInstance.startTurn();
+                    }
+                }
+                this.getMoves();
+            }
+        } catch{
+            console.log("Could not connect to server");
+        }
+		
+            
 		this.xmlhttp.open("POST", this.url, true);
 		this.xmlhttp.send(JSON.stringify({"player_id":player_id, "get_moves": "0"}));
 	}
@@ -55,7 +63,8 @@ function API(){
 			if (this.readyState == 4 && this.status == 200) {
 				var response = JSON.parse(this.responseText);
 				if (response.answer == 1) {
-					this.gameInstance = new game("white", 0);
+                    this.gameInstance = new game("white", 0);
+                    this.gameInstance.turn = true;
 				};
 			}}
 
@@ -68,7 +77,8 @@ function API(){
 			if (this.readyState == 4 && this.status == 200) {
 				var response = JSON.parse(this.responseText);
 				if (response.answer == 1){
-					this.gameInstance = new game("black", 1);
+                    this.gameInstance = new game("black", 1);
+                    this.gameInstance.turn = false;
 				};
 			}}
 		
@@ -136,9 +146,13 @@ const initalState = [
 const toLetter = ['a','b','c','d','e','f','g','h'];
 
 function game(color, id){
+    this.turn;
     this.color = color;
     this.selectedSquare = null;
+    
 	this.initalizeGui = function(){
+        this.turnMarker = document.createElement("P")
+        this.turnMarker.id  = "turn_marker";
         guiSquares = [];
         container = document.getElementById("chess_board");
         for (let i = 0; i < 9; i++) {
@@ -151,6 +165,7 @@ function game(color, id){
             }
             container.appendChild(row);
         }
+        document.getElementById("center").appendChild(this.turnMarker);
         return guiSquares;
     }
 
@@ -162,8 +177,8 @@ function game(color, id){
 		}
 	}
 	//Starts loop waiting for other player of first move.
-	this.manageInterval(true);
-
+	//this.manageInterval(true);
+    this.api.getMoves(id);
 
     this.initalizeSquares = function(){
         squares = [];
@@ -210,7 +225,6 @@ function game(color, id){
         }
     }
 
-
     this.clickOn = function(square){
         if(this.selectedSquare){
             this.move(this.selectedSquare, square);
@@ -228,40 +242,119 @@ function game(color, id){
         }
     }
 
+    this.startTurn = function(){
+        console.log("It's your turn")
+        this.turnMarker.innerHTML = "YOUR TURN";
+        this.turn = true;
+    }
+
+    this.endTurn = function(){
+        console.log("Turn ended")
+        this.turnMarker.innerHTML = "OPPONENTS TURN";
+        this.turn = false;
+    }
+
     this.boardGUI = this.initalizeGui();
     this.setMarkers(this.boardGUI, this.color);
     this.squares = this.initalizeSquares();
     this.linkGameBoard(this.squares, this.boardGUI, this.color);
     this.placePieces(this.squares, initalState);
 
+    if (this.color == 'white'){
+        this.startTurn();
+    } else{
+        this.endTurn();
+    }
+
     this.move = function(from, to, isEnemy = false){
-		if (isEnemy) {
-			// If it is the enemy move that the board is handling,
-			// set off the get_move loop and don't send it back to the
-			// server.
-			this.manageInterval(false);
-			console.log(from, to);
-			to.setPiece(from.piece);
-			from.clear();
-		} else {
-			//Noah, i honestly hope this never finds you.
-			//I'm canceling the interval before making a move just because
-			//otherwise white would always have the first loop running.
-			//It is def not the optimal way of doing it but I'm too tired
-			//to do anything better.
-			this.manageInterval(false);
-			validMoves = this.getValidMoves(from);
-			if(from.piece){
-				for (let i = 0; i < validMoves.length; i++) {
-					if(validMoves[i] == to){
-						this.manageInterval(true);
-						api.sendMoves([from, to]);
-						to.setPiece(from.piece);
-						from.clear();
-					}
-				}           
-			}
-		}
+        if(this.turn){
+            if (isEnemy) {
+                // If it is the enemy move that the board is handling,
+                // set off the get_move loop and don't send it back to the
+                // server.
+                this.manageInterval(false);
+                console.log(from, to);
+                to.setPiece(from.piece);
+                from.clear();
+            } else {
+                //Noah, i honestly hope this never finds you.
+                //I'm canceling the interval before making a move just because
+                //otherwise white would always have the first loop running.
+                //It is def not the optimal way of doing it but I'm too tired
+                //to do anything better.
+                this.manageInterval(false);
+                validMoves = this.getValidMoves(from);
+                if(from.piece){
+                    for (let i = 0; i < validMoves.length; i++) {
+                        if(validMoves[i] == to){
+                            this.manageInterval(true);
+                            api.sendMoves([from, to]);
+                            to.setPiece(from.piece);
+                            from.clear();
+                            this.endTurn();
+                        }
+                    }           
+                }
+            }
+        } else{
+            console.log("Not your turn");
+        }
+    }
+
+
+    this.validateCheck = function(from, to){
+        kingSquare;
+        mighty_king_moves = [];
+        for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
+                if(board[i][j].piece){
+                    if(board[i][j].piece.type = "king"){
+                        kingSquare = board[i][j];
+                    }
+                }
+            }
+        }
+        if(!kingSquare) return 0;
+
+        directions = [[1,1], [-1,-1], [-1,1], [1,-1], [1,0], [-1,0], [0,1], [0,-1]];
+        moveOptions = [[2,1], [2,-1], [-2,-1], [-2,1], [1,2], [1,-2], [-1,2], [-1,-2]];
+
+        for (let i = 0; i < moveOptions.length; i++) {
+            x = square.x + (moveOptions[i][0]);
+            y = square.y + (moveOptions[i][1]);
+
+            if (this.squareExists(x, y)){
+                if(squares[y][x].piece){
+                    if(squares[y][x].piece.color != square.piece.color){
+                        mighty_king_moves.push(squares[y][x]);
+                    } 
+                } else{
+                    mighty_king_moves.push(squares[y][x]);
+                }
+            }
+        }
+
+        for (let j = 0; j < directions.length; j++) {
+            for (let i = 1; i < 8; i++) {
+                x = square.x+(directions[j][0] * i);
+                y = square.y+(directions[j][1] * i);
+                if (this.squareExists(x, y)){
+                    if(squares[y][x].piece){
+                        if(squares[y][x].piece.color != square.piece.color){
+                            mighty_king_moves.push(squares[y][x])
+                        } 
+                        break;
+                    } else{
+                        mighty_king_moves.push(squares[y][x])
+                    }
+                } else{
+                    break;
+                }
+            }
+        }
+        
+        console.log(mighty_king_moves);
+        
     }
 
     this.getValidMoves = function(square){
