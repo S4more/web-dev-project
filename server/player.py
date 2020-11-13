@@ -4,6 +4,7 @@ class Player:
         self.board = board
         self.lastMove = []
         self.isTurn = False
+        #self.color = color
         self.color = 'w'
         self.board.addPlayer(self)
 
