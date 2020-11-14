@@ -16,7 +16,7 @@ class Server:
         self.port = port
         self.matches = {}
         self.connections = []
-        self.timeoutTime = 20
+        self.timeoutTime = int(60 / 0.2)
 
         #Tries to open the server at the specified port
         try:
@@ -44,7 +44,7 @@ class Server:
                     return player.board.getMoves(player.ip)
                 except Exception as e:
                     print(data['player_id'], e.message)
-                    time.sleep(1)
+                    time.sleep(0.2)
             return -1
             
         elif "get_status" in data:

@@ -54,6 +54,8 @@ class Board:
     def getMoves(self, ip):
         if len(self.players) < 2:
             raise InsuficientPlayers
+        if self._lastMove == [] and ip == self.players[0].ip:
+            return 1
         if self.lastIp == ip or self._lastMove == []:
             raise moveNotYetMade
         return self._lastMove

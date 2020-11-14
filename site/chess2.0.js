@@ -14,7 +14,6 @@ function API(){
 		this.xmlhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
 				var response = JSON.parse(this.responseText);
-				console.log(response);
 				return response;
 			}}
 
@@ -33,21 +32,29 @@ function API(){
 	}
 
 	this.getMoves = function() {
+		//console.log("called by: ", new Error().stack);
         try{
             this.xmlhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     var response = JSON.parse(this.responseText);
-                    if (response.answer != -1) {
-                        console.log(response.answer);
+                    if (response.answer == 1) {
+					//This will happens only in the first move
+						this.gameInstance.startTurn();
+					} else if (response.answer != -1) {
                         var from = this.gameInstance.squares[response.answer.from[1]][response.answer.from[0]];
                         var to = this.gameInstance.squares[response.answer.to[1]][response.answer.to[0]];	
+						console.log("answer received... calling move");
                         this.gameInstance.move(from, to, true);
                         this.gameInstance.startTurn();
-                    }
-                }
-                this.getMoves();
-            }
+		//				console.log(this);
+                    } else {
+						console.log("else");
+						api.getMoves();
+					} 
+				}
+			}
         } catch{
+			console.log("HERE!");
             console.log("Could not connect to server");
         }
 		
@@ -65,6 +72,7 @@ function API(){
 				if (response.answer == 1) {
                     this.gameInstance = new game("white", 0);
                     this.gameInstance.turn = true;
+					api.getMoves();
 				};
 			}}
 
@@ -178,7 +186,7 @@ function game(color, id){
 	}
 	//Starts loop waiting for other player of first move.
 	//this.manageInterval(true);
-    this.api.getMoves(id);
+    
 
     this.initalizeSquares = function(){
         squares = [];
@@ -243,8 +251,8 @@ function game(color, id){
     }
 
     this.startTurn = function(){
-        console.log("It's your turn")
-        this.turnMarker.innerHTML = "YOUR TURN";
+        //console.log("It's your turn")
+		this.turnMarker.innerHTML = "YOUR TURN";
         this.turn = true;
     }
 
@@ -252,6 +260,7 @@ function game(color, id){
         console.log("Turn ended")
         this.turnMarker.innerHTML = "OPPONENTS TURN";
         this.turn = false;
+		api.getMoves();
     }
 
     this.boardGUI = this.initalizeGui();
@@ -261,44 +270,46 @@ function game(color, id){
     this.placePieces(this.squares, initalState);
 
     if (this.color == 'white'){
-        this.startTurn();
-    } else{
+		//api.getMoves();
+        //this.startTurn();
+		console.log("Waiting for opponent");
+	} else{
         this.endTurn();
     }
 
     this.move = function(from, to, isEnemy = false){
-        if(this.turn){
-            if (isEnemy) {
-                // If it is the enemy move that the board is handling,
-                // set off the get_move loop and don't send it back to the
-                // server.
-                this.manageInterval(false);
-                console.log(from, to);
-                to.setPiece(from.piece);
-                from.clear();
+		if (isEnemy) {
+			// If it is the enemy move that the board is handling,
+			// set off the get_move loop and don't send it back to the
+			// server.
+			//this.manageInterval(false);
+			console.log("Moving enemy");
+			to.setPiece(from.piece);
+			from.clear();
+		} else {
+			if (this.turn) {
+			//Noah, i honestly hope this never finds you.
+			//I'm canceling the interval before making a move just because
+			//otherwise white would always have the first loop running.
+			//It is def not the optimal way of doing it but I'm too tired
+			//to do anything better.
+			//this.manageInterval(false);
+			validMoves = this.getValidMoves(from);
+			if(from.piece){
+				for (let i = 0; i < validMoves.length; i++) {
+					if(validMoves[i] == to){
+						console.log("moving own piece");
+						api.sendMoves([from, to]);
+						to.setPiece(from.piece);
+						from.clear();
+						this.endTurn();
+						}
+					}           
+				}
             } else {
-                //Noah, i honestly hope this never finds you.
-                //I'm canceling the interval before making a move just because
-                //otherwise white would always have the first loop running.
-                //It is def not the optimal way of doing it but I'm too tired
-                //to do anything better.
-                this.manageInterval(false);
-                validMoves = this.getValidMoves(from);
-                if(from.piece){
-                    for (let i = 0; i < validMoves.length; i++) {
-                        if(validMoves[i] == to){
-                            this.manageInterval(true);
-                            api.sendMoves([from, to]);
-                            to.setPiece(from.piece);
-                            from.clear();
-                            this.endTurn();
-                        }
-                    }           
-                }
-            }
-        } else{
-            console.log("Not your turn");
-        }
+				console.log("Not your turn");
+			}
+		}
     }
 
 
