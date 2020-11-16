@@ -21,10 +21,11 @@ It is important to send the right data
 - [x] Accept POST requests
 - [x] Handle multiple games at the same time
 - [ ] Reconnect system
-- 
-
-
 
 ## HTML / CSS
 - [x] Lobby prototype
 - [ ] Main page
+- [ ] Rules page / wiki
+- [ ] Show taken pieces
+- [ ] Lobby filtering/search
+
