@@ -37,6 +37,7 @@ class Board:
         self._lastMove = []
         self.lastIp = None
         self.players = []
+        self.firstMove = False
         self.cols = [letter for letter in char_range('a', 'h')]
         self.rows = [str(number) for number in range(1,9)]
         self.board = [[] for i in range(0, 8)]
@@ -52,9 +53,11 @@ class Board:
         return lastMove
 
     def getMoves(self, ip):
+        print(f"Last move {self._lastMove} done by {self.lastIp}")
         if len(self.players) < 2:
             raise InsuficientPlayers
-        if self._lastMove == [] and ip == self.players[0].ip:
+        if self._lastMove == [] and ip == self.players[0].ip and not self.firstMove:
+            self.firstMove = True
             return 1
         if self.lastIp == ip or self._lastMove == []:
             raise moveNotYetMade

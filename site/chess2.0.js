@@ -4,7 +4,7 @@ api = new API();
 
 function API(){
 	this.xmlhttp = new XMLHttpRequest();
-	this.url = "http://localhost:5555";
+	this.url = "http://192.168.2.12:5555";
 	//Should API have a board instance? API is a static class but I don't know how
 	//to use it in JS properly. I think it will be ok to use it for now.
     this.gameInstance;
@@ -14,7 +14,7 @@ function API(){
 		this.xmlhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
 				var response = JSON.parse(this.responseText);
-				return response;
+				api.getMoves();
 			}}
 
 		// I HATE JAVASCRIPT
@@ -26,9 +26,9 @@ function API(){
 		withMethod["make_move"]["from"] = [args[0].x, args[0].y];
 		withMethod["make_move"]["to"] =  [args[1].x, args[1].y];
 
+		this.xmlhttp.abort();
 		this.xmlhttp.open("POST", this.url, true);
 		this.xmlhttp.send(JSON.stringify(withMethod));
-
 	}
 
 	this.getMoves = function() {
@@ -46,7 +46,6 @@ function API(){
 						console.log("answer received... calling move");
                         this.gameInstance.move(from, to, true);
                         this.gameInstance.startTurn();
-		//				console.log(this);
                     } else {
 						console.log("else");
 						api.getMoves();
@@ -87,6 +86,7 @@ function API(){
 				if (response.answer == 1){
                     this.gameInstance = new game("black", 1);
                     this.gameInstance.turn = false;
+					api.getMoves();
 				};
 			}}
 		
@@ -260,7 +260,6 @@ function game(color, id){
         console.log("Turn ended")
         this.turnMarker.innerHTML = "OPPONENTS TURN";
         this.turn = false;
-		api.getMoves();
     }
 
     this.boardGUI = this.initalizeGui();
@@ -298,7 +297,7 @@ function game(color, id){
 			if(from.piece){
 				for (let i = 0; i < validMoves.length; i++) {
 					if(validMoves[i] == to){
-						console.log("moving own piece");
+						console.log("oving own piece");
 						api.sendMoves([from, to]);
 						to.setPiece(from.piece);
 						from.clear();

@@ -16,7 +16,7 @@ class Server:
         self.port = port
         self.matches = {}
         self.connections = []
-        self.timeoutTime = int(60 / 0.2)
+        self.timeoutTime = int(60 / 0.5)
 
         #Tries to open the server at the specified port
         try:
@@ -36,6 +36,7 @@ class Server:
             return "already in game"
     
     def request_validation(self, data):
+        #print(data)
         #get_moves : [from, to] -> [str, str]
         if "get_moves" in data:
             for i in range(0, self.timeoutTime):
@@ -43,15 +44,15 @@ class Server:
                     player = self.connections[data['player_id']]
                     return player.board.getMoves(player.ip)
                 except Exception as e:
-                    print(data['player_id'], e.message)
-                    time.sleep(0.2)
+                    #print(data['player_id'], e.message)
+                    time.sleep(0.5)
             return -1
             
         elif "get_status" in data:
             for i in range(0, self.timeoutTime):
                 if len(player.board.players) != 2: 
-                    print("waiting for player")
-                    time.sleep(2)
+                    #print("waiting for player")
+                    time.sleep(0.5)
                 else:
                     return 1
             return -1
@@ -71,28 +72,28 @@ class Server:
                 player.board.movePiece(move, player.ip)
                 return 1
             except Exception as e:
-                print(e.message)
+                #print(e.message)
                 return -1
 
         #join_game : id -> str
         elif "join_game" in data:
             try:
-                print(data)
+                #print(data)
                 id = data["join_game"]
                 if id in self.matches:
                     self.connections.append(Player(data['player_id'], 'black', self.matches[id]))
                     return 1
                 else:
-                    print("The game does not exist")
+                    #print("The game does not exist")
                     return -1
 
             except Exception as e:
-                print(e)
+                #print(e)
                 return -1
 
         #create_game : id -> str
         elif "create_game" in data:
-            print(data)
+            #print(data)
             id = data['create_game']
             if id  not in self.matches:
                 board = Board(id)
@@ -100,12 +101,13 @@ class Server:
                 self.connections.append(Player(data['player_id'], 'white', board))
                 return 1
             else:
-                print("Player is already in match")
+                #print("Player is already in match")
                 return -1
 
         else:
-            print("non-identified POST")
-            print(data)
+            #print("non-identified POST")
+            #print(data)
+            pass
 
     def threaded_handle_connection(self, conn, addr):
 
@@ -117,7 +119,7 @@ class Server:
             #If the board does not exist, creates it and then put player inside of it.
             #message = self.matches[data['board']].handlePost(data)
             
-            print(message)
+            #print(message)
 
 
         except Exception as e:
@@ -147,7 +149,7 @@ class Server:
         return [r, response_headers_raw, '\r\n', msg]
 
 if __name__ == '__main__':
-    server = Server("localhost", 5555)
+    server = Server("", 5555)
     #For some reason, I can't listen inside class. Maybe it's some thread/self problem 
     while True:
         try:
@@ -158,7 +160,7 @@ if __name__ == '__main__':
             start_new_thread(server.threaded_handle_connection, (conn, addr))
 
         except Exception as e:
-            print(e)
+            #print(e)
             traceback.print_exc(file=sys.stdout)
             conn.close()
             break
