@@ -42,7 +42,7 @@ class Server:
             for i in range(0, self.timeoutTime):
                 try:
                     player = self.connections[data['player_id']]
-                    return player.board.getMoves(player.ip)
+                    return player.board.getMoves(player.name)
                 except Exception as e:
                     #print(data['player_id'], e.message)
                     time.sleep(0.5)
@@ -60,7 +60,9 @@ class Server:
         elif "get_matches" in data:
             message = {}
             for match in self.matches:
-                message[match] = len(self.matches[match].players)
+                message[str(match)] = self.matches[match].getInfo();
+            if message == {}:
+                message["empty"] = "empty"
 
             return message
 
@@ -69,7 +71,7 @@ class Server:
             try:
                 player = self.connections[data['player_id']]
                 move = data["make_move"]
-                player.board.movePiece(move, player.ip)
+                player.board.movePiece(move, player.name)
                 return 1
             except Exception as e:
                 #print(e.message)

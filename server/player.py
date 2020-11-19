@@ -1,6 +1,6 @@
 class Player:
-    def __init__(self, ip, color, board):
-        self.ip = ip
+    def __init__(self, name, color, board):
+        self.name = name 
         self.board = board
         self.lastMove = []
         self.isTurn = False
