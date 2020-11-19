@@ -25,6 +25,7 @@ function API(){
 
 
 function createMatch(key, value) {
+	console.log(key, value);
 	let card = document.createElement("div");
 	card.className = "card";
 	let top = document.createElement("div");

@@ -1,10 +1,10 @@
 var player_id = null;
 api = new API();
-
+api.joinGame(sessionStorage.room_id);
 
 function API(){
 	this.xmlhttp = new XMLHttpRequest();
-	this.url = "http://70.26.238.78:34568";
+	this.url = "http://localhost:5555";
 	//Should API have a board instance? API is a static class but I don't know how
 	//to use it in JS properly. I think it will be ok to use it for now.
     this.gameInstance;
