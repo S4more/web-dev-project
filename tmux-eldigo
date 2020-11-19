@@ -1,0 +1,14 @@
+#!/bin/sh
+session="chess"
+
+cd $HOME/Dev/web-dev-project
+
+tmux new-session -d -s $session -n Chess
+tmux split-window -v
+tmux send-keys "clear; ssh -p 8022 192.168.2.12" C-m
+tmux split-window -h -p 60
+tmux send-keys "clear; ssh -p 8022 192.168.2.12" C-m
+tmux new-window -t $session:1 -n noLag
+tmux send-keys "ssh -t -p 8022 192.168.2.12 'while true; do echo ANTI-LAG IS ON.; sleep 0.3; clear; done'" C-m
+tmux select-window -t $session:0
+tmux attach-session -t $session
