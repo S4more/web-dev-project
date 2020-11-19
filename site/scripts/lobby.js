@@ -10,6 +10,7 @@ function API(){
 			if (this.readyState == 4 && this.status == 200) {
 				let response = JSON.parse(this.responseText);
 				if (response.answer !== 1) {
+					console.log(response);
 					populateList(response.answer);
 				} else {
 					console.log("Empty.");
@@ -17,15 +18,12 @@ function API(){
 			}
 		}
 
-		this.xmlhttp;
 		this.xmlhttp.open("POST", this.url, true);
 		this.xmlhttp.send(JSON.stringify({"get_matches":"_"}));
 	}
 }
 
-
-function createMatch(key, value) {
-	console.log(key, value);
+function createCard(key, value) {
 	let card = document.createElement("div");
 	card.className = "card";
 	let top = document.createElement("div");
@@ -45,6 +43,7 @@ function createMatch(key, value) {
 	button.innerHTML = "Join";
 	button.addEventListener("click", function() {
 		sessionStorage.setItem('room_id', key);
+		sessionStorage.setItem('action', "join game");
 		document.location.href = "/";
 	});
 
@@ -59,12 +58,33 @@ function createMatch(key, value) {
 function populateList(dic) {
 	list = document.getElementById("games_list");
 	for (let key in dic) {
-		list.appendChild(createMatch(key, dic[key]));
+		list.appendChild(createCard(key, dic[key]));
 	}
 }
 
-let listExample = {"room_id":{"players":["white_id", "black_id"]}};
+function createMatch() {
+	let card = document.createElement("div");
+	card.className = "card";
 
+	let top = document.createElement("div");
+	let input = document.createElement("INPUT");
+	input.setAttribute("type", "text");
+	input.setAttribute("id", "input");
+
+	let button = document.createElement("button");
+	button.className = "join_button";
+	button.innerHTML = "Join";
+	button.addEventListener("click", function() {
+		sessionStorage.setItem('room_id', document.getElementById("input").value);
+		sessionStorage.setItem('action', "create game");
+		document.location.href = "/";
+	});
+
+	card.append(input, button);
+
+	return card;
+}
 
 api = new API();
 api.getMatches();
+document.getElementById("games_list").appendChild(createMatch());

@@ -1,6 +1,11 @@
 var player_id = null;
 api = new API();
-api.joinGame(sessionStorage.room_id);
+if (sessionStorage.action == "create game"){
+	api.createGame(sessionStorage.room_id);
+} else if (sessionStorage.action == "join game"){
+	api.joinGame(sessionStorage.room_id);
+}
+sessionStorage.clear()
 
 function API(){
 	this.xmlhttp = new XMLHttpRequest();
