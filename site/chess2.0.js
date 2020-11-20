@@ -1,10 +1,15 @@
 var player_id = null;
 api = new API();
-
+if (sessionStorage.action == "create game"){
+	api.createGame(sessionStorage.room_id);
+} else if (sessionStorage.action == "join game"){
+	api.joinGame(sessionStorage.room_id);
+}
+sessionStorage.clear()
 
 function API(){
 	this.xmlhttp = new XMLHttpRequest();
-	this.url = "http://70.26.238.78:34568";
+	this.url = "http://localhost:5555";
 	//Should API have a board instance? API is a static class but I don't know how
 	//to use it in JS properly. I think it will be ok to use it for now.
     this.gameInstance;
@@ -62,9 +67,8 @@ function API(){
 		this.xmlhttp.send(JSON.stringify({"player_id":player_id, "get_moves": "0"}));
 	}
 
-	this.createGame = function(id) {
+	this.createGame = function(player_id) {
 		//player_id is set to 0 purely for test purposes.
-		player_id = 0;
 		this.xmlhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
 				var response = JSON.parse(this.responseText);
@@ -79,7 +83,7 @@ function API(){
 		this.xmlhttp.send(JSON.stringify({"player_id":player_id, "create_game": "0"}));
 	}
 	
-	this.joinGame = function(id) {
+	this.joinGame = function(player_id) {
 		this.xmlhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
 				var response = JSON.parse(this.responseText);
@@ -90,7 +94,6 @@ function API(){
 				};
 			}}
 		
-		player_id = 1;
 		this.xmlhttp.open("POST", this.url, true);
 		this.xmlhttp.send(JSON.stringify({"player_id": player_id, "join_game": "0"}));
 	}

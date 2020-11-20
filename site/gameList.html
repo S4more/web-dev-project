@@ -2,50 +2,78 @@
 <html>
 <head>
     <link rel="stylesheet" href="gameList.css">
+	<link rel="stylesheet" href="styles/header.css">
+	<script defer src="scripts/lobby.js"></script>
 	<meta charset="utf-8">
 	<title>Find Game</title>
 </head>
 
 <body>
     <nav>
-		<a href="index.html">Home</a>
-		<a href="gameList.html">Find a Match</a>
-		<a href="index.html">Ongoing Matches</a>
-		<a href="index.html">About</a>
+		<img src="images/logo.png">
+		<div class="right"> 
+			<a href="index.html">Home</a>
+			<a href="gameList.html">Find a Match</a>
+			<a href="index.html">Ongoing Matches</a>
+			<a href="index.html">About</a>
+		</div>
 	</nav>
 
-
-    <div id="left"></div>
-    <div id="games_list_container">
-        <label id="games_list_label" for="games_list_container">Avalible Games:</label>
-        <button id="new_game_button">Create Lobby</button>
-        <ul id="games_list">
-            <li class="game_lobby">Lobby1 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby2 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby1 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby2 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby1 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby2 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby1 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby2 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby1 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby2 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby1 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby2 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby1 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby2 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby1 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby2 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby1 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby2 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby1 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby2 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby1 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby2 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby1 <button class="join_button">Join</button></li>
-            <li class="game_lobby">Lobby2 <button class="join_button">Join</button></li>
-        </ul>
-    </div>
-    <div id="right"></div>
+	<div id="games_list">
+		<div class="card">
+			<div class="card top">
+				<img src="images/white_pawn">
+				<p> Guilherme </p>
+			</div>
+			<div class="card bot">
+				<button class="join_button">Join</button>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card top">
+				<img src="images/white_pawn">
+				<p> Noah </p>
+			</div>
+			<div class="card bot">
+				<button class="join_button">Join</button>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card top">
+				<img src="images/white_pawn">
+				<p> Guilherme </p>
+			</div>
+			<div class="card bot">
+				<button class="join_button">Join</button>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card top">
+				<img src="images/white_pawn">
+				<p> Noah </p>
+			</div>
+			<div class="card bot">
+				<button class="join_button">Join</button>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card top">
+				<img src="images/white_pawn">
+				<p> Guilherme </p>
+			</div>
+			<div class="card bot">
+				<button class="join_button">Join</button>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card top">
+				<img src="images/white_pawn">
+				<p> Noah </p>
+			</div>
+			<div class="card bot">
+				<button class="join_button">Join</button>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

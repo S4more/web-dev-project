@@ -25,15 +25,6 @@ class Server:
             str(e)
 
         self.s.listen(2)
-
-    def client_handler(self, conn, addr) -> str:
-        if addr[0] not in self.matches:
-            #Each IP will be associated with a Player object.
-            #And ideally with a chess board object as well.
-            self.matches[addr[0]] = "k"
-            return "registered"
-        else:
-            return "already in game"
     
     def request_validation(self, data):
         #print(data)
@@ -42,7 +33,7 @@ class Server:
             for i in range(0, self.timeoutTime):
                 try:
                     player = self.connections[data['player_id']]
-                    return player.board.getMoves(player.ip)
+                    return player.board.getMoves(player.name)
                 except Exception as e:
                     #print(data['player_id'], e.message)
                     time.sleep(0.5)
@@ -60,7 +51,9 @@ class Server:
         elif "get_matches" in data:
             message = {}
             for match in self.matches:
-                message[match] = len(self.matches[match].players)
+                message[match] = self.matches[match].getInfo();
+            if message == {}:
+                message["empty"] = "empty"
 
             return message
 
@@ -69,7 +62,7 @@ class Server:
             try:
                 player = self.connections[data['player_id']]
                 move = data["make_move"]
-                player.board.movePiece(move, player.ip)
+                player.board.movePiece(move, player.name)
                 return 1
             except Exception as e:
                 #print(e.message)
