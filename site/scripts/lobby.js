@@ -71,16 +71,21 @@ function createMatch() {
 	input.setAttribute("type", "text");
 	input.setAttribute("id", "input");
 
+	let name = document.createElement("INPUT");
+	name.setAttribute("type", "text");
+	name.setAttribute("id", "name");
+
 	let button = document.createElement("button");
 	button.className = "join_button";
 	button.innerHTML = "Join";
 	button.addEventListener("click", function() {
 		sessionStorage.setItem('room_id', document.getElementById("input").value);
+		sessionStorage.setItem('name', document.getElementById("name").value);
 		sessionStorage.setItem('action', "create game");
 		document.location.href = "/";
 	});
 
-	card.append(input, button);
+	card.append(input, name, button);
 
 	return card;
 }

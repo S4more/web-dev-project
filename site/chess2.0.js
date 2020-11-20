@@ -67,9 +67,8 @@ function API(){
 		this.xmlhttp.send(JSON.stringify({"player_id":player_id, "get_moves": "0"}));
 	}
 
-	this.createGame = function(id) {
+	this.createGame = function(player_id) {
 		//player_id is set to 0 purely for test purposes.
-		player_id = 0;
 		this.xmlhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
 				var response = JSON.parse(this.responseText);
@@ -84,7 +83,7 @@ function API(){
 		this.xmlhttp.send(JSON.stringify({"player_id":player_id, "create_game": "0"}));
 	}
 	
-	this.joinGame = function(id) {
+	this.joinGame = function(player_id) {
 		this.xmlhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
 				var response = JSON.parse(this.responseText);
@@ -95,7 +94,6 @@ function API(){
 				};
 			}}
 		
-		player_id = 1;
 		this.xmlhttp.open("POST", this.url, true);
 		this.xmlhttp.send(JSON.stringify({"player_id": player_id, "join_game": "0"}));
 	}

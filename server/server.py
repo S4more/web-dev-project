@@ -25,15 +25,6 @@ class Server:
             str(e)
 
         self.s.listen(2)
-
-    def client_handler(self, conn, addr) -> str:
-        if addr[0] not in self.matches:
-            #Each IP will be associated with a Player object.
-            #And ideally with a chess board object as well.
-            self.matches[addr[0]] = "k"
-            return "registered"
-        else:
-            return "already in game"
     
     def request_validation(self, data):
         #print(data)
@@ -60,7 +51,7 @@ class Server:
         elif "get_matches" in data:
             message = {}
             for match in self.matches:
-                message[str(match)] = self.matches[match].getInfo();
+                message[match] = self.matches[match].getInfo();
             if message == {}:
                 message["empty"] = "empty"
 
