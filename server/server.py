@@ -15,7 +15,7 @@ class Server:
         self.ip = ip
         self.port = port
         self.matches = {}
-        self.connections = []
+        self.connections = {}
         self.timeoutTime = int(60 / 0.5)
 
         #Tries to open the server at the specified port
@@ -27,16 +27,18 @@ class Server:
         self.s.listen(2)
     
     def request_validation(self, data):
-        #print(data)
         #get_moves : [from, to] -> [str, str]
+        print(data)
         if "get_moves" in data:
             for i in range(0, self.timeoutTime):
                 try:
                     player = self.connections[data['player_id']]
+                    print(player)
                     return player.board.getMoves(player.name)
                 except Exception as e:
-                    #print(data['player_id'], e.message)
+                    print(data['player_id'], e.message)
                     time.sleep(0.5)
+                    print("t")
             return -1
             
         elif "get_status" in data:
@@ -70,36 +72,38 @@ class Server:
 
         #join_game : id -> str
         elif "join_game" in data:
+            print("join game")
             try:
                 #print(data)
                 id = data["join_game"]
                 if id in self.matches:
-                    self.connections.append(Player(data['player_id'], 'black', self.matches[id]))
+                    self.connections[data['player_id']] = Player(data['player_id'], 'black', self.matches[id])
                     return 1
                 else:
-                    #print("The game does not exist")
+                    print("The game does not exist")
                     return -1
 
             except Exception as e:
-                #print(e)
+                print("exception", e)
                 return -1
 
         #create_game : id -> str
         elif "create_game" in data:
-            #print(data)
+            #print(dat)
+            #print("create game")
             id = data['create_game']
-            if id  not in self.matches:
+            if id not in self.matches:
                 board = Board(id)
                 self.matches[id] = board 
-                self.connections.append(Player(data['player_id'], 'white', board))
+                self.connections[data['player_id']] = Player(data['player_id'], 'white', board)
                 return 1
             else:
                 #print("Player is already in match")
                 return -1
 
         else:
-            #print("non-identified POST")
-            #print(data)
+            print("non-identified POST")
+            print(data)
             pass
 
     def threaded_handle_connection(self, conn, addr):
