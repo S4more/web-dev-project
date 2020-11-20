@@ -43,7 +43,7 @@ class Board:
         self.board = [[] for i in range(0, 8)]
         self.start()
     
-    def flnameSide(self):
+    def flipSide(self):
         lastMove = self._lastMove
         print(lastMove)
         for key in self._lastMove:
