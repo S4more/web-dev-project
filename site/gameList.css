@@ -1,69 +1,165 @@
 body {
 	height: 500px;
-	background-color: #cdd4e4;
+	background-color: #18181e;
 }
 
 #games_list {
 	display: flex;
 	margin: auto;
-	width: 50%;
+	max-width: 80%;
 	height: 100%;
-	justify-content: space-evenly;
 	flex-wrap: wrap;
+	justify-content: center;
+	align-content: flex-start;
 }
 
-.card {
+.card{
 	display: flex;
-	flex: 0 0 25%;
-	margin: 1% 0;
 	background-color: #f3f3f3;
 	align-items: center;
 	flex-direction: column;	
 	justify-content: space-between;
 	border-radius: 6px;
-	border: 1px solid black;
-
+	box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.38);
+	margin: 20px;
 
 	/* Animation */
-	transition: transform .3s;
+	transition: transform .3s ease-in-out, background-color .3s ease-in-out;
 }
 
-.card:hover {
-	border-color: #7a837e;
-	border-width: 1px;
-	transform: scale(1.1);	
+.card.create {
+	/* different color for when you can create a game */
 }
-.card .top {
-	border: none;
-	margin: 0 5%;
-	justify-content: space-between;
+
+.card:hover{
+	transform: scale(1.04);
+	background-color: #2b2b2b;
+}
+
+.card:hover .mid{
+	background-color: #2b2b2b;
+}
+
+.card:hover .hidden{
+	visibility: visible;
+	opacity: 1;
+	transition: visibility 0s, opacity .6s ease-in-out;
+}
+
+.card:hover .mid img{
+	filter: brightness(30%) blur(1.5px);
+}
+
+.card.player-bar {
 	flex-direction: row;
 	align-items: center;
+	height: 50px;
+	width: 110%;
+	margin-top: 20px;
+	background-color: #c5a05c;
 }
 
-
-.card .top p {
-	margin: 0 0;
+.card.player-bar p {
+	color: #26231D;
+	margin: 5px;
+	margin-right: 15px;
 }
 
-.card .top img {
-	width: 20%;
-	border-radius: 30px;
-	border: 1px solid black;
+.card.player-bar img {
+	border-radius:62px;
+	width: 60px;
+	height: 60px;
+	margin-left: 15px;
+	border: 4px solid #c5a05c;
+	background-color: white;
 }
 
-.card .bot {
+.card.player-bar.bot img{
+	margin-right: 15px;
+}
+
+.card.player-bar.bot p{
+	margin-left: 15px;
+}
+
+.card.mid {
+	position: relative;
+	transform: none;
+	box-shadow: none;
+}
+
+.card.mid img {
+	transition: filter .3s ease-in-out, transform .3s ease-in-out;
+}
+
+/* Paragraph styling */
+.card.mid p, .card.mid label{
+	color: white;
+	font-weight: bold;
+}
+
+.hidden {	
+	display: flex;
+	align-items: center;
+	flex-direction: column;	
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s 0.3s, opacity .2s linear;
+}
+
+.hidden label {
+	margin-top: 1em;
+	align-items: baseline;
+}
+
+.hidden p {
+	color: grey;
+}
+
+.card.mid .left {	
+	position: absolute;
+	left: 5%;
+	top: 5%;
+}
+
+.card.mid .right {
+	position: absolute;
+	text-align: right;
+	right: 5%;
+	bottom: 5%;
+}
+
+.card.join {
 	display: flex;
 	border: none;
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
+	background-color: white;
+	width: 90%;
+	height: 50px;
 }
 
-.card .bot button {
-	
+.card.join button {
+	background-color: #c5a05c;
+	width: 100%;
+	height: 100%;
+	border:none;
+	font-size: 20px;
+	color: #26231D;
+
+	/* Animation */
+	transition: border 0.2s;
+	transition: transform 0.05s;
+	background-color: #DEC79b;
 }
 
+.card.join button:active{
+	transform: scale(0.9);
+}
 #new_game_button {
 	width: 80px;
 }

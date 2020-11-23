@@ -24,34 +24,36 @@ function API(){
 }
 
 function createCard(key, value) {
-	let card = document.createElement("div");
-	card.className = "card";
-	let top = document.createElement("div");
-	top.className = "card top";
-	let bot = document.createElement("div");
-	bot.className = "card bot";
+	let card = document.createElement("card");
+	card.className = "card create";
 
-	let image = document.createElement("IMG");
-	image.setAttribute("src", "images/white_pawn");
+	let documentFragment = document.createRange().createContextualFragment(`
+			<div class="card player-bar">
+				<img src="images/white_pawn">
+				<p> ${value["players"][0]} </p>
+			</div>
+			<div class="card mid">
+				<img src="images/Chess-Board.jpg">
+				<div class=hidden>
+					<p> this is </p>
+					<p> loss </p>
+					<p> this is some info about the game</p>
+				</div>
+			</div>
+			<div class="card join">
+				<button> JOIN BOARD</button>
+			</div>
+				</div>
+			</div>`)
+	card.append(documentFragment);
 
-	let playerOne = document.createElement("p");
-	playerOne.innerHTML = value["players"][0];
-
-	let button = document.createElement("button");
-
-	button.className = "join_button";
-	button.innerHTML = "Join";
-	button.addEventListener("click", function() {
+	card.querySelector("button").addEventListener("click", function() {
 		sessionStorage.setItem('room_id', key);
 		sessionStorage.setItem('action', "join_game");
 		sessionStorage.setItem('player_id', "enemy");
 		document.location.href = "/";
 	});
 
-	top.appendChild(image);
-	top.appendChild(playerOne);
-	bot.appendChild(button);
-	card.append(top, bot);
 
 	return card;
 }
@@ -64,30 +66,41 @@ function populateList(dic) {
 }
 
 function createMatch() {
-	let card = document.createElement("div");
-	card.className = "card";
+	let card = document.createElement("card");
+	card.className = "card create";
 
-	let top = document.createElement("div");
-	let input = document.createElement("INPUT");
-	input.setAttribute("type", "text");
-	input.setAttribute("id", "input");
+	let documentFragment = document.createRange().createContextualFragment(`
+			<div class="card player-bar">
+				<img src="images/white_pawn">
+				<p> Your name here </p>
+			</div>
+			<div class="card mid">
+				<img src="images/Chess-Board.jpg">
+				<div class="hidden row">
+					<label>
+						<input type="checkbox" checked>
+						10 minutes
+					</label>
+					<label> 
+						<input type="checkbox" checked>
+						Public
+					</label>
 
-	let name = document.createElement("INPUT");
-	name.setAttribute("type", "text");
-	name.setAttribute("id", "name");
 
-	let button = document.createElement("button");
-	button.className = "join_button";
-	button.innerHTML = "Join";
-	button.addEventListener("click", function() {
-		sessionStorage.setItem('room_id', document.getElementById("input").value);
-		sessionStorage.setItem('player_id', document.getElementById("name").value);
+				</div>
+			</div>
+			<div class="card join bot">
+				<button> CREATE GAME </button>
+			</div>`)
+	card.append(documentFragment);
+
+	card.querySelector("button").addEventListener("click", function() {
+		sessionStorage.setItem('room_id', Math.floor(Math.random() * Math.floor(50000)));
 		sessionStorage.setItem('action', "create_game");
+		sessionStorage.setItem('player_id', "Guilherme");
 		document.location.href = "/";
 	});
-
-	card.append(input, name, button);
-
+	
 	return card;
 }
 
