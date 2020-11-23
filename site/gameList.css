@@ -15,28 +15,30 @@ body {
 
 .card{
 	display: flex;
-	background-color: white;
+	background-color: #f3f3f3;
 	align-items: center;
 	flex-direction: column;	
 	justify-content: space-between;
 	border-radius: 6px;
 	box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.38);
-	width: 200px;
-	height: 300px;
-
 	/* Animation */
-	transition: transform .3s;
-	margin: 15px;
+	transition: transform .3s ease-in-out, background-color .3s ease-in-out;
+	margin: 20px;
 }
 
-.card:hover {
-	transform: scale(1.1);
+.card:hover{
+	transform: scale(1.05);
+	background-color: #2b2b2b;
+}
+
+.card:hover .mid img{
+	filter: brightness(30%) blur(1.5px);
+	transform: scale(1.02);
 }
 
 .card.top {
 	flex-direction: row;
 	align-items: center;
-	background-color: #DEC79b;
 	height: 50px;
 	width: 110%;
 	margin-top: 20px;
@@ -44,6 +46,7 @@ body {
 }
 
 .card.top p {
+	color: #26231D;
 	margin: 5px;
 	margin-right: 15px;
 }
@@ -51,9 +54,20 @@ body {
 .card.top img {
 	border-radius:62px;
 	height: 62px;
-	border: 2px solid black;
+	width: 62px;
+	margin-left: 15px;
+	border: 4px solid #c5a05c;
 	background-color: white;
 }
+
+.card.mid {
+	transform: none;
+	box-shadow: none;
+	transition: filter 0.3s ease-in-out;
+	display: flex;
+	max-width: 100%;
+}
+
 
 .card.bot {
 	display: flex;
@@ -66,6 +80,12 @@ body {
 	height: 50px;
 }
 
+.wrapper {
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
 .card.bot button {
 	background-color: #c5a05c;
 	width: 100%;
@@ -74,6 +94,7 @@ body {
 	border:none;
 	font-size: 20px;
 
+	color: #26231D;
 	/* Animation */
 	transition: border 0.2s;
 	transition: transform 0.05s;
