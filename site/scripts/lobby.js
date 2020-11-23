@@ -43,7 +43,8 @@ function createCard(key, value) {
 	button.innerHTML = "Join";
 	button.addEventListener("click", function() {
 		sessionStorage.setItem('room_id', key);
-		sessionStorage.setItem('action', "join game");
+		sessionStorage.setItem('action', "join_game");
+		sessionStorage.setItem('player_id', "enemy");
 		document.location.href = "/";
 	});
 
@@ -80,8 +81,8 @@ function createMatch() {
 	button.innerHTML = "Join";
 	button.addEventListener("click", function() {
 		sessionStorage.setItem('room_id', document.getElementById("input").value);
-		sessionStorage.setItem('name', document.getElementById("name").value);
-		sessionStorage.setItem('action', "create game");
+		sessionStorage.setItem('player_id', document.getElementById("name").value);
+		sessionStorage.setItem('action', "create_game");
 		document.location.href = "/";
 	});
 
