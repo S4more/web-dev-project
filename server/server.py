@@ -88,7 +88,7 @@ class Server:
         elif "create_game" in data:
             #print(data)
             id = data['create_game']
-            if id  not in self.matches:
+            if id not in self.matches:
                 board = Board(id)
                 self.matches[id] = board 
                 self.connections.append(Player(data['player_id'], 'white', board))
