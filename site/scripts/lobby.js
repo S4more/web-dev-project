@@ -63,30 +63,39 @@ function populateList(dic) {
 }
 
 function createMatch() {
-	let card = document.createElement("div");
-	card.className = "card";
+	let card = document.createElement("card");
+	card.className = "card create";
 
-	let top = document.createElement("div");
-	let input = document.createElement("INPUT");
-	input.setAttribute("type", "text");
-	input.setAttribute("id", "input");
+	let documentFragment = document.createRange().createContextualFragment(`
+			<div class="card player-bar">
+				<img src="images/white_pawn">
+				<p> Your name here </p>
+			</div>
+			<div class="card mid">
+				<img src="images/Chess-Board.jpg">
+				<div class="hidden row">
+					<label>
+						<input type="checkbox" checked>
+						10 minutes
+					</label>
+					<label> 
+						<input type="checkbox" checked>
+						Public
+					</label>
 
-	let name = document.createElement("INPUT");
-	name.setAttribute("type", "text");
-	name.setAttribute("id", "name");
 
-	let button = document.createElement("button");
-	button.className = "join_button";
-	button.innerHTML = "Join";
-	button.addEventListener("click", function() {
-		sessionStorage.setItem('room_id', document.getElementById("input").value);
-		sessionStorage.setItem('name', document.getElementById("name").value);
+				</div>
+			</div>
+			<div class="card join bot">
+				<button> CREATE GAME </button>
+			</div>`)
+	card.append(documentFragment);
+
+	card.querySelector("button").addEventListener("click", function() {
 		sessionStorage.setItem('action', "create game");
 		document.location.href = "/";
 	});
-
-	card.append(input, name, button);
-
+	
 	return card;
 }
 
