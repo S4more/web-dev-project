@@ -102,3 +102,5 @@ https:// sonic.dawsoncollege.qc.ca/~YOUR_USER_NAME/420-120/Project/home.html
 * Only one member must submit the page to LEA.
 * However, all members must have the same copy of the project in their respective server account
 * Deadline: as stated in LEA
+
+### Questions for teacher
