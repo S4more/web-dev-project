@@ -15,7 +15,8 @@ It is important to send the right data
 - [x] Create a game
 - [x] Join a game
 - [x] Sync move pieces thorugh requests loop
-- [ ] Single request with server timeout
+- [x] Single request with server timeout
+- [ ] Refactor API class
 
 ## Server
 - [x] Accept POST requests
