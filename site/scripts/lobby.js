@@ -49,7 +49,8 @@ function createCard(key, value) {
 
 	card.querySelector("button").addEventListener("click", function() {
 		sessionStorage.setItem('room_id', key);
-		sessionStorage.setItem('action', "join game");
+		sessionStorage.setItem('action', "join_game");
+		sessionStorage.setItem('player_id', "enemy");
 		document.location.href = "/";
 	});
 
@@ -65,6 +66,7 @@ function populateList(dic) {
 }
 
 function createMatch() {
+<<<<<<< HEAD
 	let card = document.createElement("card");
 	card.className = "card create";
 
@@ -96,6 +98,27 @@ function createMatch() {
 	card.querySelector("button").addEventListener("click", function() {
 		sessionStorage.setItem('room_id', Math.floor(Math.random() * Math.floor(50000)));
 		sessionStorage.setItem('action', "create game");
+=======
+	let card = document.createElement("div");
+	card.className = "card";
+
+	let top = document.createElement("div");
+	let input = document.createElement("INPUT");
+	input.setAttribute("type", "text");
+	input.setAttribute("id", "input");
+
+	let name = document.createElement("INPUT");
+	name.setAttribute("type", "text");
+	name.setAttribute("id", "name");
+
+	let button = document.createElement("button");
+	button.className = "join_button";
+	button.innerHTML = "Join";
+	button.addEventListener("click", function() {
+		sessionStorage.setItem('room_id', document.getElementById("input").value);
+		sessionStorage.setItem('player_id', document.getElementById("name").value);
+		sessionStorage.setItem('action', "create_game");
+>>>>>>> 68a9c38210050cf3d35090763373b57f5c9893b4
 		document.location.href = "/";
 	});
 	

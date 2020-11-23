@@ -9,6 +9,6 @@ class Player:
         self.board.addPlayer(self)
 
     def __str__(self):
-        return self.ip
+        return self.name
     def __repr__(self):
-        return str(self.ip)
+        return str(self.name)
