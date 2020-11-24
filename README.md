@@ -32,6 +32,11 @@ It is important to send the right data
 
 ## Project Requirements
 
+### Pages
+
+
+
+
 ### General
 - [ ] Test on several web browsers (Chrome, Firefox, IE, Safari)
 - [ ] Upload to sonic server
@@ -81,26 +86,26 @@ It is important to send the right data
     * one css file called tabs.css to style the tabs (see tabs section)
 
 ### JavaScript
-On contact.html Page (last menu option):
-- [ ] 4 tabs (adress, call, e-mail, chat)
-- [ ] adress and call tabs contain the adress and telephone numbers respectivly (no form)
-- [ ] e-mail tab: form appears where you can enter
+On contact.html Page (last menu option) <b>DONE</b>:
+- [x] 4 tabs (adress, call, e-mail, chat)
+- [x] adress and call tabs contain the adress and telephone numbers respectivly (no form)
+- [x] e-mail tab: form appears where you can enter
     * Email adress
     * Topic of message
     * Type of text
     * Submit button
-- [ ] Chat tab:
+- [x] Chat tab:
     * message form
     * Send button
 
 ### Submission
 * Once properly tested in your LOCAL DRIVE/420-120/, upload the whole project to your sonic account.
-* Test the page remotely by pointing url to:
-https:// sonic.dawsoncollege.qc.ca/~YOUR_USER_NAME/420-120/Project/home.html
+* Test the page remotely by pointing url to: https:// sonic.dawsoncollege.qc.ca/~YOUR_USER_NAME/420-120/Project/home.html
 * Submit to LEA the entry (first) page only
 * Put your name/id and the name/id of the other members
 * Only one member must submit the page to LEA.
 * However, all members must have the same copy of the project in their respective server account
-* Deadline: as stated in LEA
+* Deadline: DEC 1st
 
 ### Questions for teacher
+* Can we use javascript for a simmilar but more advanced form system on another page instead of the contact.html page in the reqs
