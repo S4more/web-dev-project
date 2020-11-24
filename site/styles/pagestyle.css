@@ -1,0 +1,18 @@
+.content_box{
+    display: block;
+    background: coral;
+    border: 2px solid white;
+    border-radius: 10px;
+    background-color: #f3f3f3;
+	box-shadow: 5px 5px 20px 5px rgba(0,0,0,0.31);
+}
+
+#content{
+    margin: 20px auto;
+    max-width: 1600px;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 20px;
+}
