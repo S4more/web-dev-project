@@ -31,13 +31,17 @@ body {
 	/* different color for when you can create a game */
 }
 
-.card:hover{
+.card:hover, .card:focus-within{
 	transform: scale(1.04);
 	background-color: #2b2b2b;
 }
 
 .card:hover .mid{
 	background-color: #2b2b2b;
+}
+
+.card:hover .mid label {
+	color: white;
 }
 
 .card:hover .hidden{
@@ -48,6 +52,20 @@ body {
 
 .card:hover .mid img{
 	filter: brightness(30%) blur(1.5px);
+}
+
+.card.title {
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	height: 50px;
+	width: 110%;
+	margin-top: 20px;
+	background-color: #c5a05c;
+}
+
+.card.title p {
+	font-weight: bold;
 }
 
 .card.player-bar {
@@ -93,9 +111,44 @@ body {
 }
 
 /* Paragraph styling */
-.card.mid p, .card.mid label{
+.card.mid p{
 	color: white;
 	font-weight: bold;
+}
+
+.card.mid input {
+	outline: none;
+	border: solid 2px #dbdbdb;
+	border-radius: 5px;
+	padding: 10px;
+	margin: 10px;
+}
+
+.card.mid input:invalid {
+	border-color: red;
+}
+
+.card.mid input:invalid ~ #login-error {
+	opacity: 1;
+	height: auto;
+}	
+
+#login-error {
+	color: red;
+	height: 0;
+	opacity: 0;
+	margin: 0;
+	overflow: hidden;
+	word-wrap: break-word;
+	width: 13em;
+	transition: opacity 0.2s ease-in;
+}
+
+#important {
+	position: absolute;
+	margin-top: 0;
+	color: white;
+	background-color: #6e1413;
 }
 
 .hidden {	
