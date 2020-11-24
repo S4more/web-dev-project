@@ -128,6 +128,22 @@ body {
 	border-color: red;
 }
 
+.card.mid input:invalid ~ #login-error {
+	opacity: 1;
+	height: auto;
+}	
+
+#login-error {
+	color: red;
+	height: 0;
+	opacity: 0;
+	margin: 0;
+	overflow: hidden;
+	word-wrap: break-word;
+	width: 13em;
+	transition: opacity 0.2s ease-in;
+}
+
 #important {
 	position: absolute;
 	margin-top: 0;
