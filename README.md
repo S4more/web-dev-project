@@ -86,7 +86,7 @@ It is important to send the right data
     * one css file called tabs.css to style the tabs (see tabs section)
 
 ### JavaScript
-On contact.html Page (last menu option) <b>DONE</b>:
+On contact.html Page (last menu option) <b>(DONE)</b>
 - [x] 4 tabs (adress, call, e-mail, chat)
 - [x] adress and call tabs contain the adress and telephone numbers respectivly (no form)
 - [x] e-mail tab: form appears where you can enter
