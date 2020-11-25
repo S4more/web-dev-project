@@ -1,10 +1,8 @@
 body{
-	display: grid;
 	padding: 0px;
 	margin: 0px;
-	grid-template-rows: 60px 1fr 80px;
-	grid-template-columns: 1fr 3fr 1fr;
 	height: 100vh;
+	background-color: #18181e;
 }
 
 button{
@@ -27,74 +25,46 @@ button{
 button:active{
     transform: translate(0px, 2px);
 }
-
-
-nav{
-	display: flex;
-	width: 100%;
-	background-color: #303036;
-	margin: 0px;
-	justify-content: center;
-	border-bottom: 2px solid grey;
-	grid-column-start: 1;
-	grid-column-end: 4;
-}
-nav *{
-  	color: white;
-	text-decoration: none;
-	font-size: 28px;
-	line-height: 40px;
-	height: 40px;
-	display: block;
-	padding: 10px;
-	padding-left: 20px;
-	padding-right: 20px;
-}
-nav *:hover{
-	background-color: #0c0c0d;
-	border-bottom: 2px solid grey;
-	height:38px;
-}
-
 #center{
-	grid-column-start: 2;
-	grid-column-end: 3;
-	background-color: lightgrey;
-	display: block;
+	display: flex;
+	margin-left: auto;
+	flex-direction: column;
+	margin-right: auto;
+	width: 80%;
+	align-items: center;
 }
 
 table{
-	height: 90%;
-	width: 90%;
+	line-height: 0;
+	margin-top: 5%;
 	border-collapse: collapse; 
 	box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.26);
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 50px;
-	margin-bottom: 50px;
 }
 
 footer{
-	grid-column-start: 1;
-	grid-column-end: 4;
+	table-layout: fixed;
 	background-color: lightpink;
 }
 
 td{
-	font-family: "Times New Roman", Times, serif;
 	text-align: center;
-	font-size: calc(100% * 2);
+	height: 45px;
+	width: 45px;
 	text-transform: uppercase;
 	padding: 0px;
-	text-shadow: 1px 1px 2px #0000004d;
-	width: calc(200%/19);
-	height: calc(200%/19);
 	user-select: none;
 	outline: none;
+ 
 }
 
-td.selected{
-	outline:3px outset rgb(165, 94, 94);
+td img {
+	width: 100%;
+	height:45px;
+	margin: 0;
+}
+
+.selected {
+	background-color: #c5a05c!important;
 }
 
 
@@ -112,17 +82,15 @@ tr:nth-child(odd):not(:last-child) td:nth-child(even):hover, tr:nth-child(even) 
 }
 
 tr:last-child *, td:first-child{
-	background: lightsalmon;
-	font-size: 25px;
-	
+	font-size: 0.5em;
+	color: white;
 }
 td:first-child{
-	width: calc(100%/19);
+	background-color: none;
 }
 tr:last-child *{
-	height: calc(100%/19);
+	background-color: none;
 }
-
 
 #turn_marker{
 	font-family: sans-serif;
