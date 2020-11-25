@@ -55,6 +55,7 @@ nav *:hover{
 	border-bottom: 2px solid grey;
 	height:38px;
 }
+
 #center{
 	grid-column-start: 2;
 	grid-column-end: 3;

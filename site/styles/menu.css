@@ -1,6 +1,5 @@
 nav {
-	display: grid;
-	grid-template-columns: 75px 1fr auto auto auto auto;
+	display: flex;
 	background-color: #f3f3f3;
 	height: 75px;
 	max-width: 1600px;
@@ -8,10 +7,12 @@ nav {
 
 	box-shadow: 5px 5px 20px 5px rgba(0,0,0,0.31);
 }
+
 #nav_spacer{
 	max-width: 1000;
 	min-width: auto;
 }
+
 nav *{
 	height: 100%;
 }
@@ -19,6 +20,7 @@ nav *{
 nav *:first-child{
 	justify-self: flex-start;
 	margin-left: 20px;
+	margin-right: auto;
 }
 nav *:last-child{
 	margin-right: 20px;

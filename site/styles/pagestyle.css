@@ -1,10 +1,64 @@
+h1, h2, h3, h4, h5, h6{
+    text-align:center;
+}
+
+.content_box button{
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+    height: 50px;
+    border-radius: 8px;
+    background: #453F35;
+    font-size: 1.5rem;
+    color: white;
+    box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.31);
+    border: none;
+    font-weight: bold;
+}
+
+.content_box button:hover{
+    background-color: white;
+    color: black;
+    border: 2px solid#453F35;
+}
+
 .content_box{
-    display: block;
-    background: coral;
-    border: 2px solid white;
-    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
     background-color: #f3f3f3;
-	box-shadow: 5px 5px 20px 5px rgba(0,0,0,0.31);
+    box-shadow: 5px 5px 20px 5px rgba(0,0,0,0.31);
+    padding: 10px;
+}
+
+.content_box#centre{
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+
+    grid-row-start:1;
+    grid-row-end:3;
+    grid-column-start:2;
+    grid-column-end: 4;
+
+    padding: 20px;
+}
+
+.content_box img{
+    margin: auto;
+    box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.31);
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.content_box div{
+    padding-top: 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.content_box div *{
+    margin:5px 0px;
 }
 
 #content{
@@ -13,6 +67,10 @@
     height: 100%;
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: auto auto 1fr;
     grid-gap: 20px;
+}
+
+body{
+    height: 100vh;
 }
