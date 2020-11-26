@@ -2,19 +2,19 @@ import {API} from './api.js';
 let api = new API();
 
 const pieces = {
-    white_pawn: {color: "white", type: "pawn", charcode: "&#9817"},
-    white_rook: {color: "white", type: "rook", charcode: "&#9814"},
-    white_knight: {color: "white", type: "knight", charcode: "&#9816"},
-    white_bishop: {color: "white", type: "bishop", charcode: "&#9815"},
-    white_queen: {color: "white", type: "queen", charcode: "&#9813"},
-    white_king: {color: "white", type: "king", charcode: "&#9812"},
+    white_pawn: {color: "white", type: "pawn", charcode: "wpawn.svg"},
+    white_rook: {color: "white", type: "rook", charcode: "wrook.svg"},
+    white_knight: {color: "white", type: "knight", charcode: "wknight.svg"},
+    white_bishop: {color: "white", type: "bishop", charcode: "wbishop.svg"},
+    white_queen: {color: "white", type: "queen", charcode: "wqueen.svg"},
+    white_king: {color: "white", type: "king", charcode: "wking.svg"},
 
-    black_pawn: {color: "black", type: "pawn", charcode: "&#9823"},
-    black_rook: {color: "black", type: "rook", charcode: "&#9820"},
-    black_knight: {color: "black", type: "knight", charcode: "&#9822"},
-    black_bishop: {color: "black", type: "bishop", charcode: "&#9821"},
-    black_queen: {color: "black", type: "queen", charcode: "&#9819"},
-    black_king: {color: "black", type: "king", charcode: "&#9818"},
+    black_pawn: {color: "black", type: "pawn", charcode: "bpawn.svg"},
+    black_rook: {color: "black", type: "rook", charcode: "brook.svg"},
+    black_knight: {color: "black", type: "knight", charcode: "bknight.svg"},
+    black_bishop: {color: "black", type: "bishop", charcode: "bbishop.svg"},
+    black_queen: {color: "black", type: "queen", charcode: "bqueen.svg"},
+    black_king: {color: "black", type: "king", charcode: "bking.svg"},
 }
 
 const initalState = [
@@ -398,7 +398,7 @@ function square(board, x, y){
     this.setPiece = function(piece){
         this.piece = piece;
         if(this.piece){
-            this.cell.innerHTML = this.piece.charcode;
+            this.cell.innerHTML = `<img src='images/pieces/${piece.charcode}'>`;
         } else{
             this.cell.innerHTML = "";
         }

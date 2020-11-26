@@ -31,12 +31,14 @@ body {
 	/* different color for when you can create a game */
 }
 
-.card:hover, .card:focus-within{
+.card:hover, .card:focus-within,
+.card.hover{
 	transform: scale(1.04);
 	background-color: #2b2b2b;
 }
 
-.card:hover .mid{
+.card:hover .mid,
+.card.hover.mid {
 	background-color: #2b2b2b;
 }
 
@@ -113,7 +115,13 @@ body {
 /* Paragraph styling */
 .card.mid p{
 	color: white;
+	margin-right: 1%;
+	margin-left: 1%;
 	font-weight: bold;
+}
+
+.card.hover.mid {
+	margin: 0;
 }
 
 .card.mid input {

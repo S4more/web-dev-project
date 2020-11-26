@@ -1,50 +1,94 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Online Chess</title>
+	<title>In Game</title>
 	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="styles/menu.css">
+	<link rel="stylesheet" href="styles/pagestyle.css">
 	<link rel="stylesheet" type="text/css" href="ingame.css">
+	<link rel="stylesheet" type="text/css" href="gameList.css">
 	<script src="navbar.js"></script>
 </head>
 <body>
 	<nav id="navbar"></nav>
-	<div id="center">
-	<table id="chess_board">
-	</table>
-
-	<div style="display:flex; flex-direction: row; justify-content:center;" id="Buttons">
-		<button style="margin: 20px; "onclick="api.createGame(1)"> Create game 0 (white)</button>
-		<button style="margin: 20px; "onclick="api.joinGame(1)"> Join game 0 (black)</button>
+	<div class="game_list">
 	</div>
-	
 
+	<div id="content-game">
+		<div id="left">
+			<div class="card hover">
+				<div class="card player-bar">
+					<img src="images/pp.jpeg">
+					<p>Noah [750]</p>
+				</div>
+				<div class="card hover mid">
+					<p>Course: Computer Science<br>
+					Games Played: 59<br>
+					Date Joined: 2020/10/12</p>
+				</div>
+			</div>
+
+			<div class="card hover">
+				<div class="card title">
+					Moves
+				</div>
+				<div id="move_logs">
+					<ul id="white_move">
+						<li><img src="images/pieces/wpawn.svg">d4</li>
+						<li><img src="images/pieces/wpawn.svg">c4</li>
+						<li><img src="images/pieces/wpawn.svg">e3</li>
+						<li><img src="images/pieces/wbishop.svg">xc4</li>
+						<li><img src="images/pieces/wpawn.svg">b5</li>
+						<li><img src="images/pieces/wpawn.svg">b5</li>
+						<li><img src="images/pieces/wpawn.svg">b5</li>
+					</ul>
+					<ul id="black_move">
+						<li><img src="images/pieces/bpawn.svg">d5</li>
+						<li><img src="images/pieces/bpawn.svg">dxc4</li>
+						<li><img src="images/pieces/bpawn.svg">b5</li>
+						<li><img src="images/pieces/bpawn.svg">b5</li>
+						<li><img src="images/pieces/bpawn.svg">b5</li>
+						<li><img src="images/pieces/bpawn.svg">b5</li>
+						<li><img src="images/pieces/bpawn.svg">b5</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+			<div id="center">
+				<table id="chess_board"></table>
+			</div>
+			<div id="right_cont">
+
+			</div>
+		</div>
+		
+
+		
 	</div>
-	<footer>
-		Footer
-	</footer>
+
 </body>
 <script type="module" src="scripts/chess2.0.js"></script>
 <script>
-	var board = document.getElementById('chess_board');
-
-	if(board.offsetHeight < board.offsetWidth){
-		board.style.width = board.offsetHeight + "px";
-	} else{
-		board.style.height = board.offsetWidth + "px";
-	}
-
-	if(window.addEventListener) {
-		window.addEventListener('resize', function() {
-			if(board.offsetHeight < board.offsetWidth){
-				board.style.width = board.offsetHeight + "px";
-			} else{
-				board.style.height = board.offsetWidth + "px";
-			}
-		}, true);
-		}
-		
-		else {
-			console.log("your browser does not support window resize events, the site may display strangly if you resize the window");
-		}
+	//var board = document.getElementById('chess_board');
+//
+////	if(board.offsetHeight < board.offsetWidth){
+//		board.style.width = board.offsetHeight + "px";
+////	} else{
+//		board.style.height = board.offsetWidth + "px";
+////	}
+//
+////	if(window.addEventListener) {
+//		window.addEventListener('resize', function() {
+////			if(board.offsetHeight < board.offsetWidth){
+//				board.style.width = board.offsetHeight + "px";
+////			} else{
+//				board.style.height = board.offsetWidth + "px";
+////			}
+//		}, true);
+////		}
+//		
+////		else {
+//			console.log("your browser does not support window resize events, the site may display strangly if you resize the window");
+//		}
 </script>
 </html>

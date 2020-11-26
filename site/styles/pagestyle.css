@@ -1,5 +1,13 @@
 h1, h2, h3, h4, h5, h6{
     text-align:center;
+    margin: 0px;
+}
+body{
+    background-color:#18181e;
+}
+
+#left {
+	margin-left: 3%;
 }
 
 .content_box button{
@@ -20,6 +28,19 @@ h1, h2, h3, h4, h5, h6{
     background-color: white;
     color: black;
     border: 2px solid#453F35;
+}
+
+.title_box{
+    background: #453F35;
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: white;
+    padding: 10px;
+    border-radius: 10px 10px 0px 0px;
+    height: 52px;
+    display: flex;
+    flex-direction: row;
+    line-height: 52px;
 }
 
 .content_box{
@@ -43,22 +64,8 @@ h1, h2, h3, h4, h5, h6{
     padding: 20px;
 }
 
-.content_box img{
-    margin: auto;
+.logo{
     box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.31);
-    max-height: 100%;
-    max-width: 100%;
-}
-
-.content_box div{
-    padding-top: 10%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.content_box div *{
-    margin:5px 0px;
 }
 
 #content{
@@ -66,9 +73,86 @@ h1, h2, h3, h4, h5, h6{
     max-width: 1600px;
     height: 100%;
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    grid-template-rows: auto auto 1fr;
+    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-rows: 1fr;
     grid-gap: 20px;
+}
+
+#content-game{
+    margin: 20px auto;
+    max-width: 1600px;
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-rows: 100%;
+    grid-gap: 20px;
+}
+
+ul {
+    list-style-type: none;
+	margin: auto;
+    padding: 0px;
+	margin-bottom: 20px;
+}
+
+#move_logs{
+	width: 80%;
+    display: flex;
+    border-radius: 0px 0px 10px 10px;
+    height: auto;
+	align-items: flex-start;
+	max-height: 7em;
+	overflow-y: auto;
+}
+
+#move_logs::-webkit-scrollbar {
+  width: 10px;
+}
+
+#move_logs::-webkit-scrollbar-track {
+  background: none;
+}
+
+#move_logs::-webkit-scrollbar-thumb {
+  background: #333231;
+  border-radius: 4px;
+}
+
+#move_logs ul{
+	width: 100%;
+	text-align: left;
+	margin-top: 0;
+}
+
+#white_move{
+	border-right: 1px solid black;
+}
+
+#move_logs ul img {
+	height: 1em;
+	width: 1em;
+	vertical-align: bottom;
+	padding-bottom: 2px;
+}
+#move_logs li:nth-child(even){
+    /*background-color: rgb(204, 204, 204);*/
+}
+li{
+    margin-top: 0px;
+    font-size: 1.2rem;
+    padding-left: 5px;
+}
+
+#profilePic{
+    height: 100%;
+    border-radius: 100%;
+    z-index: 100;
+    margin-right: 10px;
+    border: 2px solid black;
+}
+
+#opponent_info{
+    grid-column-start:1;
+    grid-column-end: 2;
 }
 
 body{
