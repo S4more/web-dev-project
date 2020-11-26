@@ -1,4 +1,5 @@
 import json
+import Database
 from player import Player
 from board import Board, FullBoardError, PlayerAlreadyInBoard, WrongTurn, InsuficientPlayers
 import socket
@@ -17,6 +18,8 @@ class Server:
         self.matches = {}
         self.connections = {}
         self.timeoutTime = int(60 / 0.5)
+        self.database = Database("192.168.2.12", 5432);
+
 
         #Tries to open the server at the specified port
         try:
@@ -100,6 +103,17 @@ class Server:
             else:
                 #print("Player is already in match")
                 return -1
+
+        #register: username, password
+        elif "register" in data:
+            return 1 if database.registerUser(data['username'], data['password']) else -1
+
+        elif "login" in data:
+            return database.connectUser(data['username'], data['password']); 
+               
+
+
+
 
         else:
             print("non-identified POST")
