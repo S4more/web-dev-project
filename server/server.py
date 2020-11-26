@@ -1,4 +1,5 @@
 import json
+from Database import Database
 from player import Player
 from board import Board, FullBoardError, PlayerAlreadyInBoard, WrongTurn, InsuficientPlayers
 import socket
@@ -17,6 +18,8 @@ class Server:
         self.matches = {}
         self.connections = {}
         self.timeoutTime = int(60 / 0.5)
+        self.database = Database("192.168.2.12", 5432);
+
 
         #Tries to open the server at the specified port
         try:
@@ -101,6 +104,18 @@ class Server:
                 #print("Player is already in match")
                 return -1
 
+        #register: username, password
+        elif "register" in data:
+            return 1 if self.database.registerUser(data['username'], data['password']) else -1
+
+        elif "login" in data:
+            return self.database.connectUser(data['username'], data['password']); 
+               
+        elif "user_id" in data:
+            return 
+
+
+
         else:
             print("non-identified POST")
             print(data)
@@ -131,7 +146,7 @@ class Server:
         '''Creates the right headers so javascript will accept the informations.'''
         #msg = "\"{\"answer\":\"{}\"}\"".format(msg)
         msg = {"answer":msg}
-        msg = json.dumps(msg)
+        msg = json.dumps(msg, default=str)
         response_headers = {
                 'Content-Type': 'text/html; encoding=ut8',
                 'Content-Length': len(msg),
