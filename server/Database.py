@@ -30,6 +30,13 @@ class Database:
         except:
             return -1
 
+    def getUserInfo(self, user_id: int) ->bool: 
+        try:
+            self.cursor.execute("SELECT * FROM users WHERE user_id = %s", (user_id))
+            return dict(self.cursor.fetchone())
+        except:
+            return -1
+
 if __name__ == "__main__":
     database = Database("192.168.2.12", 5432)
     print(database.connectUser("guilherme", "123"))

@@ -1,5 +1,5 @@
 import json
-import Database
+from Database import Database
 from player import Player
 from board import Board, FullBoardError, PlayerAlreadyInBoard, WrongTurn, InsuficientPlayers
 import socket
@@ -106,12 +106,13 @@ class Server:
 
         #register: username, password
         elif "register" in data:
-            return 1 if database.registerUser(data['username'], data['password']) else -1
+            return 1 if self.database.registerUser(data['username'], data['password']) else -1
 
         elif "login" in data:
-            return database.connectUser(data['username'], data['password']); 
+            return self.database.connectUser(data['username'], data['password']); 
                
-
+        elif "user_id" in data:
+            return 
 
 
 
@@ -145,7 +146,7 @@ class Server:
         '''Creates the right headers so javascript will accept the informations.'''
         #msg = "\"{\"answer\":\"{}\"}\"".format(msg)
         msg = {"answer":msg}
-        msg = json.dumps(msg)
+        msg = json.dumps(msg, default=str)
         response_headers = {
                 'Content-Type': 'text/html; encoding=ut8',
                 'Content-Length': len(msg),

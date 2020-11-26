@@ -76,4 +76,48 @@ export function API(){
 		this.xmlhttp.send(JSON.stringify({"player_id": player_id, "join_game": game_id}));
 	}
 
+	this.register = function(username, password) {
+		let that = this;
+		this.xmlhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var response = JSON.parse(this.responseText);
+				if (response.answer == 1){
+					console.log("registered!");
+					that.login(username, password)
+				} else {
+					console.log(response);	
+				}
+			}
+		}
+		this.xmlhttp.open("POST", this.url, false);
+		this.xmlhttp.send(JSON.stringify({"register":"_", "username":username, "password":password}));
+	}
+
+
+	this.login = function(username, password) {
+		this.xmlhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var response = JSON.parse(this.responseText);
+				if (response.answer != 1){
+					console.log("logged");
+					sessionStorage.setItem('userinfo', this.responseText);
+				}
+			}
+		}
+		this.xmlhttp.open("POST", this.url, false);
+		this.xmlhttp.send(JSON.stringify({"login":"_", "username":username, "password":password}));
+	}
+
+	this.getUser = function(userid) {
+		this.xmlhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var response = JSON.parse(this.responseText);
+				if (response.answer != -1){
+					console.log(response.answer);
+				}
+			}
+		}
+		this.xmlhttp.open("POST", this.url, false);
+		this.xmlhttp.send(JSON.stringify({"user_id":userid}));
+	}
 }
