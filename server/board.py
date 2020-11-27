@@ -53,7 +53,7 @@ class Board:
         return lastMove
 
     def getMoves(self, name):
-        print(f"Last move {self._lastMove} done by {self.lastName}")
+        #print(f"Last move {self._lastMove} done by {self.lastName}")
         if len(self.players) < 2:
             raise InsuficientPlayers
         if self._lastMove == [] and name == self.players[0].name and not self.firstMove:
@@ -91,7 +91,7 @@ class Board:
     def addPlayer(self, player):
         '''add player to board'''
         if player.name in [player.name for player in self.players]:
-            raise PlayerAlreadyInBoard
+            return
         if len(self.players) >= 2: # If there are two players, make sure that no one else is added
             raise FullBoardError
         self.players.append(player)

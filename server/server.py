@@ -36,12 +36,10 @@ class Server:
             for i in range(0, self.timeoutTime):
                 try:
                     player = self.connections[data['player_id']]
-                    print(player)
                     return player.board.getMoves(player.name)
                 except Exception as e:
-                    print(data['player_id'], e.message)
+                    #print(data['player_id'], e.message)
                     time.sleep(0.5)
-                    print("t")
             return -1
             
         elif "get_status" in data:
@@ -101,8 +99,12 @@ class Server:
                 self.connections[data['player_id']] = Player(data['player_id'], 'white', board)
                 return 1
             else:
-                #print("Player is already in match")
-                return -1
+                try:
+                    self.connections[data['player_id']] = Player(data['player_id'], 'white', self.matches[id])
+                    return 1
+                except Exception as e:
+                    print(e)
+                    return -1
 
         #register: username, password
         elif "register" in data:
@@ -128,18 +130,18 @@ class Server:
             data = data.split("\n")[-1] #post request
             data = json.loads(data)
             message = self.request_validation(data)
-            #If the board does not exist, creates it and then put player inside of it.
-            #message = self.matches[data['board']].handlePost(data)
-            
-            #print(message)
-
 
         except Exception as e:
             traceback.print_exc(file=sys.stdout)
+            print("disconecting")
+            
 
         response = self.generateResponse(message)
-        for info in response:
-            conn.send(str.encode(info))
+        try:
+            for info in response:
+                conn.send(str.encode(info))
+        except:
+            print("disconnected")
         conn.close()
     
     def generateResponse(self, msg):

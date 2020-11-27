@@ -418,15 +418,14 @@ function square(board, x, y){
 }
 
 if (sessionStorage.action == "create_game"){
-	api.createGame(createGame, sessionStorage.player_id, sessionStorage.room_id);
+	api.createGame(createGame, JSON.parse(sessionStorage.userinfo)['username'], sessionStorage.room_id);
 } else if (sessionStorage.action == "join_game"){
-	api.joinGame(joinGame, sessionStorage.player_id, sessionStorage.room_id);
+	api.joinGame(joinGame, JSON.parse(sessionStorage.userinfo)['username'], sessionStorage.room_id);
 }
 
 function createGame(bool) {
 	if (bool) {
-		let gameInstance = new game("white", sessionStorage.player_id, sessionStorage.room_id);
-		sessionStorage.clear();
+		let gameInstance = new game("white",  JSON.parse(sessionStorage.userinfo)['username'], sessionStorage.room_id);
 		gameInstance.turn = true;
 		return gameInstance;
 	}
@@ -434,9 +433,8 @@ function createGame(bool) {
 
 function joinGame(bool) {
 	if (bool) {
-		let gameInstance = new game("black", sessionStorage.player_id, sessionStorage.room_id);
+		let gameInstance = new game("black", JSON.parse(sessionStorage.userinfo)['username'], sessionStorage.room_id);
 		gameInstance.turn = false;
-		sessionStorage.clear();
 		return gameInstance;
 	}
 }

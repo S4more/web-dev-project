@@ -25,7 +25,6 @@ export function API(){
         try{
 			let that = this;
             this.xmlhttp.onreadystatechange = function() {
-				console.log(new Error().stack);
                 if (this.readyState == 4 && this.status == 200) {
                     var response = JSON.parse(this.responseText);
                     if (response.answer == 1) {
@@ -55,6 +54,8 @@ export function API(){
 				if (response.answer == 1) {
                     let gameInstance = callback(true);
 					that.getMoves(gameInstance, player_id, game_id);
+				} else if (response.answer != -1) {
+					//reconstruct board.
 				};
 			}}
 
@@ -70,6 +71,8 @@ export function API(){
 				if (response.answer == 1){
 					let gameInstance = callback(true);
 					that.getMoves(gameInstance, player_id, game_id);
+				} else if (response.answer != -1) {
+					//reconstruct board.
 				};
 			}}
 		this.xmlhttp.open("POST", this.url, true);
@@ -100,7 +103,7 @@ export function API(){
 				var response = JSON.parse(this.responseText);
 				if (response.answer != 1){
 					console.log("logged");
-					sessionStorage.setItem('userinfo', this.responseText);
+					sessionStorage.setItem('userinfo', JSON.stringify(response.answer));
 				}
 			}
 		}

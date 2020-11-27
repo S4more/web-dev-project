@@ -97,7 +97,6 @@ function createMatch() {
 	card.querySelector("button").addEventListener("click", function() {
 		sessionStorage.setItem('room_id', Math.floor(Math.random() * Math.floor(50000)));
 		sessionStorage.setItem('action', "create_game");
-		sessionStorage.setItem('player_id', "Guilherme");
 		document.location.href = "/";
 	});
 	
