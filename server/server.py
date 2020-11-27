@@ -1,12 +1,11 @@
-import json
 from Database import Database
 from player import Player
 from board import Board, FullBoardError, PlayerAlreadyInBoard, WrongTurn, InsuficientPlayers
-import socket
 from _thread import start_new_thread
+import socket
+import json
 import sys, traceback
 import time
-
 #Simple Socket server for chess web-admin project.
 #
 class Server:
@@ -14,16 +13,13 @@ class Server:
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.ip = ip
-        self.port = port
         self.matches = {}
         self.connections = {}
         self.timeoutTime = int(60 / 0.5)
-        self.database = Database("192.168.2.12", 5432);
+        self.database = Database(ip, port)
 
-
-        #Tries to open the server at the specified port
         try:
-            self.s.bind((self.ip, self.port))
+            self.s.bind(("", 5555))
         except socket.error as e:
             str(e)
 
@@ -163,7 +159,14 @@ class Server:
         return [r, response_headers_raw, '\r\n', msg]
 
 if __name__ == '__main__':
-    server = Server("", 5555)
+    try:
+        server = Server(sys.argv[1], int(sys.argv[2]))
+        print(f"Attatched to database on port {sys.argv[2]}.")
+    except Exception as e:
+        print("Couldn't attach to local database.")
+        print("Usage: server.py IP PORT")
+        sys.exit()
+
     #For some reason, I can't listen inside class. Maybe it's some thread/self problem 
     while True:
         try:
