@@ -13,37 +13,12 @@ body {
 	align-content: flex-start;
 }
 
-.card{
-	display: flex;
-	background-color: #f3f3f3;
-	align-items: center;
-	flex-direction: column;	
-	justify-content: space-between;
-	border-radius: 6px;
-	box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.38);
-	margin: 20px;
-
-	/* Animation */
-	transition: transform .3s ease-in-out, background-color .3s ease-in-out;
-}
-
-.card.create {
-	/* different color for when you can create a game */
-}
+/*---------------------CARD--------------*/
 
 .card:hover, .card:focus-within,
 .card.hover{
 	transform: scale(1.04);
 	background-color: #2b2b2b;
-}
-
-.card:hover .mid,
-.card.hover.mid {
-	background-color: #2b2b2b;
-}
-
-.card:hover .mid label {
-	color: white;
 }
 
 .card:hover .hidden{
@@ -56,36 +31,66 @@ body {
 	filter: brightness(30%) blur(1.5px);
 }
 
-.card.title {
+.card{
+	display: flex;
+	background-color: #f3f3f3;
+	align-items: center;
+	flex-direction: column;	
+	justify-content: space-between;
+	border-radius: 6px;
+	box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.38);
+	margin: 20px;
+	padding: 10px 0px;
+
+	transition: transform .3s ease-in-out, background-color .3s ease-in-out;
+}
+
+.card.hover h2 {
+	color: white;
+	box-shadow: none;
+}
+
+/* Most card elements have box-shadow and a radius. */
+.card > * {	
+	box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.38);
+	border-radius: 6px;
+}
+
+.card .join {
+	width: 90%;
+	height: 50px;
+	margin: 10px 0px;
+}
+
+.card .join button {
+	width: 100%;
+	height: 100%;
+	border:none;
+	/* for some reason it needs it's own border.*/
+	border-radius: 6px;
+	font-size: 1.2em;
+	color: #26231D;
+	background-color: #DEC79b;
+}
+/*----------------------------------------*/
+/*-----------------BAR--------------------*/
+.bar {
+	display: flex;
 	flex-direction: row;
 	align-items: center;
-	justify-content: center;
 	height: 50px;
 	width: 110%;
-	margin-top: 20px;
+	margin: 10px 0;
 	background-color: #c5a05c;
 }
 
-.card.title p {
-	font-weight: bold;
-}
-
-.card.player-bar {
-	flex-direction: row;
-	align-items: center;
-	height: 50px;
-	width: 110%;
-	margin-top: 20px;
-	background-color: #c5a05c;
-}
-
-.card.player-bar p {
+.bar p {
 	color: #26231D;
 	margin: 5px;
 	margin-right: 15px;
 }
 
-.card.player-bar img {
+.bar.player img {
 	border-radius:62px;
 	width: 60px;
 	height: 60px;
@@ -94,26 +99,47 @@ body {
 	background-color: white;
 }
 
-.card.player-bar.bot img{
+.bar.player {
+	justify-content: space-between;
+}
+
+.bar.inverted img{
 	margin-right: 15px;
 }
 
-.card.player-bar.bot p{
+.bar.inverted p{
 	margin-left: 15px;
 }
 
-.card.mid {
+.bar.title {
+	justify-content: center;
+}
+
+.bar.title p {
+	font-weight: bold;
+}
+/*-----------------------------------------*/
+/*-------------MID------------------------*/
+
+.mid {
+	display: flex;
 	position: relative;
 	transform: none;
 	box-shadow: none;
+	margin: 10px 20px;
 }
 
-.card.mid img {
+.mid.col {
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.mid img {
 	transition: filter .3s ease-in-out, transform .3s ease-in-out;
 }
 
-/* Paragraph styling */
-.card.mid p{
+.mid p{
 	color: white;
 	margin-right: 1%;
 	margin-left: 1%;
@@ -124,7 +150,7 @@ body {
 	margin: 0;
 }
 
-.card.mid input {
+.mid input {
 	outline: none;
 	border: solid 2px #dbdbdb;
 	border-radius: 5px;
@@ -132,15 +158,46 @@ body {
 	margin: 10px;
 }
 
-.card.mid input:invalid {
+.mid input:invalid {
 	border-color: red;
 }
 
-.card.mid input:invalid ~ #login-error {
+.mid input:invalid ~ #login-error {
 	opacity: 1;
 	height: auto;
 }	
+.mid .left {	
+	position: absolute;
+	left: 5%;
+	top: 5%;
+}
 
+.mid .right {
+	position: absolute;
+	text-align: right;
+	right: 5%;
+	bottom: 5%;
+}
+/*-----------------------------------------*/
+/*--------------HIDDEN--------------------*/
+.hidden {	
+	display: flex;
+	align-items: center;
+	flex-direction: column;	
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s 0.3s, opacity .2s linear;
+}
+
+.hidden label {
+	margin-top: 1em;
+	align-items: baseline;
+}
+
+/*-------------------------------------*/
 #login-error {
 	color: red;
 	height: 0;
@@ -159,68 +216,6 @@ body {
 	background-color: #6e1413;
 }
 
-.hidden {	
-	display: flex;
-	align-items: center;
-	flex-direction: column;	
-	position: absolute;
-	height: 100%;
-	width: 100%;
-	visibility: hidden;
-	opacity: 0;
-	transition: visibility 0s 0.3s, opacity .2s linear;
-}
-
-.hidden label {
-	margin-top: 1em;
-	align-items: baseline;
-}
-
-.hidden p {
-	color: grey;
-}
-
-.card.mid .left {	
-	position: absolute;
-	left: 5%;
-	top: 5%;
-}
-
-.card.mid .right {
-	position: absolute;
-	text-align: right;
-	right: 5%;
-	bottom: 5%;
-}
-
-.card.join {
-	display: flex;
-	border: none;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-	background-color: white;
-	width: 90%;
-	height: 50px;
-}
-
-.card.join button {
-	background-color: #c5a05c;
-	width: 100%;
-	height: 100%;
-	border:none;
-	font-size: 20px;
-	color: #26231D;
-
-	/* Animation */
-	transition: border 0.2s;
-	transition: transform 0.05s;
-	background-color: #DEC79b;
-}
-
-.card.join button:active{
-	transform: scale(0.9);
-}
 #new_game_button {
 	width: 80px;
 }
