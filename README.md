@@ -9,26 +9,31 @@ It is important to send the right data
 - [x] Black and White perspective
 - [ ] King validation
 - [ ] Finish game
+- [ ] Show taken pieces
 - [ ] Clock ?
 
 ## Client-Server-API
 - [x] Create a game
 - [x] Join a game
 - [x] Sync move pieces thorugh requests loop
-- [x] Single request with server timeout
-- [ ] Refactor API class
+- [x] Single request with server timeout.
+- [X] Registration
+- [X] Join / Create games
+- [ ] Board preview
+
 
 ## Server
 - [x] Accept POST requests
 - [x] Handle multiple games at the same time
 - [ ] Reconnect system
+- [ ] stop password
 
 ## HTML / CSS
 - [x] Lobby prototype
 - [ ] Main page
-- [ ] Rules page / wiki
-- [ ] Show taken pieces
 - [ ] Lobby filtering/search
+- [ ] Rules page / wiki
+
 
 ## Project Requirements
 
@@ -38,11 +43,11 @@ It is important to send the right data
 
 
 ### General
-- [ ] Test on several web browsers (Chrome, Firefox, IE, Safari)
+- [ ] Test on several web browsers (Chrome, Firefox, IE, Safari) !!!!!
 - [ ] Upload to sonic server
 
 ### Technical Required Inclusions
-- [ ] Tables (For data/Images not layout)
+- [X] Tables (For data/Images not layout)
 - [ ] Graphic title or logo on each page (Custom if possible)
 - [ ] Footer including (On each page):
     * Copyright/year
@@ -50,16 +55,16 @@ It is important to send the right data
         * Name (Clickable bringing user to current page on sonic account)
         * Student-Id
         * Sonic link to current page
-- [ ] Forms
+- [X] Forms
     * logic/registration
     * Contact page (Email __AND__ Chat features in two seperate forms)
-- [ ] Menu Bar (home link must be first option, vertical or horozontal)
-- [ ] Must use icons beside text for menu bar options
+- [X] Menu Bar (home link must be first option, vertical or horozontal)
+- [ ] Must use icons beside text for menu bar options 
 - [ ] Each page must have favicon
 
 ### Layout and Positioning
-- [ ] Use html symantic elements +(Divs/Spans)
-- [ ] Use fluid layout (Flex...?)
+- [X] Use html symantic elements +(Divs/Spans)
+- [X] Use fluid layout (Flex...?)
     * (Structure, number of columns and exact layout is up to us)
 - [ ] Use (relative, absolute, sticky, and fixed) attributes to position different part of your layout
 
@@ -69,32 +74,32 @@ It is important to send the right data
 - [ ] Titles for each page
 
 ### Content
-- [ ] Paragraph or heading on each page
+- [X] Paragraph or heading on each page
 - [ ] Required Inclusion:
     - [ ] At least one link to external site
-    - [ ] Simple rollover effects (:hover or image based)
+    - [X] Simple rollover effects (:hover or image based)
 
 ### Styling/CSS
 - [ ] THREE external CSS files:
     * pagestyle.css to style the layout and structure of your pages.
         - [ ] Font family/size for: body, paragraph, and heading text
-        - [ ] Attributes for link states I.E. visited, focus, hover, active
-        - [ ] Attributes for form element states (pseudo-classes) including different types of inputs.
-        - [ ] Table styling
-        - [ ] Background images/colors for containers   
+        - [X] Attributes for link states I.E. visited, focus, hover, active
+        - [X] Attributes for form element states (pseudo-classes) including different types of inputs.
+        - [X] Table styling
+        - [X] Background images/colors for containers   
     * menu.css to style all your menus (horizontal and vertical)
-    * one css file called tabs.css to style the tabs (see tabs section)
+    * one css file called tabs.css to style the tabs (see tabs section) (?)
 
 ### JavaScript
 On contact.html Page (last menu option) <b>(DONE)</b>
-- [x] 4 tabs (adress, call, e-mail, chat)
-- [x] adress and call tabs contain the adress and telephone numbers respectivly (no form)
-- [x] e-mail tab: form appears where you can enter
+- [ ] 4 tabs (adress, call, e-mail, chat)
+- [ ] adress and call tabs contain the adress and telephone numbers respectivly (no form)
+- [ ] e-mail tab: form appears where you can enter
     * Email adress
     * Topic of message
     * Type of text
     * Submit button
-- [x] Chat tab:
+- [ ] Chat tab:
     * message form
     * Send button
 
