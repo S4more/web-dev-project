@@ -6,6 +6,6 @@ window.onload = function() {
     <a href="gameList.html">Find a Match</a>
     <a href="index.html">Ongoing Matches</a>
     <a href="index.html">About</a>
-    <a href="contact.html">Contact</a>
+    <a href="login.html">Login</a>
     `
 };

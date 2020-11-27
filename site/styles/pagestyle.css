@@ -97,11 +97,12 @@ ul {
 #move_logs{
 	width: 80%;
     display: flex;
-    border-radius: 0px 0px 10px 10px;
     height: auto;
+	box-shadow: none;
 	align-items: flex-start;
 	max-height: 7em;
 	overflow-y: auto;
+	margin-bottom: 6px;
 }
 
 #move_logs::-webkit-scrollbar {
