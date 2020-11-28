@@ -195,7 +195,7 @@ function game(color, player_id, game_id){
             this.move(this.selectedSquare, square);
             this.selectedSquare.unselect();
             this.selectedSquare = null;
-        } else {
+        } else if(square.piece.color == this.color){
             this.selectedSquare = square;
 			square.select();
         }
