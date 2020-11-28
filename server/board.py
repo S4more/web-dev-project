@@ -38,9 +38,11 @@ class Board:
         self.lastName = None
         self.players = []
         self.firstMove = False
-        self.cols = [letter for letter in char_range('a', 'h')]
-        self.rows = [str(number) for number in range(1,9)]
+        self.state = "wp01wp11wp21wp31wp41wp51wp61wp71wr00wr70wn10wn60wb20wb50wq30wk40bp06bp16bp26bp36bp46bp56bp66bp76br07br77bn67bb27bb57bq37bk47"
+        self.cols = [number for number in range(0,8)]
+        self.rows = [number for number in range(0,8)]
         self.board = [[] for i in range(0, 8)]
+        self.lastGet = ""
         self.start()
     
     def flipSide(self):
@@ -53,7 +55,7 @@ class Board:
         return lastMove
 
     def getMoves(self, name):
-        print(f"Last move {self._lastMove} done by {self.lastName}")
+        #print(f"Last move {self._lastMove} done by {self.lastName}")
         if len(self.players) < 2:
             raise InsuficientPlayers
         if self._lastMove == [] and name == self.players[0].name and not self.firstMove:
@@ -91,7 +93,7 @@ class Board:
     def addPlayer(self, player):
         '''add player to board'''
         if player.name in [player.name for player in self.players]:
-            raise PlayerAlreadyInBoard
+            return
         if len(self.players) >= 2: # If there are two players, make sure that no one else is added
             raise FullBoardError
         self.players.append(player)

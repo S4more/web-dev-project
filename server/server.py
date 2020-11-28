@@ -1,12 +1,11 @@
-import json
 from Database import Database
 from player import Player
 from board import Board, FullBoardError, PlayerAlreadyInBoard, WrongTurn, InsuficientPlayers
-import socket
 from _thread import start_new_thread
+import socket
+import json
 import sys, traceback
 import time
-
 #Simple Socket server for chess web-admin project.
 #
 class Server:
@@ -14,16 +13,13 @@ class Server:
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.ip = ip
-        self.port = port
         self.matches = {}
         self.connections = {}
         self.timeoutTime = int(60 / 0.5)
-        self.database = Database("192.168.2.12", 5432);
+        self.database = Database(ip, port)
 
-
-        #Tries to open the server at the specified port
         try:
-            self.s.bind((self.ip, self.port))
+            self.s.bind(("", 5555))
         except socket.error as e:
             str(e)
 
@@ -36,12 +32,16 @@ class Server:
             for i in range(0, self.timeoutTime):
                 try:
                     player = self.connections[data['player_id']]
-                    print(player)
                     return player.board.getMoves(player.name)
+                except WrongTurn:
+                    # It's the player turn and there is no reason to ask for moves.
+                    # The only reason this exception is handled separately is because
+                    # Other wise it would repeat the same movement on the client.
+                    return -1
+
                 except Exception as e:
-                    print(data['player_id'], e.message)
+                    #print(data['player_id'], e.message)
                     time.sleep(0.5)
-                    print("t")
             return -1
             
         elif "get_status" in data:
@@ -68,6 +68,8 @@ class Server:
                 player = self.connections[data['player_id']]
                 move = data["make_move"]
                 player.board.movePiece(move, player.name)
+                state = data["board_state"]
+                player.board.state = state
                 return 1
             except Exception as e:
                 #print(e.message)
@@ -75,13 +77,16 @@ class Server:
 
         #join_game : id -> str
         elif "join_game" in data:
-            print("join game")
             try:
                 #print(data)
                 id = data["join_game"]
                 if id in self.matches:
                     self.connections[data['player_id']] = Player(data['player_id'], 'black', self.matches[id])
-                    return 1
+                    # If it is a reconnect and it's not the player turn 
+                    # or if it's the first time joining the game.
+                    if self.matches[id].lastName == self.connections[data['player_id']].name or self.matches[id]._lastMove == []:
+                        return 1
+                    return 2
                 else:
                     print("The game does not exist")
                     return -1
@@ -100,8 +105,34 @@ class Server:
                 self.matches[id] = board 
                 self.connections[data['player_id']] = Player(data['player_id'], 'white', board)
                 return 1
+            # Reconnects.
             else:
-                #print("Player is already in match")
+                try:
+                    self.connections[data['player_id']] = Player(data['player_id'], 'white', self.matches[id])
+                    #If it's a reconnect and it's the opponent's turn
+                    if self.matches[id].lastName == self.connections[data['player_id']].name:
+                        return 1
+                    return 2
+                except Exception as e:
+                    print(e)
+                    return -1
+
+        elif "board_state" in data:
+            state = data["board_state"]
+            #state = [state[i:i+4] for i in range(0, len(state), 4)]
+            id = data["room_id"]
+            if id in self.matches:
+                self.matches[id].state = state
+                return 1
+            else:
+                print("The game does not exist")
+                return -1
+
+        elif "get_board_state" in data:
+            id = data["get_board_state"]
+            if id in self.matches:
+                return self.matches[id].state
+            else:
                 return -1
 
         #register: username, password
@@ -113,7 +144,7 @@ class Server:
                
         elif "user_id" in data:
             return 
-
+        
 
 
         else:
@@ -121,25 +152,35 @@ class Server:
             print(data)
             pass
 
+    def recvall(self, sock):
+        BUFF_SIZE = 2048 # 4 KiB
+        data = b''
+        while True:
+            part = sock.recv(BUFF_SIZE)
+            data += part
+            if len(part) < BUFF_SIZE:
+                # either 0 or end of data
+                break
+        return data
     def threaded_handle_connection(self, conn, addr):
-
         try:
-            data = conn.recv(2048).decode()
+            data = self.recvall(conn).decode()
             data = data.split("\n")[-1] #post request
             data = json.loads(data)
             message = self.request_validation(data)
-            #If the board does not exist, creates it and then put player inside of it.
-            #message = self.matches[data['board']].handlePost(data)
-            
-            #print(message)
-
 
         except Exception as e:
-            traceback.print_exc(file=sys.stdout)
+            print(e)
+            conn.close()
+            print("disconecting")
+            
 
         response = self.generateResponse(message)
-        for info in response:
-            conn.send(str.encode(info))
+        try:
+            for info in response:
+                conn.send(str.encode(info))
+        except:
+            print("disconnected")
         conn.close()
     
     def generateResponse(self, msg):
@@ -161,7 +202,14 @@ class Server:
         return [r, response_headers_raw, '\r\n', msg]
 
 if __name__ == '__main__':
-    server = Server("", 5555)
+    try:
+        server = Server(sys.argv[1], int(sys.argv[2]))
+        print(f"Attatched to database on port {sys.argv[2]}.")
+    except Exception as e:
+        print("Couldn't attach to local database.")
+        print("Usage: server.py IP PORT")
+        sys.exit()
+
     #For some reason, I can't listen inside class. Maybe it's some thread/self problem 
     while True:
         try:

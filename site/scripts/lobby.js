@@ -28,11 +28,11 @@ function createCard(key, value) {
 	card.className = "card create";
 
 	let documentFragment = document.createRange().createContextualFragment(`
-			<div class="card player-bar">
+			<div class="bar player">
 				<img src="images/white_pawn">
 				<p> ${value["players"][0]} </p>
 			</div>
-			<div class="card mid">
+			<div class="mid">
 				<img src="images/Chess-Board.jpg">
 				<div class=hidden>
 					<p> this is </p>
@@ -40,7 +40,7 @@ function createCard(key, value) {
 					<p> this is some info about the game</p>
 				</div>
 			</div>
-			<div class="card join">
+			<div class="join">
 				<button> JOIN BOARD</button>
 			</div>
 				</div>
@@ -70,11 +70,11 @@ function createMatch() {
 	card.className = "card create";
 
 	let documentFragment = document.createRange().createContextualFragment(`
-			<div class="card player-bar">
+			<div class="bar top player">
 				<img src="images/white_pawn">
 				<p> Your name here </p>
 			</div>
-			<div class="card mid">
+			<div class="mid">
 				<img src="images/Chess-Board.jpg">
 				<div class="hidden row">
 					<label>
@@ -89,7 +89,7 @@ function createMatch() {
 
 				</div>
 			</div>
-			<div class="card join bot">
+			<div class="join">
 				<button> CREATE GAME </button>
 			</div>`)
 	card.append(documentFragment);
@@ -97,7 +97,6 @@ function createMatch() {
 	card.querySelector("button").addEventListener("click", function() {
 		sessionStorage.setItem('room_id', Math.floor(Math.random() * Math.floor(50000)));
 		sessionStorage.setItem('action', "create_game");
-		sessionStorage.setItem('player_id', "Guilherme");
 		document.location.href = "/";
 	});
 	
