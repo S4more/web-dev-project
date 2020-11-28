@@ -129,6 +129,22 @@ body {
 	margin: 10px 20px;
 }
 
+.mid form {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.mid form > div {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.mid form > *{
+	margin: 5px;
+}
+
 .mid.col {
 	flex-direction: column;
 	align-items: center;

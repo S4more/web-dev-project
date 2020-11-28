@@ -37,6 +37,15 @@ class Database:
         except:
             return -1
 
+    def updateUserInfo(self, info: dict) -> bool:
+        try:
+            self.cursor.execute("UPDATE users SET username = %s, password = %s, profile_picture = %s WHERE user_id = %s", (info["username"], info["password"], info["profile_picture"], info["change_user"]));
+            self.connector.commit();
+        except Exception as e:
+            print(e)
+
+        return False
+
 if __name__ == "__main__":
     database = Database("192.168.2.12", 5432)
     print(database.connectUser("guilherme", "123"))
