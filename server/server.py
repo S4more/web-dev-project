@@ -142,10 +142,10 @@ class Server:
         elif "login" in data:
             return self.database.connectUser(data['username'], data['password']); 
                
-        elif "user_id" in data:
-            return 
+        elif "change_user" in data:
+            self.database.updateUserInfo(data) 
+            return "Data changed successfully." 
         
-
 
         else:
             print("non-identified POST")
@@ -165,14 +165,14 @@ class Server:
     def threaded_handle_connection(self, conn, addr):
         try:
             data = self.recvall(conn).decode()
+            print(data)
             data = data.split("\n")[-1] #post request
             data = json.loads(data)
             message = self.request_validation(data)
 
         except Exception as e:
-            print(e)
-            conn.close()
             print("disconecting")
+            conn.close()
             
 
         response = self.generateResponse(message)

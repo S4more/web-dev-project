@@ -1,6 +1,7 @@
 nav {
 	display: flex;
 	background-color: #f3f3f3;
+	align-items: center;
 	height: 75px;
 	max-width: 1600px;
 	margin: 0px auto;
@@ -27,10 +28,12 @@ nav *:last-child{
 }
 
 nav a {
+	display: flex;
+	align-items: center;
 	font-size: 1.5rem;
 	color: #453F35;
 	padding: 20px;
-	padding-top: 20px;
+	padding-top: 10px;
 	padding-bottom: 10px;
 	height: 45px;
 
@@ -45,4 +48,11 @@ nav a:hover {
 	text-decoration: none;
 	color: #f3f3f3;
 	background-color: #453F35;
+}
+
+nav a img {
+	border-radius: 60px;
+	width: 60px;
+	height: 60px;
+	border: 2px solid black;
 }
