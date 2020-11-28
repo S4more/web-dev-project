@@ -38,9 +38,11 @@ class Board:
         self.lastName = None
         self.players = []
         self.firstMove = False
-        self.cols = [letter for letter in char_range('a', 'h')]
-        self.rows = [str(number) for number in range(1,9)]
+        self.state = "wp01wp11wp21wp31wp41wp51wp61wp71wr00wr70wn10wn60wb20wb50wq30wk40bp06bp16bp26bp36bp46bp56bp66bp76br07br77bn67bb27bb57bq37bk47"
+        self.cols = [number for number in range(0,8)]
+        self.rows = [number for number in range(0,8)]
         self.board = [[] for i in range(0, 8)]
+        self.lastGet = ""
         self.start()
     
     def flipSide(self):

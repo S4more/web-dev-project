@@ -2,64 +2,110 @@ import {API} from './api.js';
 let api = new API();
 
 const pieces = {
-    white_pawn: {color: "white", type: "pawn", charcode: "wpawn.svg"},
-    white_rook: {color: "white", type: "rook", charcode: "wrook.svg"},
-    white_knight: {color: "white", type: "knight", charcode: "wknight.svg"},
-    white_bishop: {color: "white", type: "bishop", charcode: "wbishop.svg"},
-    white_queen: {color: "white", type: "queen", charcode: "wqueen.svg"},
-    white_king: {color: "white", type: "king", charcode: "wking.svg"},
+    white_pawn: {color: "white", type: "pawn", charcode: "wpawn.svg", charType: "p", charColor: "w"},
+    white_rook: {color: "white", type: "rook", charcode: "wrook.svg", charType: "r", charColor: "w"},
+    white_knight: {color: "white", type: "knight", charcode: "wknight.svg", charType: "n", charColor: "w" },
+    white_bishop: {color: "white", type: "bishop", charcode: "wbishop.svg", charType: "b", charColor: "w"},
+    white_queen: {color: "white", type: "queen", charcode: "wqueen.svg", charType: "q", charColor: "w"},
+    white_king: {color: "white", type: "king", charcode: "wking.svg", charType: "k", charColor: "w"},
 
-    black_pawn: {color: "black", type: "pawn", charcode: "bpawn.svg"},
-    black_rook: {color: "black", type: "rook", charcode: "brook.svg"},
-    black_knight: {color: "black", type: "knight", charcode: "bknight.svg"},
-    black_bishop: {color: "black", type: "bishop", charcode: "bbishop.svg"},
-    black_queen: {color: "black", type: "queen", charcode: "bqueen.svg"},
-    black_king: {color: "black", type: "king", charcode: "bking.svg"},
+    black_pawn: {color: "black", type: "pawn", charcode: "bpawn.svg", charType: "p", charColor: "b"},
+    black_rook: {color: "black", type: "rook", charcode: "brook.svg", charType: "r", charColor: "b"},
+    black_knight: {color: "black", type: "knight", charcode: "bknight.svg", charType: "n", charColor: "b"},
+    black_bishop: {color: "black", type: "bishop", charcode: "bbishop.svg", charType: "b", charColor: "b"},
+    black_queen: {color: "black", type: "queen", charcode: "bqueen.svg", charType: "q", charColor: "b"},
+    black_king: {color: "black", type: "king", charcode: "bking.svg", charType: "k", charColor: "b"},
 }
 
-const initalState = [
-    {piece: pieces.white_pawn, x:0, y:1},
-    {piece: pieces.white_pawn, x:1, y:1},
-    {piece: pieces.white_pawn, x:2, y:1},
-    {piece: pieces.white_pawn, x:3, y:1},
-    {piece: pieces.white_pawn, x:4, y:1},
-    {piece: pieces.white_pawn, x:5, y:1},
-    {piece: pieces.white_pawn, x:6, y:1},
-    {piece: pieces.white_pawn, x:7, y:1},
-    {piece: pieces.white_rook, x:0, y:0},
-    {piece: pieces.white_rook, x:7, y:0},
-    {piece: pieces.white_knight, x:1, y:0},
-    {piece: pieces.white_knight, x:6, y:0},
-    {piece: pieces.white_bishop, x:2, y:0},
-    {piece: pieces.white_bishop, x:5, y:0},
-    {piece: pieces.white_queen, x:3, y:0},
-    {piece: pieces.white_king, x:4, y:0},
-    {piece: pieces.black_pawn, x:0, y: 6},
-    {piece: pieces.black_pawn, x:1, y: 6},
-    {piece: pieces.black_pawn, x:2, y: 6},
-    {piece: pieces.black_pawn, x:3, y: 6},
-    {piece: pieces.black_pawn, x:4, y: 6},
-    {piece: pieces.black_pawn, x:5, y: 6},
-    {piece: pieces.black_pawn, x:6, y: 6},
-    {piece: pieces.black_pawn, x:7, y: 6},
-    {piece: pieces.black_rook, x:0, y: 7},
-    {piece: pieces.black_rook, x:7, y: 7},
-    {piece: pieces.black_knight, x:1, y: 7},
-    {piece: pieces.black_knight, x:6, y: 7},
-    {piece: pieces.black_bishop, x:2, y: 7},
-    {piece: pieces.black_bishop, x:5, y: 7},
-    {piece: pieces.black_queen, x:3, y: 7},
-    {piece: pieces.black_king, x:4, y: 7}];
+function boardStateToString(statePieces){
+    let outputString = "";
+    for (let i = 0; i < statePieces.length; i++) {
+        outputString += statePieces[i].piece.charColor;
+        outputString += statePieces[i].piece.charType;
+        outputString += statePieces[i].x;
+        outputString += statePieces[i].y;
+    }
+    return outputString;
+}
+
+function squaresToBoardState(squares) {
+	let outputString = ""
+	for (let i = 0; i < squares.length; i++) {
+		for (let j = 0; j < squares[i].length; j++) {
+			if (squares[i][j].piece) {
+				outputString += squares[i][j].piece.charColor;
+				outputString += squares[i][j].piece.charType;
+				outputString += squares[i][j].x;
+				outputString += squares[i][j].y;
+			}
+		}
+	}
+	return outputString;
+}
+
+function stringToBoardState(string){
+    let boardState = [];
+    for (let i = 0; i < string.length; i+=4) {
+        let PObj = {};
+        if(string.charAt(i) == "w"){
+            if(string.charAt(i+1) == "p"){
+                PObj.piece = pieces.white_pawn;
+            } else if(string.charAt(i+1) == "r"){
+                PObj.piece = pieces.white_rook;
+            } else if(string.charAt(i+1) == "n"){
+                PObj.piece = pieces.white_knight;
+            } else if(string.charAt(i+1) == "k"){
+                PObj.piece = pieces.white_king;
+            } else if(string.charAt(i+1) == "q"){
+                PObj.piece = pieces.white_queen;
+            } else if(string.charAt(i+1) == "b"){
+                PObj.piece = pieces.white_bishop;
+            }
+        } else{
+            if(string.charAt(i+1) == "p"){
+                PObj.piece = pieces.black_pawn;
+            } else if(string.charAt(i+1) == "r"){
+                PObj.piece = pieces.black_rook;
+            } else if(string.charAt(i+1) == "n"){
+                PObj.piece = pieces.black_knight;
+            } else if(string.charAt(i+1) == "k"){
+                PObj.piece = pieces.black_king;
+            } else if(string.charAt(i+1) == "q"){
+                PObj.piece = pieces.black_queen;
+            } else if(string.charAt(i+1) == "b"){
+                PObj.piece = pieces.black_bishop;
+            }
+        }
+        PObj.x = parseInt(string.charAt(i+2));
+        PObj.y = parseInt(string.charAt(i+3));
+        boardState.push(PObj);
+    }
+    return boardState;
+}
 
 const toLetter = ['a','b','c','d','e','f','g','h'];
 
 function game(color, player_id, game_id){
-	console.log(player_id, game_id);
 	this.turn;
     this.color = color;
     this.selectedSquare = null;
 	this.player_id = player_id;
 	this.game_id = game_id;
+
+	this.init = function(board_state) { 
+		this.boardGUI = this.initalizeGui();
+		this.setMarkers(this.boardGUI, this.color);
+		this.squares = this.initalizeSquares();
+		this.linkGameBoard(this.squares, this.boardGUI, this.color);
+		this.board_state = stringToBoardState(board_state);
+		this.placePieces(this.squares, this.board_state);
+
+		if (this.color == 'white'){
+			console.log("Waiting for opponent");
+		} else{
+			this.endTurn();
+		}
+	}
 
 	this.initalizeGui = function(){
         this.turnMarker = document.createElement("P")
@@ -138,7 +184,6 @@ function game(color, player_id, game_id){
 			return; 
 		}
 
-		console.log(from, to);
 		var from = this.squares[from[1]][from[0]];
 		var to = this.squares[to[1]][to[0]];	
 		this.move(from, to, true);
@@ -168,44 +213,24 @@ function game(color, player_id, game_id){
         this.turn = false;
     }
 
-    this.boardGUI = this.initalizeGui();
-    this.setMarkers(this.boardGUI, this.color);
-    this.squares = this.initalizeSquares();
-    this.linkGameBoard(this.squares, this.boardGUI, this.color);
-    this.placePieces(this.squares, initalState);
-
-    if (this.color == 'white'){
-		console.log("Waiting for opponent");
-	} else{
-        this.endTurn();
-    }
-
     this.move = function(from, to, isEnemy = false){
 		if (isEnemy) {
-			// If it is the enemy move that the board is handling,
-			// set off the get_move loop and don't send it back to the
-			// server.
-			//this.manageInterval(false);
 			console.log("Moving enemy");
 			to.setPiece(from.piece);
 			from.clear();
+			this.board_state = squaresToBoardState(this.squares);
 		} else {
 			if (this.turn) {
-			//Noah, i honestly hope this never finds you.
-			//I'm canceling the interval before making a move just because
-			//otherwise white would always have the first loop running.
-			//It is def not the optimal way of doing it but I'm too tired
-			//to do anything better.
-			//this.manageInterval(false);
 			let validMoves = this.getValidMoves(from);
 			if(from.piece){
 				for (let i = 0; i < validMoves.length; i++) {
 					if(validMoves[i] == to){
-						console.log("oving own piece");
-						api.sendMoves(this, [from, to], this.player_id, this.game_id);
+						console.log("Moving own piece");
 						to.setPiece(from.piece);
 						from.clear();
 						this.endTurn();
+						this.board_state = squaresToBoardState(this.squares);
+						api.sendMoves(this, [from, to], this.player_id, this.game_id, this.board_state);
 						}
 					}           
 				}
@@ -426,6 +451,7 @@ if (sessionStorage.action == "create_game"){
 function createGame(bool) {
 	if (bool) {
 		let gameInstance = new game("white",  JSON.parse(sessionStorage.userinfo)['username'], sessionStorage.room_id);
+		api.getBoardState(sessionStorage.room_id, gameInstance);
 		gameInstance.turn = true;
 		return gameInstance;
 	}
@@ -434,6 +460,7 @@ function createGame(bool) {
 function joinGame(bool) {
 	if (bool) {
 		let gameInstance = new game("black", JSON.parse(sessionStorage.userinfo)['username'], sessionStorage.room_id);
+		api.getBoardState(sessionStorage.room_id, gameInstance);
 		gameInstance.turn = false;
 		return gameInstance;
 	}

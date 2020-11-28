@@ -33,6 +33,12 @@ class Server:
                 try:
                     player = self.connections[data['player_id']]
                     return player.board.getMoves(player.name)
+                except WrongTurn:
+                    # It's the player turn and there is no reason to ask for moves.
+                    # The only reason this exception is handled separately is because
+                    # Other wise it would repeat the same movement on the client.
+                    return -1
+
                 except Exception as e:
                     #print(data['player_id'], e.message)
                     time.sleep(0.5)
@@ -62,6 +68,8 @@ class Server:
                 player = self.connections[data['player_id']]
                 move = data["make_move"]
                 player.board.movePiece(move, player.name)
+                state = data["board_state"]
+                player.board.state = state
                 return 1
             except Exception as e:
                 #print(e.message)
@@ -69,13 +77,16 @@ class Server:
 
         #join_game : id -> str
         elif "join_game" in data:
-            print("join game")
             try:
                 #print(data)
                 id = data["join_game"]
                 if id in self.matches:
                     self.connections[data['player_id']] = Player(data['player_id'], 'black', self.matches[id])
-                    return 1
+                    # If it is a reconnect and it's not the player turn 
+                    # or if it's the first time joining the game.
+                    if self.matches[id].lastName == self.connections[data['player_id']].name or self.matches[id]._lastMove == []:
+                        return 1
+                    return 2
                 else:
                     print("The game does not exist")
                     return -1
@@ -94,13 +105,35 @@ class Server:
                 self.matches[id] = board 
                 self.connections[data['player_id']] = Player(data['player_id'], 'white', board)
                 return 1
+            # Reconnects.
             else:
                 try:
                     self.connections[data['player_id']] = Player(data['player_id'], 'white', self.matches[id])
-                    return 1
+                    #If it's a reconnect and it's the opponent's turn
+                    if self.matches[id].lastName == self.connections[data['player_id']].name:
+                        return 1
+                    return 2
                 except Exception as e:
                     print(e)
                     return -1
+
+        elif "board_state" in data:
+            state = data["board_state"]
+            #state = [state[i:i+4] for i in range(0, len(state), 4)]
+            id = data["room_id"]
+            if id in self.matches:
+                self.matches[id].state = state
+                return 1
+            else:
+                print("The game does not exist")
+                return -1
+
+        elif "get_board_state" in data:
+            id = data["get_board_state"]
+            if id in self.matches:
+                return self.matches[id].state
+            else:
+                return -1
 
         #register: username, password
         elif "register" in data:
@@ -111,7 +144,7 @@ class Server:
                
         elif "user_id" in data:
             return 
-
+        
 
 
         else:
@@ -119,16 +152,26 @@ class Server:
             print(data)
             pass
 
+    def recvall(self, sock):
+        BUFF_SIZE = 2048 # 4 KiB
+        data = b''
+        while True:
+            part = sock.recv(BUFF_SIZE)
+            data += part
+            if len(part) < BUFF_SIZE:
+                # either 0 or end of data
+                break
+        return data
     def threaded_handle_connection(self, conn, addr):
-
         try:
-            data = conn.recv(2048).decode()
+            data = self.recvall(conn).decode()
             data = data.split("\n")[-1] #post request
             data = json.loads(data)
             message = self.request_validation(data)
 
         except Exception as e:
-            traceback.print_exc(file=sys.stdout)
+            print(e)
+            conn.close()
             print("disconecting")
             
 

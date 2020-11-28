@@ -2,7 +2,7 @@ export function API(){
 	this.xmlhttp = new XMLHttpRequest();
 	this.url = "http://localhost:5555";
 
-	this.sendMoves = function(gameInstance, args, player_id, game_id){
+	this.sendMoves = function(gameInstance, args, player_id, game_id, board_state){
 		let that = this;
 		this.xmlhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
@@ -15,6 +15,7 @@ export function API(){
 		withMethod["make_move"] = {}
 		withMethod["make_move"]["from"] = [args[0].x, args[0].y];
 		withMethod["make_move"]["to"] =  [args[1].x, args[1].y];
+		withMethod["board_state"] = board_state;
 
 		this.xmlhttp.abort();
 		this.xmlhttp.open("POST", this.url, true);
@@ -28,6 +29,7 @@ export function API(){
                 if (this.readyState == 4 && this.status == 200) {
                     var response = JSON.parse(this.responseText);
                     if (response.answer == 1) {
+						// If someone else joined the game.
 						gameInstance.onEnemyMove();
 					} else if (response.answer != -1) {
 						console.log("answer received... calling move");
@@ -54,9 +56,10 @@ export function API(){
 				if (response.answer == 1) {
                     let gameInstance = callback(true);
 					that.getMoves(gameInstance, player_id, game_id);
-				} else if (response.answer != -1) {
-					//reconstruct board.
-				};
+				} else if (response.answer == 2) {
+                    let gameInstance = callback(true);
+					gameInstance.startTurn();
+				}	
 			}}
 
 		this.xmlhttp.open("POST", this.url, true);
@@ -71,8 +74,9 @@ export function API(){
 				if (response.answer == 1){
 					let gameInstance = callback(true);
 					that.getMoves(gameInstance, player_id, game_id);
-				} else if (response.answer != -1) {
-					//reconstruct board.
+				} else if (response.answer == 2) {
+					let gameInstance = callback(true);
+					gameInstance.startTurn();
 				};
 			}}
 		this.xmlhttp.open("POST", this.url, true);
@@ -101,7 +105,7 @@ export function API(){
 		this.xmlhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
 				var response = JSON.parse(this.responseText);
-				if (response.answer != 1){
+				if (response.answer != -1){
 					console.log("logged");
 					sessionStorage.setItem('userinfo', JSON.stringify(response.answer));
 				}
@@ -122,5 +126,31 @@ export function API(){
 		}
 		this.xmlhttp.open("POST", this.url, false);
 		this.xmlhttp.send(JSON.stringify({"user_id":userid}));
+	}
+
+	this.sendBoardState = function(board_state) {
+		this.xmlhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var response = JSON.parse(this.responseText);
+				if (response.answer != 1){
+					console.log("logged");
+				}
+			}
+		}
+		this.xmlhttp.open("POST", this.url, true);
+		this.xmlhttp.send(JSON.stringify({"room_id":sessionStorage.room_id, "board_state":board_state}));
+	}
+
+	this.getBoardState = function(room_id, callback) {
+		this.xmlhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var response = JSON.parse(this.responseText);
+				if (response.answer != -1){
+					if (callback) {callback.init(response.answer)};
+				}
+			}
+		}
+		this.xmlhttp.open("POST", this.url, false);
+		this.xmlhttp.send(JSON.stringify({"get_board_state":room_id}));
 	}
 }
