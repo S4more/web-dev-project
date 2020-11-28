@@ -111,6 +111,13 @@ tr:last-child *{
 
 #turn_marker{
 	font-family: sans-serif;
+	font-size: 20px;
 	font-weight: bold;
 	text-align: center;
+	color: white;
 }
+
+td.problem_square {
+	background-color: red!important;
+}
+
