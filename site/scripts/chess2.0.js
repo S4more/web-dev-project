@@ -205,6 +205,7 @@ function game(color, player_id, game_id){
     this.startTurn = function(){
 		this.turnMarker.innerHTML = "YOUR TURN";
         this.turn = true;
+		this.checkForMate(this.color);
     }
 
     this.endTurn = function(){
@@ -221,16 +222,32 @@ function game(color, player_id, game_id){
 			this.board_state = squaresToBoardState(this.squares);
 		} else {
 			if (this.turn) {
-			let validMoves = this.getValidMoves(from);
-			if(from.piece){
-				for (let i = 0; i < validMoves.length; i++) {
-					if(validMoves[i] == to){
-						console.log("Moving own piece");
-						to.setPiece(from.piece);
-						from.clear();
-						this.endTurn();
-						this.board_state = squaresToBoardState(this.squares);
-						api.sendMoves(this, [from, to], this.player_id, this.game_id, this.board_state);
+				let possibleMoves = this.getPossibleMoves(from);
+				if(from.piece){
+					for (let i = 0; i < possibleMoves.length; i++) {
+						if(possibleMoves[i] == to){
+							//Removing the problem square class from any elements that might have it from a previous attempt
+							let problemSquares = document.getElementsByClassName("problem_square");
+							while (problemSquares.length)
+								problemSquares[0].classList.remove("problem_square");
+							let from_lastState = from.piece;
+							let to_lastState = to.piece;
+							to.setPiece(from.piece);
+							from.clear();
+							let validationOutcome = this.validateCheck(this.color);
+							if (validationOutcome.safe == true) {
+								console.log("Valid move!");
+								this.board_state = squaresToBoardState(this.squares);
+								api.sendMoves(this, [from, to], this.player_id, this.game_id, this.board_state);
+								this.endTurn();
+							} else {
+								console.log("Invalid Move");
+								for (let i =0; i < validationOutcome.offendingPieces.length; i++) {
+									validationOutcome.offendingPieces[i].cell.classList.add("problem_square");
+								}
+								from.setPiece(from_lastState);
+								to.setPiece(to_lastState);
+							}
 						}
 					}           
 				}
@@ -241,62 +258,101 @@ function game(color, player_id, game_id){
     }
 
 
-    this.validateCheck = function(from, to){
-        kingSquare;
-        mighty_king_moves = [];
-        for (let i = 0; i < 8; i++) {
-            for (let j = 0; j < 8; j++) {
-                if(board[i][j].piece){
-                    if(board[i][j].piece.type = "king"){
-                        kingSquare = board[i][j];
-                    }
-                }
-            }
-        }
-        if(!kingSquare) return 0;
+	this.checkForMate = function(color) {
+		console.log("checking for mate");
+		let possibleSquaresToMove = this.getSquaresWithPiecesOfColor(color);
+		for (let i =0; i < possibleSquaresToMove.length; i++) {
+			let squareMoves = this.getPossibleMoves(possibleSquaresToMove[i]);
+			var from = possibleSquaresToMove[i];
+			var lastPiece_from = from.piece;
+			
+			for (let j = 0; j < squareMoves.length; j++) {
+				var to = squareMoves[j];
+				var lastPiece_to = to.piece;
 
-        directions = [[1,1], [-1,-1], [-1,1], [1,-1], [1,0], [-1,0], [0,1], [0,-1]];
-        moveOptions = [[2,1], [2,-1], [-2,-1], [-2,1], [1,2], [1,-2], [-1,2], [-1,-2]];
+				to.setPiece(from.piece);
+				from.clear();
+				let validationOutcome = this.validateCheck(this.color);
+				if (validationOutcome.safe == true) {
+					from.setPiece(lastPiece_from);
+					to.setPiece(lastPiece_to);
+					return false;
+				} else {
+					from.setPiece(lastPiece_from);
+					to.setPiece(lastPiece_to);
+				}
+			}
+		}
+		console.log("Check-Mate");
+		return true;
+	}
 
-        for (let i = 0; i < moveOptions.length; i++) {
-            x = square.x + (moveOptions[i][0]);
-            y = square.y + (moveOptions[i][1]);
+	this.findKing = function(color) {
+		var squareList = this.getSquaresWithPieces();
+		console.log("Color to search for is!: " + color);
+		for (let i = 0; i < squareList.length; i++) {
+			console.log(squareList[i].piece.type + " : " + squareList[i].piece.color);
+			if (squareList[i].piece.type == "king" && squareList[i].piece.color == color) {
+				return squareList[i];
+			}
+		}
+		console.log("ERROR no king found");
+		return 0;
+	}
 
-            if (this.squareExists(x, y)){
-                if(squares[y][x].piece){
-                    if(squares[y][x].piece.color != square.piece.color){
-                        mighty_king_moves.push(squares[y][x]);
-                    } 
-                } else{
-                    mighty_king_moves.push(squares[y][x]);
-                }
-            }
-        }
+	this.getSquaresWithPiecesOfColor = function(color) {
+		let squareList = this.getSquaresWithPieces();
+		let rightColorSquareList = [];
+		for (let i = 0; i < squareList.length; i++) {
+			if(squareList[i].piece.color == color) {
+				rightColorSquareList.push(squareList[i]);
+			}
+		}
+		return rightColorSquareList;
+	}
 
-        for (let j = 0; j < directions.length; j++) {
-            for (let i = 1; i < 8; i++) {
-                x = square.x+(directions[j][0] * i);
-                y = square.y+(directions[j][1] * i);
-                if (this.squareExists(x, y)){
-                    if(squares[y][x].piece){
-                        if(squares[y][x].piece.color != square.piece.color){
-                            mighty_king_moves.push(squares[y][x])
-                        } 
-                        break;
-                    } else{
-                        mighty_king_moves.push(squares[y][x])
-                    }
-                } else{
-                    break;
-                }
-            }
-        }
-        
-        console.log(mighty_king_moves);
-        
-    }
+	// TODO - fix loop performance. Length shoulnd't be recalculated.
+	this.getSquaresWithPieces = function() {
+		let squaresWithPieces = [];
+		for (let i = 0; i < this.squares.length; i++) {
+			for (let j = 0; j < this.squares[i].length; j++) {
+				if (this.squares[i][j].piece) {
+					squaresWithPieces.push(this.squares[i][j]);
+				}
+			}
+		}
+		return squaresWithPieces;
+	}
 
-    this.getValidMoves = function(square){
+    this.validateCheck = function(color){
+		var kingSafe = true;
+		var problemPieces = [];
+		let kingSquare = this.findKing(color);
+		if (!kingSquare) {
+			console.log("no king found?!")
+			return 0;
+		}
+
+		if (color == "white") { var enemyColor = "black"; }
+		else { var enemyColor = "white";}
+		
+		let enemySquares = this.getSquaresWithPiecesOfColor(enemyColor);
+
+		// Finding every valid enemy move.
+		for (let i =0; i < enemySquares.length; i++) {
+			let possibleMoves = this.getPossibleMoves(enemySquares[i]);
+			for (let j = 0; j < possibleMoves.length; j++) {
+				if (possibleMoves[j] == kingSquare) {
+					kingSafe = false;
+					problemPieces.push(enemySquares[i]);
+				}
+			}
+		}
+		console.log("The king is safe = :" + kingSafe);
+		return {safe: kingSafe, offendingPieces: problemPieces};
+	}
+
+    this.getPossibleMoves = function(square){
         let validMoves = [];
         if(square.piece == null){
             return false;
@@ -378,10 +434,8 @@ function game(color, player_id, game_id){
                     }
                 }
             }
-
-
             return validMoves;
-        } else{
+        } else {
             return validMoves;
         }
 
