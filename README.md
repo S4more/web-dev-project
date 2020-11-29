@@ -7,7 +7,7 @@ It is important to send the right data
 ## Chess engine
 - [x] Piece movement
 - [x] Black and White perspective
-- [ ] King validation
+- [x] King validation
 - [ ] Finish game
 - [ ] Show taken pieces
 - [ ] Clock ?
@@ -25,8 +25,8 @@ It is important to send the right data
 ## Server
 - [x] Accept POST requests
 - [x] Handle multiple games at the same time
-- [ ] Reconnect system
-- [ ] stop password
+- [x] Reconnect system
+- [x] stop password
 
 ## HTML / CSS
 - [x] Lobby prototype
@@ -59,7 +59,7 @@ It is important to send the right data
     * logic/registration
     * Contact page (Email __AND__ Chat features in two seperate forms)
 - [X] Menu Bar (home link must be first option, vertical or horozontal)
-- [ ] Must use icons beside text for menu bar options 
+- [x] Must use icons beside text for menu bar options 
 - [ ] Each page must have favicon
 
 ### Layout and Positioning
@@ -76,7 +76,7 @@ It is important to send the right data
 ### Content
 - [X] Paragraph or heading on each page
 - [ ] Required Inclusion:
-    - [ ] At least one link to external site
+    - [] At least one link to external site
     - [X] Simple rollover effects (:hover or image based)
 
 ### Styling/CSS
