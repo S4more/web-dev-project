@@ -11,6 +11,35 @@ window.onload = function() {
     <a href="index.html">About</a>
 	${isLogged}
     `
+
+    document.getElementsByTagName("footer")[0].innerHTML = 
+        `
+        <div id="footer_content">
+            <div id="footer_left">
+                <p> Project contributers: <br>
+                    <ul>
+                        <li><a href="">Guilherme Corrêa (student#)</a><br></li>
+                        <li><a href="">Noah Labrecque (1931815)</a><br></li>
+                    </ul>
+                </p>
+            </div>
+            <div id="footer_center">
+                <p>
+                    2020-12-01<br>
+                    Web-Dev-1-sect:00001<br>
+                    Dawson College(Fall-2020) <br>
+                    © 2020 Guilherme Corrêa. Noah Labrecque.
+                </p>
+            </div>
+            <div id="footer_right">
+                <p>
+                    Made using: <br> 
+                    JS, CSS, Python server <br> 
+                    View on github <a href="">here</a>
+                </p>
+            </div>    
+        </div>
+        `
 };
 
 function loadProfile() {

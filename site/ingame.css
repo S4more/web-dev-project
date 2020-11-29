@@ -1,6 +1,4 @@
 body{
-	padding: 0px;
-	margin: 0px;
 	height: 100vh;
 	background-color: #18181e;
 }
@@ -51,12 +49,6 @@ table{
 	border-collapse: collapse; 
 	box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.26);
 }
-
-footer{
-	table-layout: fixed;
-	background-color: lightpink;
-}
-
 td{
 	text-align: center;
 	text-transform: uppercase;

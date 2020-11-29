@@ -4,6 +4,13 @@
 The server is preferably run on port 5555 and there is no current validation for the type of data that ir receives.
 It is important to send the right data
 
+
+## TODO
+- [ ] Link buttons on homepage
+- [ ] Link github and sonic links in footer
+
+
+
 ## Chess engine
 - [x] Piece movement
 - [x] Black and White perspective
@@ -36,9 +43,6 @@ It is important to send the right data
 
 
 ## Project Requirements
-
-### Pages
-
 
 
 
@@ -114,3 +118,4 @@ On contact.html Page (last menu option) <b>(DONE)</b>
 
 ### Questions for teacher
 * Can we use javascript for a simmilar but more advanced form system on another page instead of the contact.html page in the reqs
+

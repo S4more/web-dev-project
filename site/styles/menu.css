@@ -1,3 +1,5 @@
+/*Nav Menu Styling*/
+
 nav {
 	display: flex;
 	background-color: #f3f3f3;
@@ -55,4 +57,49 @@ nav a img {
 	width: 60px;
 	height: 60px;
 	border: 2px solid black;
+}
+
+
+
+/*Footer Styling*/
+
+footer{
+	padding: 10px;
+	margin-left: -20px;
+	width: 100vw;
+	bottom: 0px;
+	display: flex;
+	justify-content: center;
+	position:absolute;
+}
+
+#footer_content{
+	max-width: 1600px;
+    display: flex;
+    background: #2b2b2b;
+	justify-content: center;
+	width: 100%;	
+	margin: 0px 10px;
+}
+
+#footer_content div#footer_center{
+	margin: 0px auto;
+	text-align: center;
+}
+
+#footer_content div{
+	padding: 20px;
+	color: white;
+}
+
+#footer_content ul li{
+	font-size: 1em;
+}
+
+#footer_content ul{
+	margin: 0px;
+}
+
+#footer_content p{
+    margin: 0px;
 }
