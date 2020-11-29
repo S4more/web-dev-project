@@ -21,6 +21,8 @@ class Database:
         except psycopg2.errors.UniqueViolation as e:
             print(f"Username \"{username}\" already in use.")
             return -1
+        except Exception as e:
+            print("-------------",  e)
 
 
     def connectUser(self, username:str, password:str) ->bool:

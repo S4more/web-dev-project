@@ -1,6 +1,6 @@
 window.onload = function() {
 	
-	isLogged = (sessionStorage.userinfo ? `<a href='profile.html'> ${JSON.parse(sessionStorage.userinfo).username} <img src='${JSON.parse(sessionStorage.userinfo).profile_picture}'></a>` : `<a href="login.html">Login</a>`); 
+	isLogged = (sessionStorage.userinfo != null? `<a href='profile.html'> ${JSON.parse(sessionStorage.userinfo).username} <img src='${JSON.parse(sessionStorage.userinfo).profile_picture}'></a>` : `<a href="login.html">Login</a>`); 
 
     document.getElementById("navbar").innerHTML = 
     `
