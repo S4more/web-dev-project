@@ -137,8 +137,11 @@ class Server:
         #register: username, password
         elif "register" in data:
             if self.database.registerUser(data['username'], data['password']):
+                print("here")
                 info = self.database.connectUser(data['username'], data['password'])
+                print(info)
                 del info["password"]
+                return info
             else:
                 return -1
 
@@ -173,6 +176,7 @@ class Server:
             data = self.recvall(conn).decode()
             data = data.split("\n")[-1] #post request
             data = json.loads(data)
+            print(data)
             message = self.request_validation(data)
 
         except Exception as e:

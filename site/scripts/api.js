@@ -108,7 +108,6 @@ export function API(){
 				if (response.answer != -1){
 					console.log("logged");
 					sessionStorage.setItem('userinfo', JSON.stringify(response.answer));
-					location.reload();
 				}
 			}
 		}

@@ -13,23 +13,7 @@
 	<div id="games_list">
 		<div class="card">
 			<div class="bar title">
-				<p> Create a new account </p>
-			</div>
-			<div class="mid col">
-					<p id="important"> Don't reutilize passwords!</p>
-				<form id="register">
-					<input type="text" name="username" placeholder="Username or email" pattern="[a-zA-Z0-9 ]+" maxlength="15">
-					<p id="login-error"> Your username must contain only letters, numbers and spaces.</p>
-					<input type="password" name="password" placeholder="Password" autocomplete="off">
-			</div>
-			<div class="join">
-				<input type="submit" value="register">
-				</form>
-			</div>
-		</div>
-		<div class="card">
-			<div class="bar title">
-				<p> Already have an account? </p>
+				<p> LOGIN </p>
 			</div>
 			<div class="mid col">
 				<form id="connect">
@@ -37,9 +21,23 @@
 				<input type="password" name="password" placeholder="Password" autocomplete="on">
 			</div>
 			<div class="join">
-				<input type="submit" id="login" value="login">
+				<button type="submit" id="login" value="login">LOGIN </button>
 				</form>
 			</div>
+		</div>
+		<div class="card hover" style="transform: none">
+			<div class="bar title">
+				<p> Register </p>
+			</div>
+			<div class="mid">
+				<p>Don't have an account?! Create one<br>
+				to play among billions of players!</p>
+			</div>
+			<div class="join">
+				<a href="./register.html"><button> Register now</button></a>
+			</div>
+		</div>
+
 	</div>
 </body>
 </html>
