@@ -68,27 +68,20 @@ function populateList(dic) {
 function createMatch() {
 	let card = document.createElement("card");
 	card.className = "card create";
+	card.id = "create_game";
 
 	let documentFragment = document.createRange().createContextualFragment(`
-			<div class="bar top player">
-				<img src="images/white_pawn">
-				<p> Your name here </p>
-			</div>
 			<div class="mid">
-				<img src="images/Chess-Board.jpg">
-				<div class="hidden row">
-					<label>
-						<input type="checkbox" checked>
-						10 minutes
-					</label>
-					<label> 
-						<input type="checkbox" checked>
-						Public
-					</label>
-
-
-				</div>
+				<label>
+					<input type="checkbox" checked>
+					10 minutes
+				</label>
+				<label> 
+					<input type="checkbox" checked>
+					Public
+				</label>
 			</div>
+			
 			<div class="join">
 				<button> CREATE GAME </button>
 			</div>`)
@@ -105,4 +98,4 @@ function createMatch() {
 
 api = new API();
 api.getMatches();
-document.getElementById("games_list").appendChild(createMatch());
+document.getElementById("new_game_container").appendChild(createMatch());

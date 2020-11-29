@@ -255,3 +255,12 @@ body {
 #new_game_button {
 	width: 80px;
 }
+
+#new_game_container > .card{
+	display: flex;
+	flex-direction: row;
+}
+
+input[type=checkbox] { 
+	background: red;
+} 
