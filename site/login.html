@@ -3,41 +3,45 @@
 <head>
 	<link rel="stylesheet" href="styles/menu.css">	
     <link rel="stylesheet" href="gameList.css">
+	<link rel="stylesheet" href="styles/pagestyle.css">
 	<script type="module" src="scripts/login.js"></script>
 	<script  src="navbar.js"></script>
 	<meta charset="utf-8">
 	<title>Find Game</title>
 </head>
 <body>
-	<nav id="navbar"></nav>
-	<div id="games_list">
-		<div class="card">
-			<div class="bar title">
-				<p> LOGIN </p>
+	<div>
+		<nav id="navbar"></nav>
+		<div id="games_list">
+			<div class="card">
+				<div class="bar title">
+					<p> LOGIN </p>
+				</div>
+				<div class="mid col">
+					<form id="connect">
+					<input type="text" name="username" placeholder="Username or email">
+					<input type="password" name="password" placeholder="Password" autocomplete="on">
+				</div>
+				<div class="join">
+					<button type="submit" id="login" value="login">LOGIN </button>
+					</form>
+				</div>
 			</div>
-			<div class="mid col">
-				<form id="connect">
-				<input type="text" name="username" placeholder="Username or email">
-				<input type="password" name="password" placeholder="Password" autocomplete="on">
+			<div class="card hover" style="transform: none">
+				<div class="bar title">
+					<p> Register </p>
+				</div>
+				<div class="mid">
+					<p>Don't have an account?! Create one<br>
+					to play among billions of players!</p>
+				</div>
+				<div class="join">
+					<a href="./register.html"><button> Register now</button></a>
+				</div>
 			</div>
-			<div class="join">
-				<button type="submit" id="login" value="login">LOGIN </button>
-				</form>
-			</div>
-		</div>
-		<div class="card hover" style="transform: none">
-			<div class="bar title">
-				<p> Register </p>
-			</div>
-			<div class="mid">
-				<p>Don't have an account?! Create one<br>
-				to play among billions of players!</p>
-			</div>
-			<div class="join">
-				<a href="./register.html"><button> Register now</button></a>
-			</div>
-		</div>
 
+		</div>
 	</div>
+	<footer> </footer>
 </body>
 </html>

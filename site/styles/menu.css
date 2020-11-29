@@ -1,4 +1,19 @@
 /*Nav Menu Styling*/
+html {
+	max-width: 1600px;
+	margin: 0 auto;
+	padding: 0;
+}
+
+body {
+	padding: 0;
+	display: flex;
+	height: 100vh;
+	flex-direction: column;
+	justify-content: space-between;
+	overflow-y: auto;
+
+}
 
 nav {
 	display: flex;
@@ -66,11 +81,12 @@ nav a img {
 footer{
 	padding: 10px;
 	margin-left: -20px;
-	width: 100vw;
+	width: 100%;
 	bottom: 0px;
+	left: 0px;
+	margin-bottom: 0px;
 	display: flex;
 	justify-content: center;
-	position:absolute;
 }
 
 #footer_content{

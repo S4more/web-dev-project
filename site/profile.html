@@ -2,6 +2,7 @@
 <html>
 <head>
 	<link rel="stylesheet" href="styles/menu.css">	
+	<link rel="stylesheet" href="styles/pagestyle.css">
     <link rel="stylesheet" href="gameList.css">
 	<script type="module" src="scripts/login.js"></script>
 	<script  src="navbar.js"></script>
@@ -9,31 +10,34 @@
 	<title> Profile </title>
 </head>
 <body>
-	<nav id="navbar"></nav>
-		<div class="card hover" style="background-color: #f3f3f3">
-			<h2 style="color: black"> Update profile.</h2>
-			<div class="mid">
-				<form id="form">
-					<!--<div id="username-wrapper">
-						<label for="username">Username: </label>
-						<input type="TEXT" placeholder="re-enter your username" name="username">
-					</div>!-->
-					<div id="upload-wrapper"> 
-						<label>Profile picture: </label>
-						<input type="TEXT" placeholder="URL of profile picture" name="pp">
-					</div>
-					<div id="password-wrapper">
-						<label>Password: </label>
-						<input type="PASSWORD" placeholder="Confirm your password" name="password">
-					</div> 
-					<input type="submit" value="Confirm Changes">
-				</form>
+	<div>
+		<nav id="navbar"></nav>
+			<div class="card hover" style="background-color: #f3f3f3">
+				<h2 style="color: black"> Update profile.</h2>
+				<div class="mid">
+					<form id="form">
+						<!--<div id="username-wrapper">
+							<label for="username">Username: </label>
+							<input type="TEXT" placeholder="re-enter your username" name="username">
+						</div>!-->
+						<div id="upload-wrapper"> 
+							<label>Profile picture: </label>
+							<input type="TEXT" placeholder="URL of profile picture" name="pp">
+						</div>
+						<div id="password-wrapper">
+							<label>Password: </label>
+							<input type="PASSWORD" placeholder="Confirm your password" name="password">
+						</div> 
+						<input type="submit" value="Confirm Changes">
+					</form>
+				</div>
 			</div>
-		</div>
-		<div class="card">
-			<div class="join">
-				<button onclick="sessionStorage.clear(); window.location.href = '/login.html'"> Disconnect </button>
+			<div class="card">
+				<div class="join">
+					<button onclick="sessionStorage.clear(); window.location.href = '/login.html'"> Disconnect </button>
+				</div>
 			</div>
-		</div>
+	</div>
+	<footer></footer>
 </body>
 </html>
