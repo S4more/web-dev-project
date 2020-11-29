@@ -16,13 +16,15 @@
 				<p> Create a new account </p>
 			</div>
 			<div class="mid col">
-				<p id="important"> Don't reutilize passwords!</p>
-				<input type="text" id="usernameRegister" name="nickname" placeholder="Username or email" pattern="[a-zA-Z0-9 ]+" maxlength="15">
-				<p id="login-error"> Your username must contain only letters, numbers and spaces.</p>
-				<input type="password" id="passwordRegister" name="password" placeholder="Password">
+					<p id="important"> Don't reutilize passwords!</p>
+				<form id="register">
+					<input type="text" name="username" placeholder="Username or email" pattern="[a-zA-Z0-9 ]+" maxlength="15">
+					<p id="login-error"> Your username must contain only letters, numbers and spaces.</p>
+					<input type="password" name="password" placeholder="Password" autocomplete="off">
 			</div>
 			<div class="join">
-				<button id="register"> Register </button>
+				<input type="submit" value="register">
+				</form>
 			</div>
 		</div>
 		<div class="card">
@@ -30,11 +32,13 @@
 				<p> Already have an account? </p>
 			</div>
 			<div class="mid col">
-				<input type="text" id="usernameLogin" name="nickname" placeholder="Username or email">
-				<input type="password" id="passwordLogin" name="password" placeholder="Password">
+				<form id="connect">
+				<input type="text" name="username" placeholder="Username or email">
+				<input type="password" name="password" placeholder="Password" autocomplete="on">
 			</div>
 			<div class="join">
-				<button id="login"> Log In</button>
+				<input type="submit" id="login" value="login">
+				</form>
 			</div>
 	</div>
 </body>

@@ -27,7 +27,6 @@ class Server:
     
     def request_validation(self, data):
         #get_moves : [from, to] -> [str, str]
-        print(data)
         if "get_moves" in data:
             for i in range(0, self.timeoutTime):
                 try:
@@ -137,13 +136,20 @@ class Server:
 
         #register: username, password
         elif "register" in data:
-            return 1 if self.database.registerUser(data['username'], data['password']) else -1
+            if self.database.registerUser(data['username'], data['password']):
+                info = self.database.connectUser(data['username'], data['password'])
+                del info["password"]
+            else:
+                return -1
 
         elif "login" in data:
-            return self.database.connectUser(data['username'], data['password']); 
-               
+            info = self.database.connectUser(data['username'], data['password'])
+            del info["password"]
+            return info
+            
+
         elif "change_user" in data:
-            self.database.updateUserInfo(data) 
+            self.database.updateProfilePicture(data) 
             return "Data changed successfully." 
         
 
@@ -165,7 +171,6 @@ class Server:
     def threaded_handle_connection(self, conn, addr):
         try:
             data = self.recvall(conn).decode()
-            print(data)
             data = data.split("\n")[-1] #post request
             data = json.loads(data)
             message = self.request_validation(data)

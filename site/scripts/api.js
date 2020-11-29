@@ -108,10 +108,12 @@ export function API(){
 				if (response.answer != -1){
 					console.log("logged");
 					sessionStorage.setItem('userinfo', JSON.stringify(response.answer));
+					location.reload();
 				}
 			}
 		}
-		this.xmlhttp.open("POST", this.url, false);
+		this.xmlhttp.open("POST", this.url, true);
+		console.log(username, password);
 		this.xmlhttp.send(JSON.stringify({"login":"_", "username":username, "password":password}));
 	}
 

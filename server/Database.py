@@ -26,7 +26,10 @@ class Database:
     def connectUser(self, username:str, password:str) ->bool:
         try:
             self.cursor.execute("SELECT * FROM users WHERE username = %s AND password = %s", (username, password))
-            return dict(self.cursor.fetchone())
+            ans = dict(self.cursor.fetchone())
+            if ans["profile_picture"] == None:
+                ans["profile_picture"] = "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png?w=640"
+            return ans 
         except:
             return -1
 
@@ -36,6 +39,16 @@ class Database:
             return dict(self.cursor.fetchone())
         except:
             return -1
+
+    def updateProfilePicture(self, info: dict) -> bool:
+        print(info)
+        try:
+            self.cursor.execute("UPDATE users SET profile_picture = %s WHERE user_id = %s AND password = %s", (info["profile_picture"], info["change_user"], info["password"]))
+            self.connector.commit()
+        except Exception as e:
+            print("aqui")
+            print(e)
+
 
     def updateUserInfo(self, info: dict) -> bool:
         try:
