@@ -66,6 +66,7 @@ function populateList(dic) {
 }
 
 function createMatch() {
+
 	let card = document.createElement("card");
 	card.className = "card create";
 	card.id = "create_game";
@@ -88,6 +89,10 @@ function createMatch() {
 	card.append(documentFragment);
 
 	card.querySelector("button").addEventListener("click", function() {
+		if(sessionStorage.userinfo == null){
+			alert("You must be logged in to create a game");
+			return;
+		}
 		sessionStorage.setItem('room_id', Math.floor(Math.random() * Math.floor(50000)));
 		sessionStorage.setItem('action', "create_game");
 		document.location.href = "/";
