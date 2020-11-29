@@ -1,5 +1,4 @@
 body {
-	height: 500px;
 	background-color: #18181e;
 }
 
@@ -11,7 +10,15 @@ body {
 	flex-wrap: wrap;
 	justify-content: center;
 	align-content: flex-start;
+	overflow: scroll;
+	-ms-overflow-style: none;  /* IE and Edge */
+  	scrollbar-width: none;  /* Firefox */
 }
+
+#games_list::-webkit-scrollbar {
+	display: none;
+}
+
 
 /*---------------------CARD--------------*/
 
@@ -45,16 +52,20 @@ body {
 	transition: transform .3s ease-in-out, background-color .3s ease-in-out;
 }
 
-.card.hover h2 {
-	color: white;
-	box-shadow: none;
-}
-
 /* Most card elements have box-shadow and a radius. */
 .card > * {	
 	box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.38);
 	border-radius: 6px;
 }
+
+.card > p {
+	box-shadow: none;
+	border-radius: 0px;
+	color: white;
+	padding: 10px;
+}
+
+
 
 .card .join {
 	width: 90%;
@@ -133,6 +144,15 @@ body {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
+}
+
+.mid form .invalid{
+	border-color: red;
+}
+
+.invalid ~ #login-error {
+	opacity: 1;
+	height: auto;
 }
 
 .mid form > div {
