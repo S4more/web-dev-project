@@ -1,28 +1,25 @@
 function API(){
-	this.xmlhttp = new XMLHttpRequest();
-	this.url = "http://localhost:5555"
-	//Should API have a board instance? API is a static class but I don't know how
-	//to use it in JS properly. I think it will be ok to use it for now.
-    this.gameInstance;
+	this.socket = new WebSocket('ws://localhost:5000');
+
+	this.gameInstance;
+
+	this.socket.addEventListener('open', function(event) {
+		console.log("Connected to the server.")
+		api.getMatches();
+	});
+
+	this.socket.addEventListener('close', function(event) {
+		console.log('Disconnected from the server.');
+	});
+
+	this.socket.addEventListener('message', function(event) {
+		populateList(JSON.parse(event.data).answer);
+	});
 
 	this.getMatches = function() {
-		this.xmlhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				let response = JSON.parse(this.responseText);
-				if (response.answer !== 1) {
-					console.log(response);
-					populateList(response.answer);
-				} else {
-					console.log("Empty.");
-				}
-			}
-		}
-
-		this.xmlhttp.open("POST", this.url, true);
-		this.xmlhttp.send(JSON.stringify({"get_matches":"_"}));
+		this.socket.send(JSON.stringify({"action":"get_matches"}));
 	}
 }
-
 function createCard(key, value) {
 	let card = document.createElement("card");
 	card.className = "card create";
@@ -102,5 +99,4 @@ function createMatch() {
 }
 
 api = new API();
-api.getMatches();
 document.getElementById("new_game_container").appendChild(createMatch());

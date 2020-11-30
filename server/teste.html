@@ -1,67 +1,35 @@
 <!DOCTYPE html>
-<html>
-	<head>
-	</head>
-	<body>
-		<script>
-			var xmlhttp = new XMLHttpRequest();
-var url = "http://localhost:5555";
-
-var i = 1
-
-function myFunction(ip) {
-
-
-xmlhttp.onreadystatechange = function() {
-	if (this.readyState == 4 && this.status == 200) {
-		var myArr = JSON.parse(this.responseText);
-		console.log(myArr);
-	}}
-xmlhttp.open("POST", url, true);
-	xmlhttp.send(JSON.stringify( {"create_game": "0"}));
-	i = i + 1;
-};
-
-
-function myMove(ip) {
-xmlhttp.onreadystatechange = function() {
-	if (this.readyState == 4 && this.status == 200) {
-		var myArr = JSON.parse(this.responseText);
-		console.log(myArr);
-	}}
-xmlhttp.open("POST", url, true);
-	xmlhttp.send(JSON.stringify({ "make_move": ["a1", "a2"]}));
-	i = i + 1;
-};
-
-function myGet(ip) {
-xmlhttp.onreadystatechange = function() {
-	if (this.readyState == 4 && this.status == 200) {
-		var myArr = JSON.parse(this.responseText);
-		console.log(myArr);
-	}}
-xmlhttp.open("POST", url, true);
-	xmlhttp.send(JSON.stringify({ "get_matches": "_"}));
-	i = i + 1;
-};
-
-function myConnection(ip) {
-xmlhttp.onreadystatechange = function() {
-	if (this.readyState == 4 && this.status == 200) {
-		var myArr = JSON.parse(this.responseText);
-		console.log(myArr);
-	}}
-xmlhttp.open("POST", url, true);
-	xmlhttp.send(JSON.stringify({ "join_game": "0"}));
-	i = i + 1;
-};
-
-		</script>
-		<h1>Connection python test</h1>
-
-		<button onclick="myFunction(0)">Click me </button>
-		<button onclick="myMove(1)"> Move </button>
-		<button onclick="myConnection(1)">Click me </button>
-		<button onclick="myGet(0)"> Get info </button>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket Thing1</title>
+</head>
+<body>
+    Client1
+    <button onclick="sendMsg()">Send Msg</button>
 </body>
-</html> 
+<script>
+    // Create WebSocket connection.
+    const socket = new WebSocket('ws://localhost:5000');
+
+    // Connection opened
+    socket.addEventListener('open', function (event) {
+        console.log('Connected to the WS Server!')
+    });
+
+    // Connection closed
+    socket.addEventListener('close', function (event) {
+        console.log('Disconnected from the WS Server!')
+    });
+
+    // Listen for messages
+    socket.addEventListener('message', function (event) {
+        console.log('Message from server ', event.data);
+    });
+    // Send a msg to the websocket
+    const sendMsg = () => {
+			socket.send(JSON.stringify({"oi":"oi"}));
+    }
+</script>
+</html>

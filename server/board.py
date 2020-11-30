@@ -1,4 +1,6 @@
 from player import Player
+import json
+import datetime
 class WrongTurn(Exception):
     def __init__(self):
         self.message = "board.WrongTurn"
@@ -35,9 +37,11 @@ class Board:
         self.pieces = [0, 1]
         self.moves = 0
         self._lastMove = []
-        self.lastName = None
         self.players = []
         self.firstMove = False
+        self.lastActionTime = None
+        self.lastName = None
+        self.disconnectedId = []
         self.state = "wp01wp11wp21wp31wp41wp51wp61wp71wr00wr70wn10wn60wb20wb50wq30wk40bp06bp16bp26bp36bp46bp56bp66bp76br07br77bn67bb27bb57bq37bk47"
         self.cols = [number for number in range(0,8)]
         self.rows = [number for number in range(0,8)]
@@ -90,13 +94,33 @@ class Board:
                 return "Please wait for another player to join."
 
     
-    def addPlayer(self, player):
+    async def addPlayer(self, player):
         '''add player to board'''
+        if self.disconnectedId != []:
+            if player.name == self.disconnectedId[1].name:
+                await self.players[0].socket.send(json.dumps({"action":"opponent_reconnected"}))
+                self.players.insert(self.disconnectedId[0], player)
+                self.lastActionTime = None
+                print("reconnecting player")
+            else:
+                raise FullBoardError
         if player.name in [player.name for player in self.players]:
             return
         if len(self.players) >= 2: # If there are two players, make sure that no one else is added
             raise FullBoardError
         self.players.append(player)
+
+    async def removePlayer(self, player):
+        print("removing.")
+        self.disconnectedId = [self.players.index(player), player]
+        self.players.remove(player)
+        await self.players[0].socket.send(json.dumps({"action":"opponent_disconnect"}))
+        self.lastActionTime = datetime.datetime.now()
+
+    async def sendToOpponent(self, _from, to):
+        for player in self.players:
+            if player.name != self.lastName:
+                await player.socket.send(json.dumps({"action":"opponent_moves", "answer":{"from":_from, "to":to}}))
 
     def movePiece(self, move, name):
         '''Adds a piece at an specific square'''
