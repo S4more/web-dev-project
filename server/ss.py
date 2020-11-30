@@ -1,7 +1,7 @@
 from Database import Database
 import datetime
 from player import Player
-from board import Board, FullBoardError, PlayerAlreadyInBoard, WrongTurn, InsuficientPlayers
+from board import Board, FullBoardError, PlayerAlreadyInBoard, WrongTurn, InsuficientPlayers, EmptyBoard
 import json
 import sys, traceback
 import time
@@ -181,8 +181,12 @@ async def server(websocket, path):
             await serverH.async_connection(websocket, path)        
     except websockets.exceptions.ConnectionClosedOK:
         if websocket in serverH.connections:
-            await serverH.connections[websocket].board.removePlayer(serverH.connections[websocket])
-            del serverH.connections[websocket]
+            try:
+                await serverH.connections[websocket].board.removePlayer(serverH.connections[websocket])
+            except EmptyBoard:
+                del serverH.matches[serverH.connections[websocket].board.id]
+            finally:
+                del serverH.connections[websocket]
 
 def removeInactiveGames():
     while True:
