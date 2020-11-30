@@ -6,7 +6,7 @@ const pageName = location.href.split("/").slice(-1)[0];
 function updateProfile() {
 	const FD = new FormData( form );
 	let user_id = JSON.parse(sessionStorage.userinfo)["user_id"];
-	let toSend = {"change_user":user_id};
+	let toSend = {"action":"change_user", "user_id":user_id};
 	toSend["password"] = FD.get('password');
 	toSend["profile_picture"] = FD.get('pp');	
 	api.socket.send(JSON.stringify(toSend));

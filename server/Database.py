@@ -37,7 +37,7 @@ class Database:
 
     def getUserInfo(self, user_id: int) ->bool: 
         try:
-            self.cursor.execute("SELECT * FROM users WHERE user_id = %s", (user_id))
+            self.cursor.execute("SELECT * FROM users WHERE user_id = %s", (user_id,))
             return dict(self.cursor.fetchone())
         except:
             return -1
@@ -45,7 +45,7 @@ class Database:
     def updateProfilePicture(self, info: dict) -> bool:
         print(info)
         try:
-            self.cursor.execute("UPDATE users SET profile_picture = %s WHERE user_id = %s AND password = %s", (info["profile_picture"], info["change_user"], info["password"]))
+            self.cursor.execute("UPDATE users SET profile_picture = %s WHERE user_id = %s AND password = %s", (info["profile_picture"], info["user_id"], info["password"]))
             self.connector.commit()
         except Exception as e:
             print("aqui")
