@@ -150,8 +150,9 @@ class Server:
 
         elif "change_user" == action:
             self.database.updateProfilePicture(data) 
-            return "Data changed successfully." 
-        
+            info = self.database.getUserInfo(data["user_id"]) 
+            del info["password"]
+            return info
 
         else:
             print("non-identified POST")

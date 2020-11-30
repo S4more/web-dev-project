@@ -17,6 +17,9 @@ export function API(createGame){
 		var message = JSON.parse(event.data);
 		if (message.action == "opponent_joined") {	
 			this.gameInstance.startFirstTurn();
+		} else if (message.action == "change_user") {
+			sessionStorage.setItem('userinfo', JSON.stringify(message.answer));
+			location.reload();
 		} else if (message.action == "opponent_disconnect"){
 			document.getElementById("turn_marker").innerHTML = "Opponent disconnected. Win by resignation in 60 seconds,"
 		} else if (message.action == "opponent_reconnected") {
