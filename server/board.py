@@ -8,6 +8,10 @@ class InsuficientPlayers(Exception):
     def __init__(self):
         self.message = "board.insuficientPlayers"
 
+class EmptyBoard(Exception):
+    def __init__(self):
+        self.message = "board.emptyBoard"
+
 class FullBoardError(Exception):
     pass
 
@@ -114,8 +118,11 @@ class Board:
         print("removing.")
         self.disconnectedId = [self.players.index(player), player]
         self.players.remove(player)
-        await self.players[0].socket.send(json.dumps({"action":"opponent_disconnect"}))
-        self.lastActionTime = datetime.datetime.now()
+        try:
+            await self.players[0].socket.send(json.dumps({"action":"opponent_disconnect"}))
+            self.lastActionTime = datetime.datetime.now()
+        except:
+            raise EmptyBoard
 
     async def sendToOpponent(self, _from, to):
         for player in self.players:
