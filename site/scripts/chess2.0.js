@@ -1,5 +1,4 @@
 import {API} from './api.js';
-let api = new API();
 
 const pieces = {
     white_pawn: {color: "white", type: "pawn", charcode: "wpawn.svg", charType: "p", charColor: "w"},
@@ -177,11 +176,15 @@ function game(color, player_id, game_id){
         }
     }
 
+	this.startFirstTurn  = function() {	
+		console.log("first turn started");
+		this.startTurn();
+	}
+
 	this.onEnemyMove = function(from=null, to=null) {
 		if (from === null && to === null) {
 			console.log("here");
-			this.startTurn();
-			return; 
+			return
 		}
 
 		var from = this.squares[from[1]][from[0]];
@@ -238,7 +241,7 @@ function game(color, player_id, game_id){
 							if (validationOutcome.safe == true) {
 								console.log("Valid move!");
 								this.board_state = squaresToBoardState(this.squares);
-								api.sendMoves(this, [from, to], this.player_id, this.game_id, this.board_state);
+								api.sendMoves([from, to], this.player_id, this.game_id, this.board_state);
 								this.endTurn();
 							} else {
 								console.log("Invalid Move");
@@ -497,25 +500,29 @@ function square(board, x, y){
 }
 
 if (sessionStorage.action == "create_game"){
-	api.createGame(createGame, JSON.parse(sessionStorage.userinfo)['username'], sessionStorage.room_id);
+	var api = new API(createGame);
+	api.socket.onopen = () => api.createGame(JSON.parse(sessionStorage.userinfo)['username'], sessionStorage.room_id);
+
 } else if (sessionStorage.action == "join_game"){
-	api.joinGame(joinGame, JSON.parse(sessionStorage.userinfo)['username'], sessionStorage.room_id);
+	var api = new API(joinGame);
+	api.socket.onopen = () => api.joinGame(JSON.parse(sessionStorage.userinfo)['username'], sessionStorage.room_id);
 }
 
-function createGame(bool) {
+function createGame(bool, boardstate) {
 	if (bool) {
 		let gameInstance = new game("white",  JSON.parse(sessionStorage.userinfo)['username'], sessionStorage.room_id);
-		api.getBoardState(sessionStorage.room_id, gameInstance);
 		gameInstance.turn = true;
+		console.log(boardstate);
+		gameInstance.init(boardstate)
 		return gameInstance;
 	}
 }
 
-function joinGame(bool) {
+function joinGame(bool, boardstate) {
 	if (bool) {
 		let gameInstance = new game("black", JSON.parse(sessionStorage.userinfo)['username'], sessionStorage.room_id);
-		api.getBoardState(sessionStorage.room_id, gameInstance);
 		gameInstance.turn = false;
+		gameInstance.init(boardstate);
 		return gameInstance;
 	}
 }

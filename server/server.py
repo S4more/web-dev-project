@@ -41,6 +41,7 @@ class Server:
                 except Exception as e:
                     #print(data['player_id'], e.message)
                     time.sleep(0.5)
+            print("time out")
             return -1
             
         elif "get_status" in data:
@@ -116,6 +117,13 @@ class Server:
                     print(e)
                     return -1
 
+        elif "get_board_state" in data:
+            id = data["get_board_state"]
+            if id in self.matches:
+                return self.matches[id].state
+            else:
+                return -1
+
         elif "board_state" in data:
             state = data["board_state"]
             #state = [state[i:i+4] for i in range(0, len(state), 4)]
@@ -127,17 +135,10 @@ class Server:
                 print("The game does not exist")
                 return -1
 
-        elif "get_board_state" in data:
-            id = data["get_board_state"]
-            if id in self.matches:
-                return self.matches[id].state
-            else:
-                return -1
 
         #register: username, password
         elif "register" in data:
             if self.database.registerUser(data['username'], data['password']):
-                print("here")
                 info = self.database.connectUser(data['username'], data['password'])
                 print(info)
                 del info["password"]
@@ -209,6 +210,13 @@ class Server:
         response_status_text = 'OK'
         r = '%s %s %s\r\n' % (response_proto, response_status, response_status_text)
         return [r, response_headers_raw, '\r\n', msg]
+
+
+def threaded_games_checker(server):
+    while True:
+        time.sleep(60)
+        print("Checking for inactive games")
+
 
 if __name__ == '__main__':
     try:
