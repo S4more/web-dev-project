@@ -10,13 +10,13 @@ import websockets, websockets.exceptions
 from _thread import start_new_thread
 
 class Server:
-    def __init__(self):
-        self.ip = "192.168.2.12"
+    def __init__(self, ip, port):
+        self.ip = ip
         self.ll = []
         self.matches = {}
         self.connections = {}
         self.timeoutTime = int(60 / 0.5)
-        self.database = Database(self.ip, 5432)
+        self.database = Database(self.ip, port)
 
     
     async def request_validation(self, data, websocket):
@@ -174,7 +174,6 @@ class Server:
         except:
             return "Error"
 
-serverH = Server()
 async def server(websocket, path):
     try:
         while True:
@@ -197,6 +196,14 @@ def removeInactiveGames():
                 print("deleted")
                 del serverH.matches[match]
         
+if __name__ == '__main__':
+    try:
+        serverH = Server(sys.argv[1], int(sys.argv[2]))
+        print(f"Attatched to database on port {sys.argv[2]}.")
+    except Exception as e:
+        print("Couldn't attach to local database.")
+        print("Usage: server.py IP PORT")
+        sys.exit()
 
 start_server = websockets.serve(server, "localhost", 5000)
 start_new_thread(removeInactiveGames, ())
