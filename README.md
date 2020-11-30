@@ -80,11 +80,11 @@ It is important to send the right data
 ### Content
 - [X] Paragraph or heading on each page
 - [ ] Required Inclusion:
-    - [] At least one link to external site
+    - [ ] At least one link to external site
     - [X] Simple rollover effects (:hover or image based)
 
 ### Styling/CSS
-- [ ] THREE external CSS files:
+- [x] THREE external CSS files:
     * pagestyle.css to style the layout and structure of your pages.
         - [ ] Font family/size for: body, paragraph, and heading text
         - [X] Attributes for link states I.E. visited, focus, hover, active
@@ -96,14 +96,14 @@ It is important to send the right data
 
 ### JavaScript
 On contact.html Page (last menu option) <b>(DONE)</b>
-- [ ] 4 tabs (adress, call, e-mail, chat)
-- [ ] adress and call tabs contain the adress and telephone numbers respectivly (no form)
-- [ ] e-mail tab: form appears where you can enter
+- [x] 4 tabs (adress, call, e-mail, chat)
+- [x] adress and call tabs contain the adress and telephone numbers respectivly (no form)
+- [x] e-mail tab: form appears where you can enter
     * Email adress
     * Topic of message
     * Type of text
     * Submit button
-- [ ] Chat tab:
+- [x] Chat tab:
     * message form
     * Send button
 
