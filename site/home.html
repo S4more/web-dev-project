@@ -28,10 +28,14 @@
 						<h2>Find a match</h2>
 					</div>
 					<div class="join">
-						<button>Create Lobby</button>
+						<a href="gameList.html">
+							<button>Create Lobby</button>
+						</a>
 					</div>
 					<div class="join">
-						<button>View games</button>
+						<a href="gameList.html">
+							<button>View games</button>
+						</a>
 					</div>
 				   </div>
 				</div>
@@ -43,7 +47,7 @@
 							This project is made by:<br>
 							<a href="">Guilherme Corrêa</a>  and <a href="">Noah Labrecque</a> <br> 
 							for Web-Dev-1-sect:00001 (Fall-2020), final project. <br>
-							Find the source code on github <a href="">here</a>. <br>
+							Find the source code on github <a href="https://github.com/S4more/web-dev-project">here</a>. <br>
 						</p>
 					</div>
 				</div>
@@ -51,20 +55,23 @@
 				<div id="right_content">
 					<div class="card hover" id="login_register_card">
 						<div class="bar title">
-							<h2>No Logged in</h2>
+							<h2>Not Logged in</h2>
 						</div>
 						<div class="join">
-							<button>Login</button>
+							<a href="login.html">
+								<button>Login</button>
+							</a>
 						</div>
 						<div class="join">
-							<button>Register</button>
+							<a href="register.html">
+								<button>Register</button>
+							</a>
 						</div>
 					</div>
 
-
 					<div class="card hover" id="current_stats_card">
 						<div class="bar title">
-							<h2>Current Stats</h2>
+							<h2>Current Stats:</h2>
 						</div>
 						<div></div>
 						<p>
@@ -80,5 +87,13 @@
         <footer>
         </footer>
 </body>
-
+<script>
+	if(sessionStorage.userinfo != null){
+		document.getElementById("current_stats_card").style.display = "flex";
+		document.getElementById("login_register_card").style.display = "none";
+	} else{
+		document.getElementById("current_stats_card").style.display = "none";
+		document.getElementById("login_register_card").style.display = "flex";
+	}
+</script>
 </html>

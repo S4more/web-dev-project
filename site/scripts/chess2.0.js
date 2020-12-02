@@ -411,7 +411,7 @@ function game(color, player_id, game_id){
             else{var dir = -1};
 
             if((this.squareExists(square.y + dir*2,square.x)) && (square.y == 6) || (square.y == 1)){
-                if(!this.squares[square.y + dir*2][square.x].piece){
+                if(!this.squares[square.y + dir*2][square.x].piece && !this.squares[square.y + dir][square.x].piece){
                     validMoves.push(this.squares[square.y + dir*2][square.x]);
                 }
             }

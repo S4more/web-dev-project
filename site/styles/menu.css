@@ -12,7 +12,6 @@ body {
 	flex-direction: column;
 	justify-content: space-between;
 	overflow-y: auto;
-
 }
 
 nav {
@@ -31,20 +30,20 @@ nav {
 	min-width: auto;
 }
 
-nav *{
+nav img{
 	height: 100%;
 }
 
-nav *:first-child{
+nav img:first-child{
 	justify-self: flex-start;
 	margin-left: 20px;
 	margin-right: auto;
 }
-nav *:last-child{
+nav a:last-child{
 	margin-right: 20px;
 }
 
-nav a {
+nav a{
 	display: flex;
 	align-items: center;
 	font-size: 1.5rem;
@@ -53,7 +52,6 @@ nav a {
 	padding-top: 10px;
 	padding-bottom: 10px;
 	height: 45px;
-
 	transition: all 0.2s;
 }
 
@@ -61,7 +59,7 @@ nav a:link, a:visited{
 	text-decoration: none;
 }
 
-nav a:hover {
+nav a:hover{
 	text-decoration: none;
 	color: #f3f3f3;
 	background-color: #453F35;
@@ -73,7 +71,13 @@ nav a img {
 	height: 60px;
 	border: 2px solid black;
 }
-
+nav svg{
+	transition: all 0.2s;
+	height: 70%;
+}
+nav a:hover > svg{
+	stroke: #f3f3f3;
+}
 
 
 /*Footer Styling*/
