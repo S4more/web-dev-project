@@ -84,6 +84,75 @@ function stringToBoardState(string){
 
 const toLetter = ['a','b','c','d','e','f','g','h'];
 
+function BoardDisplay(game_id, element){ // Element is the HTML dom element the board will be created in, Must be a table element.
+    this.element  = element;
+    this.game_id = game_id;
+    this.init = function(board_state) {
+        this.boardGUI = this.initalizeGui();
+        this.setMarkers(this.boardGUI);
+		this.squares = this.initalizeSquares();
+		this.linkGameBoard(this.squares, this.boardGUI);
+		this.board_state = stringToBoardState(board_state);
+        this.placePieces(this.squares, this.board_state);
+    } 
+
+    this.move = function(from, to){
+			console.log("Moving Piece as Spectator");
+			to.setPiece(from.piece);
+			from.clear();
+			this.board_state = squaresToBoardState(this.squares);
+		}
+    }
+
+    this.initalizeGui = function(){
+        let guiSquares = [];
+        let container = element;
+        for (let i = 0; i < 9; i++) {
+            let row = document.createElement("TR");
+            guiSquares.push([]);
+            for (let j = 0; j < 9; j++) {
+                let cell = document.createElement("TD");
+                row.appendChild(cell);
+                guiSquares[i].push(cell);
+            }
+            container.appendChild(row);
+        }
+        return guiSquares;
+    }
+
+    this.initalizeSquares = function(){
+        let squares = [];
+        for (let i = 0; i < 8; i++) {
+            squares.push([]);
+            for (let j = 0; j < 8; j++) {
+                squares[i].push(new square(this, j, i));
+            }
+        }
+        return squares;
+    }
+
+    this.linkGameBoard = function(squares, boardGUI){
+        for(let i = 0; i < 8; i++){
+            for(let j = 0; j < 8; j++){
+                squares[i][j].cell = boardGUI[(8-(i+1))][j+1];
+            }
+        }
+    }
+
+    this.setMarkers = function(boardGUI){
+        for(let i = 0; i < 8; i++){
+            boardGUI[i][0].innerHTML = 8-i;
+        }
+        for(let i = 1; i < 9; i++){
+            boardGUI[8][i].innerHTML = toLetter[i-1];
+        }
+    }
+}
+
+
+
+
+
 function game(color, player_id, game_id){
 	this.turn;
     this.color = color;
