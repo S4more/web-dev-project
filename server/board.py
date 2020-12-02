@@ -1,4 +1,5 @@
 from player import Player
+from  websockets.exceptions import ConnectionClosedError, ConnectionClosed
 import json
 import datetime
 class WrongTurn(Exception):
@@ -42,6 +43,7 @@ class Board:
         self.moves = 0
         self._lastMove = []
         self.players = []
+        self.spectators = []
         self.firstMove = False
         self.lastActionTime = None
         self.lastName = None
@@ -128,6 +130,13 @@ class Board:
         for player in self.players:
             if player.name != self.lastName:
                 await player.socket.send(json.dumps({"action":"opponent_moves", "answer":{"from":_from, "to":to}}))
+        for spectator in self.spectators:
+            try:
+                await spectator.send(json.dumps({"action":"new_move", "answer":{"from":_from, "to":to}}))
+            except (ConnectionClosedError, ConnectionClosed) :
+                self.spectators.remove(spectator)
+                
+
 
     def movePiece(self, move, name):
         '''Adds a piece at an specific square'''
@@ -159,7 +168,7 @@ class Board:
             print(row)
 
     def getInfo(self):
-        return {"players":[player.name for player in self.players]}
+        return {"players":[player.name for player in self.players], "state":self.state}
 
 if __name__ == '__main__':
     board = Board(1)

@@ -140,6 +140,17 @@ body {
 	margin: 10px 20px;
 }
 
+.mid table {
+	width: 100%;
+}
+
+.mid td:first-child{
+	display: none;
+}
+.mid tr:last-child *{
+	display: none;
+}
+
 .mid form {
 	display: flex;
 	flex-direction: column;

@@ -2,7 +2,7 @@ body{
 	height: 100vh;
 	background-color: #18181e;
 }
-
+/*
 button{
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.335);
     max-width: 500px;
@@ -22,6 +22,7 @@ button{
 button:active{
     transform: translate(0px, 2px);
 }
+*/
 #center{
 	width: 100%;
 	display: flex;
@@ -95,10 +96,10 @@ tr:last-child *, td:first-child{
 	color: white;
 }
 td:first-child{
-	background-color: none;
+	background-color: #18181e;
 }
 tr:last-child *{
-	background-color: none;
+	background-color: #18181e;
 }
 
 #turn_marker{

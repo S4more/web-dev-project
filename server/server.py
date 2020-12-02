@@ -156,6 +156,12 @@ class Server:
             self.database.updateProfilePicture(data) 
             return "Data changed successfully." 
         
+        elif "spectate" in data:
+            id = data["room_id"]
+            if id in self.matches:
+                self.matches[id].spectators.append(socket)
+            else:
+                return -1
 
         else:
             print("non-identified POST")

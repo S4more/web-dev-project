@@ -1,25 +1,6 @@
-function API(){
-	this.socket = new WebSocket('ws://localhost:5000');
+import {SpectatorAPI} from "./api.js";
+import BoardDisplay from "./chess2.0.js";
 
-	this.gameInstance;
-
-	this.socket.addEventListener('open', function(event) {
-		console.log("Connected to the server.")
-		api.getMatches();
-	});
-
-	this.socket.addEventListener('close', function(event) {
-		console.log('Disconnected from the server.');
-	});
-
-	this.socket.addEventListener('message', function(event) {
-		populateList(JSON.parse(event.data).answer);
-	});
-
-	this.getMatches = function() {
-		this.socket.send(JSON.stringify({"action":"get_matches"}));
-	}
-}
 function createCard(key, value) {
 	let card = document.createElement("card");
 	card.className = "card create";
@@ -30,7 +11,7 @@ function createCard(key, value) {
 				<p> ${value["players"][0]} </p>
 			</div>
 			<div class="mid">
-				<img src="images/Chess-Board.jpg">
+				<table id="${key}"></table>
 				<div class=hidden>
 					<p> this is </p>
 					<p> loss </p>
@@ -56,9 +37,12 @@ function createCard(key, value) {
 }
 
 function populateList(dic) {
-	list = document.getElementById("games_list");
+	let list = document.getElementById("games_list");
 	for (let key in dic) {
 		list.appendChild(createCard(key, dic[key]));
+			let board = new BoardDisplay(key);
+			board.init(dic[key].state);
+			api.boards.push(board);
 	}
 }
 
@@ -98,5 +82,6 @@ function createMatch() {
 	return card;
 }
 
-api = new API();
+var api = new SpectatorAPI(populateList);
+api.socket.onopen = () => api.getMatches();
 document.getElementById("new_game_container").appendChild(createMatch());
