@@ -1,7 +1,6 @@
 import {API} from './api.js';
 var api = new API();
 
-const pageName = location.href.split("/").slice(-1)[0];
 
 function updateProfile() {
 	const FD = new FormData( form );
