@@ -1,6 +1,7 @@
 import {SpectatorAPI} from "./api.js";
 import BoardDisplay from "./chess2.0.js";
 
+
 function createCard(key, value) {
 	let card = document.createElement("card");
 	card.className = "card create";
@@ -62,6 +63,10 @@ function createMatch() {
 					<input type="checkbox" checked>
 					Public
 				</label>
+				<label> 
+					<input type="checkbox" checked>
+					Show Full
+				</label>
 			</div>
 			
 			<div class="join">
@@ -81,6 +86,9 @@ function createMatch() {
 	
 	return card;
 }
+
+
+
 
 var api = new SpectatorAPI(populateList);
 api.socket.onopen = () => api.getMatches();
