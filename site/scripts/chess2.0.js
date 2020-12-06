@@ -1,4 +1,5 @@
-import {API} from './api.js';
+import {PlayerAPI} from './api.js';
+export default BoardDisplay;
 
 const pieces = {
     white_pawn: {color: "white", type: "pawn", charcode: "wpawn.svg", charType: "p", charColor: "w"},
@@ -83,6 +84,80 @@ function stringToBoardState(string){
 }
 
 const toLetter = ['a','b','c','d','e','f','g','h'];
+
+function BoardDisplay(game_id){// Element is the HTML dom element the board will be created in, Must be a table element.
+    this.element  = document.getElementById(game_id);
+    this.game_id = game_id;
+    this.init = function(board_state) {
+        this.boardGUI = this.initalizeGui();
+		this.squares = this.initalizeSquares();
+		this.linkGameBoard(this.squares, this.boardGUI);
+		this.board_state = stringToBoardState(board_state);
+        this.placePieces(this.squares, this.board_state);
+    } 
+
+    this.placePieces = function(squares, piecelist){
+        for (let i = 0; i < piecelist.length; i++) {
+            squares[piecelist[i].y][piecelist[i].x].setPiece(piecelist[i].piece);
+        }
+    }
+    this.move = function(from, to){
+		console.log("Moving Piece as Spectator");
+		from = this.squares[from[1]][from[0]];
+		to = this.squares[to[1]][to[0]];	
+		to.setPiece(from.piece);
+		from.clear();
+		this.board_state = squaresToBoardState(this.squares);
+    }
+
+    this.initalizeGui = function(){
+        let guiSquares = [];
+        let container = this.element;
+        for (let i = 0; i < 9; i++) {
+            let row = document.createElement("TR");
+            guiSquares.push([]);
+            for (let j = 0; j < 9; j++) {
+                let cell = document.createElement("TD");
+                row.appendChild(cell);
+                guiSquares[i].push(cell);
+            }
+            container.appendChild(row);
+        }
+        return guiSquares;
+    }
+
+    this.initalizeSquares = function(){
+        let squares = [];
+        for (let i = 0; i < 8; i++) {
+            squares.push([]);
+            for (let j = 0; j < 8; j++) {
+                squares[i].push(new square(this, j, i));
+            }
+        }
+        return squares;
+    }
+
+    this.linkGameBoard = function(squares, boardGUI){
+        for(let i = 0; i < 8; i++){
+            for(let j = 0; j < 8; j++){
+                squares[i][j].cell = boardGUI[(8-(i+1))][j+1];
+            }
+        }
+    }
+
+    this.setMarkers = function(boardGUI){
+        for(let i = 0; i < 8; i++){
+            boardGUI[i][0].innerHTML = 8-i;
+        }
+        for(let i = 1; i < 9; i++){
+            boardGUI[8][i].innerHTML = toLetter[i-1];
+        }
+    }
+}
+
+
+
+
 
 function game(color, player_id, game_id){
 	this.turn;
@@ -220,6 +295,7 @@ function game(color, player_id, game_id){
     this.move = function(from, to, isEnemy = false){
 		if (isEnemy) {
 			console.log("Moving enemy");
+			console.log(from);
 			to.setPiece(from.piece);
 			from.clear();
 			this.board_state = squaresToBoardState(this.squares);
@@ -262,7 +338,6 @@ function game(color, player_id, game_id){
 
 
 	this.checkForMate = function(color) {
-		console.log("checking for mate");
 		let possibleSquaresToMove = this.getSquaresWithPiecesOfColor(color);
 		for (let i =0; i < possibleSquaresToMove.length; i++) {
 			let squareMoves = this.getPossibleMoves(possibleSquaresToMove[i]);
@@ -292,9 +367,7 @@ function game(color, player_id, game_id){
 
 	this.findKing = function(color) {
 		var squareList = this.getSquaresWithPieces();
-		console.log("Color to search for is!: " + color);
 		for (let i = 0; i < squareList.length; i++) {
-			console.log(squareList[i].piece.type + " : " + squareList[i].piece.color);
 			if (squareList[i].piece.type == "king" && squareList[i].piece.color == color) {
 				return squareList[i];
 			}
@@ -351,7 +424,6 @@ function game(color, player_id, game_id){
 				}
 			}
 		}
-		console.log("The king is safe = :" + kingSafe);
 		return {safe: kingSafe, offendingPieces: problemPieces};
 	}
 
@@ -499,12 +571,15 @@ function square(board, x, y){
     }
 }
 
+//TODO -> CLEAR ACTION STORAGE.
+
+
 if (sessionStorage.action == "create_game"){
-	var api = new API(createGame);
+	var api = new PlayerAPI(createGame);
 	api.socket.onopen = () => api.createGame(JSON.parse(sessionStorage.userinfo)['username'], sessionStorage.room_id);
 
 } else if (sessionStorage.action == "join_game"){
-	var api = new API(joinGame);
+	var api = new PlayerAPI(joinGame);
 	api.socket.onopen = () => api.joinGame(JSON.parse(sessionStorage.userinfo)['username'], sessionStorage.room_id);
 }
 
@@ -512,7 +587,6 @@ function createGame(bool, boardstate) {
 	if (bool) {
 		let gameInstance = new game("white",  JSON.parse(sessionStorage.userinfo)['username'], sessionStorage.room_id);
 		gameInstance.turn = true;
-		console.log(boardstate);
 		gameInstance.init(boardstate)
 		return gameInstance;
 	}

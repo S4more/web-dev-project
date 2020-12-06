@@ -15,6 +15,7 @@ class Server:
         self.ll = []
         self.matches = {}
         self.connections = {}
+        self.spectators = {}
         self.timeoutTime = int(60 / 0.5)
         self.database = Database(self.ip, port)
 
@@ -49,6 +50,8 @@ class Server:
             message = {}
             for match in self.matches:
                 message[match] = self.matches[match].getInfo();
+                self.matches[match].spectators.append(websocket)
+            self.spectators[websocket] = [self.matches[match] for match in self.matches]
             if message == {}:
                 message["empty"] = "empty"
 
@@ -154,6 +157,10 @@ class Server:
             del info["password"]
             return info
 
+        elif "spectate" in data:
+            id = data["room_id"]
+            if id in self.matches:
+                self.matches[id].spectators.append(socket)
         else:
             print("non-identified POST")
             print(data)
@@ -187,6 +194,10 @@ async def server(websocket, path):
                 del serverH.matches[serverH.connections[websocket].board.id]
             finally:
                 del serverH.connections[websocket]
+        elif websocket in serverH.spectators:
+            for board in serverH.spectators[websocket]:
+                board.spectators.remove(websocket)
+
 
 def removeInactiveGames():
     while True:
