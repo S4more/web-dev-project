@@ -64,7 +64,7 @@ nav a:link, a:visited{
 	text-decoration: none;
 }
 
-nav a:hover{
+nav a:hover:not(#logo_link){
 	text-decoration: none;
 	color: #f3f3f3;
 	background-color: #453F35;
@@ -122,4 +122,11 @@ footer{
 
 #footer_content p{
     margin: 0px;
+}
+
+nav > a:last-child > img{
+	height:50px;
+	width:50px;
+	border-radius: 100px;
+	border: 4px solid #c5a05c;
 }
