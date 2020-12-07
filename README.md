@@ -54,7 +54,7 @@ pip install psycopg2 websockets
 - [X] Login Page
 - [X] Register Page
 - [X] User page
-- [ ] About Us 
+- [X] About Us 
 - [ ] Lobby filtering/search
 
 ## Project Requirements
