@@ -1,14 +1,26 @@
 # web-dev-project
 
-# Server
-The server is preferably run on port 5555 and there is no current validation for the type of data that ir receives.
-It is important to send the right data
+# About the project
+This is a multiplayer chess game made for Dawson's college web development class. It was made by Guilherme Corrêa and Noah Labrecque in approxematly 30 days.  
+Our goal for this project was to challenge ourselves in learning key concepts in networking and javascript.  
+Because of certificate issues we aren't able to make our website interactive on our sonic acount, but you can try it out on this ip -> 70.26.238.78:8000.
 
+
+
+# How to run locally
+Requirements: Python 3.5+ <br/>
+Python packages: <br/>
+```
+pip install psycopg2 websockets
+```
+## Starting the server
+`python3 ss.py 70.26.238.78 34569`  
+(In order to run it you need to be whitelisted in the database.)
+ 
 
 ## TODO
 - [ ] Link buttons on homepage
-- [ ] Link github and sonic links in footer
-
+- [X] Link github and sonic links in footer
 
 
 ## Chess engine
@@ -17,7 +29,7 @@ It is important to send the right data
 - [x] King validation
 - [ ] Finish game
 - [ ] Show taken pieces
-- [ ] Clock ?
+- [ ] Clock
 
 ## Client-Server-API
 - [x] Create a game
@@ -26,7 +38,8 @@ It is important to send the right data
 - [x] Single request with server timeout.
 - [X] Registration
 - [X] Join / Create games
-- [ ] Board preview
+- [X] Board preview
+- [ ] Reconnect with right turn
 
 
 ## Server
@@ -37,10 +50,12 @@ It is important to send the right data
 
 ## HTML / CSS
 - [x] Lobby prototype
-- [ ] Main page
+- [X] Main page
+- [X] Login Page
+- [X] Register Page
+- [X] User page
+- [ ] About Us 
 - [ ] Lobby filtering/search
-- [ ] Rules page / wiki
-
 
 ## Project Requirements
 
@@ -48,12 +63,12 @@ It is important to send the right data
 
 ### General
 - [ ] Test on several web browsers (Chrome, Firefox, IE, Safari) !!!!!
-- [ ] Upload to sonic server
+- [X] Upload to sonic server
 
 ### Technical Required Inclusions
 - [X] Tables (For data/Images not layout)
-- [ ] Graphic title or logo on each page (Custom if possible)
-- [ ] Footer including (On each page):
+- [X] Graphic title or logo on each page (Custom if possible)
+- [X] Footer including (On each page):
     * Copyright/year
     * for each member:
         * Name (Clickable bringing user to current page on sonic account)
@@ -64,29 +79,29 @@ It is important to send the right data
     * Contact page (Email __AND__ Chat features in two seperate forms)
 - [X] Menu Bar (home link must be first option, vertical or horozontal)
 - [x] Must use icons beside text for menu bar options 
-- [ ] Each page must have favicon
+- [X] Each page must have favicon
 
 ### Layout and Positioning
 - [X] Use html symantic elements +(Divs/Spans)
 - [X] Use fluid layout (Flex...?)
     * (Structure, number of columns and exact layout is up to us)
-- [ ] Use (relative, absolute, sticky, and fixed) attributes to position different part of your layout
+- [X] Use (relative, absolute, sticky, and fixed) attributes to position different part of your layout
 
 ### Head Section
-- [ ] Minimum 3 meta tags (i.e. keyword , description, utf, ...)
-- [ ] Use any SEO/Search engine ranking tag
-- [ ] Titles for each page
+- [X] Minimum 3 meta tags (i.e. keyword , description, utf, ...)
+- [X] Use any SEO/Search engine ranking tag
+- [X] Titles for each page
 
 ### Content
 - [X] Paragraph or heading on each page
-- [ ] Required Inclusion:
-    - [ ] At least one link to external site
+- [X] Required Inclusion:
+    - [X] At least one link to external site
     - [X] Simple rollover effects (:hover or image based)
 
 ### Styling/CSS
 - [x] THREE external CSS files:
     * pagestyle.css to style the layout and structure of your pages.
-        - [ ] Font family/size for: body, paragraph, and heading text
+        - [X] Font family/size for: body, paragraph, and heading text
         - [X] Attributes for link states I.E. visited, focus, hover, active
         - [X] Attributes for form element states (pseudo-classes) including different types of inputs.
         - [X] Table styling

@@ -1,3 +1,4 @@
+const pageName = location.href.split("/").slice(-1)[0];
 window.onload = function() {
 	
 	isLogged = (sessionStorage.userinfo != null? `<a href='profile.html'> ${JSON.parse(sessionStorage.userinfo).username} <img src='${JSON.parse(sessionStorage.userinfo).profile_picture}'></a>` : `<a href="login.html">Login<svg width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#453F35" fill="none" stroke-linecap="round" stroke-linejoin="round">

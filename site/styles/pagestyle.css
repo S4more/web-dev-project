@@ -157,7 +157,7 @@ li{
 
 body{
     margin: 0px;
-    padding: 10px;
+    padding: 0 10px;
     height: 100vh;
     overflow: hidden; 
 }
@@ -165,13 +165,10 @@ body{
 
 #main_page_content{
     display: flex;
-<<<<<<< Updated upstream
-=======
 }
 
 #center_logo{
     height: 200px;
     box-shadow: none;
     text-shadow: 4px 3px 2px black;
->>>>>>> Stashed changes
 }
