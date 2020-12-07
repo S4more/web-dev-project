@@ -1,5 +1,5 @@
 *{font-family: Arial, sans-serif;}
-.card > h1, h2, h3, h4, h5, h6{
+h1, h2, h3, h4, h5, h6{
     text-align:center;
     margin: 0px;
     color: white;
@@ -171,4 +171,24 @@ body{
     height: 200px;
     box-shadow: none;
     text-shadow: 4px 3px 2px black;
+}
+
+#about_content {
+    margin: auto;
+    max-width: 900px;
+}
+
+#about_content *{
+    text-align: left;
+    color: white;
+}
+
+#about_content > h1{
+    text-align: center;
+}
+
+#about_content > ul {
+    list-style-type: square;
+    margin-top: 10px;
+    margin-left: 40px;
 }

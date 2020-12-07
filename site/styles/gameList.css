@@ -6,7 +6,7 @@ body {
 
 #games_list {
 	display: flex;
-	margin: auto;
+	margin: auto;	
 	max-width: 80%;
 	flex-wrap: wrap;
 	justify-content: center;
