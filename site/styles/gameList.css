@@ -1,3 +1,5 @@
+*{font-family: Arial, sans-serif;}
+
 body {
 	background-color: #18181e;
 }
@@ -32,11 +34,15 @@ body {
 	visibility: visible;
 	opacity: 1;
 	transition: visibility 0s, opacity .6s ease-in-out;
+	color: black;
+	background-color: white;
 }
 
+/*
 .card:hover .mid img{
 	filter: brightness(30%) blur(1.5px);
 }
+*/
 
 .card{
 	display: flex;

@@ -1,4 +1,6 @@
 /*Nav Menu Styling*/
+*{font-family: Arial, sans-serif;}
+
 html {
 	max-width: 1600px;
 	margin: 0 auto;
@@ -17,6 +19,7 @@ nav {
 	display: flex;
 	background-color: #f3f3f3;
 	align-items: center;
+	justify-content: flex-end;
 	height: 75px;
 	max-width: 1600px;
 	margin: 0px auto;
@@ -25,26 +28,29 @@ nav {
 }
 
 #nav_spacer{
-	max-width: 1000;
 	min-width: auto;
 }
 
-nav img{
-	height: 100%;
+#logo_link > *{
+	height: 200%;
 }
 
 nav img:first-child{
-	justify-self: flex-start;
+	justify-self: flex-end;
 	margin-left: 20px;
-	margin-right: auto;
 }
+
 nav a:last-child{
 	margin-right: 20px;
+}
+nav a:nth-child(2){
+	margin-left: auto;
 }
 
 nav a{
 	display: flex;
 	align-items: center;
+	justify-self: flex-end;
 	font-size: 1.5rem;
 	color: #453F35;
 	padding: 20px;
@@ -64,16 +70,11 @@ nav a:hover{
 	background-color: #453F35;
 }
 
-nav a img {
-	border-radius: 60px;
-	width: 60px;
-	height: 60px;
-	border: 2px solid black;
-}
 nav svg{
 	transition: all 0.2s;
 	height: 70%;
 }
+
 nav a:hover > svg{
 	stroke: #f3f3f3;
 }
