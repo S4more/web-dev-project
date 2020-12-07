@@ -8,7 +8,7 @@ function createCard(key, value) {
 
 	let documentFragment = document.createRange().createContextualFragment(`
 			<div class="bar player">
-				<img src="images/white_pawn">
+				<img src="images/pp.jpeg">
 				<p> ${value["players"][0]} </p>
 			</div>
 			<div class="mid">
@@ -30,7 +30,7 @@ function createCard(key, value) {
 		sessionStorage.setItem('room_id', key);
 		sessionStorage.setItem('action', "join_game");
 		sessionStorage.setItem('player_id', "enemy");
-		document.location.href = "../ingame.html";
+		document.location.href = "./ingame.html";
 	});
 
 
@@ -91,5 +91,5 @@ function createMatch() {
 
 
 var api = new SpectatorAPI(populateList);
-api.socket.onopen = () => api.getMatches();
+api.getMatches();
 document.getElementById("new_game_container").appendChild(createMatch());

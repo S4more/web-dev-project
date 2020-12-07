@@ -2,6 +2,8 @@ import {PlayerAPI} from "./api/PlayerAPI.js";
 import {SpectatorAPI} from "./api/SpectatorAPI.js";
 export {PlayerAPI, SpectatorAPI};
 
+
+
 export function API(createGame){
 	/*
 	 * Base class for all API classes.
@@ -9,8 +11,13 @@ export function API(createGame){
 	 * Holds only eventListeners common to all classes.
 	 *
 	 */
-	this.socket = new WebSocket('ws://localhost:5000');
-	this.createGame = createGame;
+	this.state = "wp01wp11wp21wp31wp41wp51wp61wp71wr00wr70wn10wn60wb20wb50wq30wk40bp06bp16bp26bp36bp46bp56bp66bp76br07br77bn67bb27bb57bq37bk47bn17";
+	this.getMatches = function() {
+		let info = {"players":["Player 1"], "state": this.state}
+		this.gameInstance = createGame({"22":info});
+	}
+
+	/*this.createGame = createGame;
 
 	this.gameInstance;
 
@@ -25,8 +32,6 @@ export function API(createGame){
 	this.socket.addEventListener('message', function(event) {
 		var message = JSON.parse(event.data);
 		if (message.action == "get_matches") {
-			console.log(message);
-			this.gameInstance = createGame(message.answer);
 		} else if (message.action == "change_user") {
 			sessionStorage.setItem('userinfo', JSON.stringify(message.answer));
 			location.reload();
@@ -111,6 +116,7 @@ export function API(createGame){
 		this.xmlhttp.open("POST", this.url, false);
 		this.xmlhttp.send(JSON.stringify({"action":"get_board_state", "board_id":room_id}));
 	}
+	*/
 }
 
 

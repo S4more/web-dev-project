@@ -1,6 +1,11 @@
 import {API} from "../api.js";
 export function PlayerAPI(createGame) {
 	API.call(this, createGame);
+
+
+	this.gameInstance = createGame(true, this.state);
+
+
 	this.sendMoves = function(args, player_id, game_id, board_state){
 		var withMethod = {"action":"make_move"};
 		withMethod["player_id"] = player_id;
@@ -14,7 +19,7 @@ export function PlayerAPI(createGame) {
 		this.xmlhttp.send(JSON.stringify({"action":"board_state", "room_id":sessionStorage.room_id, "state":board_state}));
 	}
 
-	this.socket.addEventListener('message', function(event) {
+	/* this.socket.addEventListener('message', function(event) {
 		var message = JSON.parse(event.data);
 		if (message.action == "opponent_joined") {	
 			this.gameInstance.startFirstTurn();
@@ -42,4 +47,5 @@ export function PlayerAPI(createGame) {
 			console.log(message.answer);
 		}
 	});
+	*/
 }

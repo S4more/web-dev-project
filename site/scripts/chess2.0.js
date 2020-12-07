@@ -575,11 +575,9 @@ function square(board, x, y){
 if (pageName == "ingame.html") {
 	if (sessionStorage.action == "create_game"){
 		var api = new PlayerAPI(createGame);
-		api.socket.onopen = () => api.createGame(JSON.parse(sessionStorage.userinfo)['username'], sessionStorage.room_id);
 
 	} else if (sessionStorage.action == "join_game"){
 		var api = new PlayerAPI(joinGame);
-		api.socket.onopen = () => api.joinGame(JSON.parse(sessionStorage.userinfo)['username'], sessionStorage.room_id);
 	}
 } else {
 	sessionStorage.removeItem("action");
@@ -596,7 +594,7 @@ function createGame(bool, boardstate) {
 
 function joinGame(bool, boardstate) {
 	if (bool) {
-		let gameInstance = new game("black", JSON.parse(sessionStorage.userinfo)['username'], sessionStorage.room_id);
+		let gameInstance = new game("black", "Player 2", "3333");
 		gameInstance.turn = false;
 		gameInstance.init(boardstate);
 		return gameInstance;

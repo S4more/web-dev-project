@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html>
+
+
+
+
 <head>
 	<link rel="icon" type="image/png" sizes="96x96" href="images/favicon/96.png">
 	<link rel="icon" type="image/png" sizes="64x64" href="images/favicon/64.png">
@@ -12,10 +16,16 @@
     <link rel="stylesheet" href="styles/pagestyle.css">
     <link rel="stylesheet" href="styles/menu.css">
     <title>Chess Home</title>
-    <script src="scripts/navbar.js"></script>
+	<script src="scripts/navbar.js"></script>
+	
+	
 </head>
 
 <body>
+
+	
+
+
 	<div>
 		<nav id="navbar"></nav>
 		<div id="content">
@@ -49,12 +59,20 @@
 				<div id="center_content">
 					<div class="card hover">
 						<img src="images/LOGO_SAMORE.svg" id="center_logo" alt="chess-on Logo">
+
+						<h2>This is a mockup/non-functional version of the site for demonstration pourpuses only.<br>
+							A multiplayer online version can be found <a href="http://70.26.238.78:8000/">here.</a>
+							<br>
+							<br>
+						</h2>
+
 						<p>
 							This project is made by:<br>
 							<a href="https://sonic.dawsoncollege.qc.ca/~F202035536/420-120/Project/home.html">Guilherme Corrêa</a>  and <a href="https://sonic.dawsoncollege.qc.ca/~F201931815/420-120/Project/home.html">Noah Labrecque</a> <br> 
 							for Web-Dev-1-sect:00001 (Fall-2020), final project. <br>
 							Find the source code on github <a href="https://github.com/S4more/web-dev-project">here</a>. <br>
 						</p>
+						
 					</div>
 				</div>
 
@@ -100,6 +118,19 @@
 	} else{
 		document.getElementById("current_stats_card").style.display = "none";
 		document.getElementById("login_register_card").style.display = "flex";
+	}
+
+	if (navigator.userAgent.match(/Trident.*rv:11./)) {
+
+		function openLinkInIE(url){
+  			window.open("microsoft-edge:"+ url);
+		}
+		openLinkInIE('https://sonic.dawsoncollege.qc.ca/~F202035536/420-120/Project/home.html');
+		document.body.style.display = "flex";
+		document.body.style.flexDirection = "collumn";
+		document.body.style = "justify-content:center";
+		document.body.innerHTML = '<img src="images/LOGO_SAMORE.svg" id="center_logo" alt="chess-on Logo" style="height:200px; width:500px;  margin:auto; margin-bottom:0px;">';
+		document.body.innerHTML += "<h1 style='color:red; margin: auto; margin-top:0px;'>We're sorry for the inconvenience, but our site uses features unsupported in your version of internet explorer. If you want to visit our site and be able to experience it fully please use a more modern browser, such as <a href='https://www.mozilla.org/en-US/firefox/new/'>Firefox</a></h1>";	
 	}
 </script>
 </html>
