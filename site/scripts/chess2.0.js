@@ -572,7 +572,7 @@ function square(board, x, y){
 }
 
 //TODO -> CLEAR ACTION STORAGE.
-if (pageName == "") {
+if (pageName == "ingame.html") {
 	if (sessionStorage.action == "create_game"){
 		var api = new PlayerAPI(createGame);
 		api.socket.onopen = () => api.createGame(JSON.parse(sessionStorage.userinfo)['username'], sessionStorage.room_id);
