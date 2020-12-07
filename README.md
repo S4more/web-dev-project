@@ -19,7 +19,7 @@ pip install psycopg2 websockets
  
 
 ## TODO
-- [ ] Link buttons on homepage
+- [X] Link buttons on homepage
 - [X] Link github and sonic links in footer
 
 
@@ -62,7 +62,7 @@ pip install psycopg2 websockets
 
 
 ### General
-- [ ] Test on several web browsers (Chrome, Firefox, IE, Safari) !!!!!
+- [X] Test on several web browsers (Chrome, Firefox, IE, Safari) !!!!!
 - [X] Upload to sonic server
 
 ### Technical Required Inclusions
@@ -130,7 +130,3 @@ On contact.html Page (last menu option) <b>(DONE)</b>
 * Only one member must submit the page to LEA.
 * However, all members must have the same copy of the project in their respective server account
 * Deadline: DEC 1st
-
-### Questions for teacher
-* Can we use javascript for a simmilar but more advanced form system on another page instead of the contact.html page in the reqs
-
