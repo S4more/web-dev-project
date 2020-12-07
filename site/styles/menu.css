@@ -125,7 +125,8 @@ footer{
 }
 
 nav > a:last-child > img{
-	height:120%;
-	border-radius: 200%;
+	height:50px;
+	width:50px;
+	border-radius: 100px;
 	border: 4px solid #c5a05c;
 }

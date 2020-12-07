@@ -81,7 +81,7 @@ function createMatch() {
 		}
 		sessionStorage.setItem('room_id', Math.floor(Math.random() * Math.floor(50000)));
 		sessionStorage.setItem('action', "create_game");
-		document.location.href = "/";
+		document.location.href = "ingame.html";
 	});
 	
 	return card;
