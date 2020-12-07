@@ -30,7 +30,7 @@ function createCard(key, value) {
 		sessionStorage.setItem('room_id', key);
 		sessionStorage.setItem('action', "join_game");
 		sessionStorage.setItem('player_id', "enemy");
-		document.location.href = "/";
+		document.location.href = "../ingame.html";
 	});
 
 
@@ -81,7 +81,7 @@ function createMatch() {
 		}
 		sessionStorage.setItem('room_id', Math.floor(Math.random() * Math.floor(50000)));
 		sessionStorage.setItem('action', "create_game");
-		document.location.href = "ingame.html";
+		document.location.href = "../ingame.html";
 	});
 	
 	return card;
