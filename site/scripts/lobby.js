@@ -8,7 +8,7 @@ function createCard(key, value) {
 
 	let documentFragment = document.createRange().createContextualFragment(`
 			<div class="bar player">
-				<img src="images/white_pawn">
+				<img src="images/pp.jpeg">
 				<p> ${value["players"][0]} </p>
 			</div>
 			<div class="mid">
@@ -91,5 +91,5 @@ function createMatch() {
 
 
 var api = new SpectatorAPI(populateList);
-api.socket.onopen = () => api.getMatches();
+api.getMatches();
 document.getElementById("new_game_container").appendChild(createMatch());
