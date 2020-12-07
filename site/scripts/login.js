@@ -5,27 +5,17 @@ var api = new API();
 function updateProfile() {
 	const FD = new FormData( form );
 	let user_id = JSON.parse(sessionStorage.userinfo)["user_id"];
-	let toSend = {"action":"change_user", "user_id":user_id};
-	toSend["password"] = FD.get('password');
+	let toSend = {};
 	toSend["profile_picture"] = FD.get('pp');	
-	api.socket.send(JSON.stringify(toSend));
+	sessionStorage.setItem("userinfo", JSON.stringify({"user_id":14,"username":"admin","created_on":"2020-11-26 21:41:26.275296","rank":800,"profile_picture":toSend["profile_picture"]}));
+	window.location.href = "./home.html";
 }
 
 function sendData(form, command) {
 	const XHR = new XMLHttpRequest();
 	const FD = new FormData( form );
-	api.socket.addEventListener( "load", function(event) {
-		sessionStorage.setItem("userinfo", JSON.stringify(JSON.parse(event.target.responseText).answer));
-		window.location.href = "/";
-	} );
-	api.socket.addEventListener( "error", function( event ) {
-		alert( 'Wrong password.' );
-	} );
-
-	let toSend = (command == "register") ? {"action":"register"} : {"action":"login"};
-	toSend["username"] = FD.get('username')
-	toSend["password"] = FD.get('password');
-	api.socket.send(JSON.stringify(toSend));
+	sessionStorage.setItem("userinfo", JSON.stringify({"user_id":14,"username":"admin","created_on":"2020-11-26 21:41:26.275296","rank":800,"profile_picture":"http://forum.jquery.com/viewImage.do?fileId=14737000005241509&forumGroupId=14737000000003003"}));
+	window.location.href = "./home.html";
 }
 if (pageName == "profile.html") {
 	window.addEventListener( "load", function () {
