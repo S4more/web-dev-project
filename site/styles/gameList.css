@@ -34,7 +34,12 @@ body {
 	opacity: 1;
 	transition: visibility 0s, opacity .6s ease-in-out;
 	color: black;
+}
+
+.card .hidden p{
+	margin-top: 30px;
 	background-color: white;
+	color: black;
 }
 
 /*
