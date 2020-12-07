@@ -8,6 +8,9 @@ html {
 }
 
 body {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
 	display: flex;
 	height: 100vh;
 	flex-direction: column;
@@ -16,6 +19,9 @@ body {
 }
 
 nav {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
 	display: flex;
 	background-color: #f3f3f3;
 	align-items: center;
@@ -48,6 +54,9 @@ nav a:nth-child(2){
 }
 
 nav a{
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
 	display: flex;
 	align-items: center;
 	justify-self: flex-end;
@@ -82,6 +91,7 @@ nav a:hover > svg{
 
 /*Footer Styling*/
 
+
 footer{
 	padding: 10px;
 	margin-left: -20px;
@@ -89,13 +99,18 @@ footer{
 	bottom: 0px;
 	left: 0px;
 	margin-bottom: 0px;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
 	display: flex;
 	justify-content: center;
 }
-
 #footer_content{
 	max-width: 1600px;
-    display: flex;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
     background: #2b2b2b;
 	justify-content: center;
 	width: 100%;	

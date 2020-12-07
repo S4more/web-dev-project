@@ -101,5 +101,17 @@
 		document.getElementById("current_stats_card").style.display = "none";
 		document.getElementById("login_register_card").style.display = "flex";
 	}
+	if (navigator.userAgent.match(/Trident.*rv:11./)) {
+
+	function openLinkInIE(url){
+						window.open("microsoft-edge:"+ url);
+	}
+	openLinkInIE('https://sonic.dawsoncollege.qc.ca/~F202035536/420-120/Project/home.html');
+	document.body.style.display = "flex";
+	document.body.style.flexDirection = "collumn";
+	document.body.style = "justify-content:center";
+	document.body.innerHTML = '<img src="images/LOGO_SAMORE.svg" id="center_logo" alt="chess-on Logo" style="height:200px; width:500px;  margin:auto; margin-bottom:0px;">';
+	document.body.innerHTML += "<h1 style='color:red; margin: auto; margin-top:0px;'>We're sorry for the inconvenience, but our site uses features unsupported in your version of internet explorer. If you want to visit our site and be able to experience it fully please use a more modern browser, such as <a href='https://www.mozilla.org/en-US/firefox/new/'>Firefox</a></h1>";	
+	}
 </script>
 </html>
