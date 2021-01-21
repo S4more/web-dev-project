@@ -1,11 +1,13 @@
 import psycopg2, psycopg2.extras, psycopg2.errors
+import config as credentials
 
 class Database:
     def __init__(self, ip, port):
-        self.connector = psycopg2.connect(user="u0_a340",
+        self.connector = psycopg2.connect(user=credentials.username,
         host = ip,
         port = port,
-        database = "chess")
+        password = credentials.password,
+        database = credentials.databaseName)
         self.cursor = self.connector.cursor(cursor_factory= psycopg2.extras.RealDictCursor)
         
     #      Users Scheme:
@@ -62,5 +64,5 @@ class Database:
         return False
 
 if __name__ == "__main__":
-    database = Database("192.168.2.12", 5432)
+    database = Database("localhost", 5432)
     print(database.connectUser("guilherme", "123"))

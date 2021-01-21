@@ -1,36 +1,31 @@
 from Database import Database
+import datetime
 from player import Player
-from board import Board, FullBoardError, PlayerAlreadyInBoard, WrongTurn, InsuficientPlayers
-from _thread import start_new_thread
-import socket
+from board import Board, FullBoardError, PlayerAlreadyInBoard, WrongTurn, InsuficientPlayers, EmptyBoard
 import json
 import sys, traceback
 import time
-#Simple Socket server for chess web-admin project.
-#
+import asyncio
+import websockets, websockets.exceptions
+from _thread import start_new_thread
+
 class Server:
     def __init__(self, ip, port):
-        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.ip = ip
+        self.ll = []
         self.matches = {}
         self.connections = {}
+        self.spectators = {}
         self.timeoutTime = int(60 / 0.5)
-        self.database = Database(ip, port)
+        self.database = Database(self.ip, port)
 
-        try:
-            self.s.bind(("", 5555))
-        except socket.error as e:
-            str(e)
-
-        self.s.listen(2)
     
-    def request_validation(self, data):
-        #get_moves : [from, to] -> [str, str]
-        if "get_moves" in data:
+    async def request_validation(self, data, websocket):
+        action = data["action"]
+        if "get_moves" == action:
             for i in range(0, self.timeoutTime):
                 try:
-                    player = self.connections[data['player_id']]
+                    player = self.connections[websocket]
                     return player.board.getMoves(player.name)
                 except WrongTurn:
                     # It's the player turn and there is no reason to ask for moves.
@@ -39,12 +34,10 @@ class Server:
                     return -1
 
                 except Exception as e:
-                    #print(data['player_id'], e.message)
                     time.sleep(0.5)
-            print("time out")
             return -1
             
-        elif "get_status" in data:
+        elif "get_status" == action:
             for i in range(0, self.timeoutTime):
                 if len(player.board.players) != 2: 
                     #print("waiting for player")
@@ -53,79 +46,85 @@ class Server:
                     return 1
             return -1
 
-        elif "get_matches" in data:
+        elif "get_matches" == action:
             message = {}
             for match in self.matches:
                 message[match] = self.matches[match].getInfo();
+                self.matches[match].spectators.append(websocket)
+            self.spectators[websocket] = [self.matches[match] for match in self.matches]
             if message == {}:
                 message["empty"] = "empty"
 
             return message
 
         #make_move : [from, to] -> [str,str]
-        elif "make_move" in data:
+        elif "make_move" == action:
             try:
-                player = self.connections[data['player_id']]
-                move = data["make_move"]
+                player = self.connections[websocket]
+                move = [data["from"], data["to"]]
                 player.board.movePiece(move, player.name)
                 state = data["board_state"]
                 player.board.state = state
+                await player.board.sendToOpponent(data["from"], data["to"]);
                 return 1
             except Exception as e:
-                #print(e.message)
+                print(e.message)
                 return -1
 
         #join_game : id -> str
-        elif "join_game" in data:
+        elif "game_joined" == action:
             try:
                 #print(data)
-                id = data["join_game"]
+                id = data["game_id"]
                 if id in self.matches:
-                    self.connections[data['player_id']] = Player(data['player_id'], 'black', self.matches[id])
+                    self.connections[websocket] = Player(websocket, data['player_id'], 'black', self.matches[id])
+                    await self.connections[websocket].init()
                     # If it is a reconnect and it's not the player turn 
                     # or if it's the first time joining the game.
-                    if self.matches[id].lastName == self.connections[data['player_id']].name or self.matches[id]._lastMove == []:
-                        return 1
-                    return 2
+                    if self.matches[id].lastName == self.connections[websocket].name or self.matches[id]._lastMove == []:
+                        return {"type": 1, "state":self.matches[id].state} 
+                    return {"type": 2, "state":self.matches[id].state} 
                 else:
                     print("The game does not exist")
                     return -1
 
             except Exception as e:
-                print("exception", e)
+                print(e)
                 return -1
 
         #create_game : id -> str
-        elif "create_game" in data:
+        elif "game_created" == action:
             #print(dat)
             #print("create game")
-            id = data['create_game']
+            id = data['game_id']
             if id not in self.matches:
                 board = Board(id)
                 self.matches[id] = board 
-                self.connections[data['player_id']] = Player(data['player_id'], 'white', board)
-                return 1
+                self.connections[websocket] = Player(websocket, data['player_id'], 'white', board)
+                await self.connections[websocket].init()
+                return {"type": 1, "state": board.state} 
             # Reconnects.
             else:
                 try:
-                    self.connections[data['player_id']] = Player(data['player_id'], 'white', self.matches[id])
+                    self.connections[websocket] = Player(websocket, data['player_id'], 'white', self.matches[id])
+                    await self.connections[websocket].init()
                     #If it's a reconnect and it's the opponent's turn
-                    if self.matches[id].lastName == self.connections[data['player_id']].name:
-                        return 1
-                    return 2
+                    if self.matches[id].lastName == self.connections[websocket].name:
+                        return {"type": 1, "state": self.matches[id].state}
+                    return {"type": 2, "state": self.matches[id].state} 
                 except Exception as e:
                     print(e)
                     return -1
 
-        elif "get_board_state" in data:
-            id = data["get_board_state"]
+        elif "get_board_state" == action:
+            id = data["board_id"]
             if id in self.matches:
                 return self.matches[id].state
             else:
                 return -1
 
-        elif "board_state" in data:
-            state = data["board_state"]
+        elif "board_state" == action:
+            state = data["state"]
             #state = [state[i:i+4] for i in range(0, len(state), 4)]
             id = data["room_id"]
             if id in self.matches:
@@ -137,7 +136,7 @@ class Server:
 
 
         #register: username, password
-        elif "register" in data:
+        elif "register" == action:
             if self.database.registerUser(data['username'], data['password']):
                 info = self.database.connectUser(data['username'], data['password'])
                 print(info)
@@ -146,104 +145,84 @@ class Server:
             else:
                 return -1
 
-        elif "login" in data:
+        elif "login" == action:
             info = self.database.connectUser(data['username'], data['password'])
             del info["password"]
             return info
             
 
-        elif "change_user" in data:
+        elif "change_user" == action:
             self.database.updateProfilePicture(data) 
-            return "Data changed successfully." 
-        
+            info = self.database.getUserInfo(data["user_id"]) 
+            del info["password"]
+            return info
+
         elif "spectate" in data:
             id = data["room_id"]
             if id in self.matches:
                 self.matches[id].spectators.append(socket)
-            else:
-                return -1
-
         else:
             print("non-identified POST")
             print(data)
             pass
 
-    def recvall(self, sock):
-        BUFF_SIZE = 2048 # 4 KiB
-        data = b''
-        while True:
-            part = sock.recv(BUFF_SIZE)
-            data += part
-            if len(part) < BUFF_SIZE:
-                # either 0 or end of data
-                break
-        return data
-    def threaded_handle_connection(self, conn, addr):
-        try:
-            data = self.recvall(conn).decode()
-            data = data.split("\n")[-1] #post request
-            data = json.loads(data)
-            print(data)
-            message = self.request_validation(data)
+    async def async_connection(self, websocket, path):
+        received = await websocket.recv()
+        received = json.loads(received)
+        message = await self.request_validation(received, websocket)
+        response = self.generateResponse(message, received)
+        await websocket.send(response)
 
-        except Exception as e:
-            print("disconecting")
-            conn.close()
-            
-
-        response = self.generateResponse(message)
-        try:
-            for info in response:
-                conn.send(str.encode(info))
-        except:
-            print("disconnected")
-        conn.close()
-    
-    def generateResponse(self, msg):
+    def generateResponse(self, ans, received):
         '''Creates the right headers so javascript will accept the informations.'''
-        #msg = "\"{\"answer\":\"{}\"}\"".format(msg)
-        msg = {"answer":msg}
-        msg = json.dumps(msg, default=str)
-        response_headers = {
-                'Content-Type': 'text/html; encoding=ut8',
-                'Content-Length': len(msg),
-                'Connection': 'close',
-                'Access-Control-Allow-Origin' : '*'
-                }
-        response_headers_raw = ''.join('%s: %s\r\n' % (k, v) for k, v in response_headers.items())
-        response_proto = 'HTTP/1.1'
-        response_status = '200'
-        response_status_text = 'OK'
-        r = '%s %s %s\r\n' % (response_proto, response_status, response_status_text)
-        return [r, response_headers_raw, '\r\n', msg]
+        try:
+            msg = {"action":received["action"], "answer" : ans}
+            msg = json.dumps(msg, default=str)
+            return msg
+        except:
+            return "Error"
+
+async def server(websocket, path):
+    try:
+        while True:
+            await serverH.async_connection(websocket, path)        
+    except websockets.exceptions.ConnectionClosedOK:
+        if websocket in serverH.connections:
+            try:
+                await serverH.connections[websocket].board.removePlayer(serverH.connections[websocket])
+            except EmptyBoard:
+                del serverH.matches[serverH.connections[websocket].board.id]
+            finally:
+                del serverH.connections[websocket]
+        elif websocket in serverH.spectators:
+            for board in serverH.spectators[websocket]:
+                board.spectators.remove(websocket)
 
 
-def threaded_games_checker(server):
+def removeInactiveGames():
     while True:
-        time.sleep(60)
-        print("Checking for inactive games")
+        toDelete = None
+        time.sleep(10)
+        for match in serverH.matches.copy():
+            print("verifying")
+            if serverH.matches[match].lastActionTime == None:
+                continue
 
-
+            if (datetime.datetime.now() - serverH.matches[match].lastActionTime).total_seconds() > 60:
+                print("deleted")
+                del serverH.matches[match]
+        
 if __name__ == '__main__':
     try:
-        server = Server(sys.argv[1], int(sys.argv[2]))
+        serverH = Server(sys.argv[1], int(sys.argv[2]))
         print(f"Attatched to database on port {sys.argv[2]}.")
     except Exception as e:
         print("Couldn't attach to local database.")
         print("Usage: server.py IP PORT")
         sys.exit()
 
-    #For some reason, I can't listen inside class. Maybe it's some thread/self problem 
-    while True:
-        try:
-            '''listen for new connections'''
-            conn, addr = server.s.accept()
-            # Creates a thread for each new connection. The thread should exist for less than a second
-            # So it's not really an issue.
-            start_new_thread(server.threaded_handle_connection, (conn, addr))
+start_server = websockets.serve(server, "localhost", 5000)
+start_new_thread(removeInactiveGames, ())
+asyncio.get_event_loop().run_until_complete(start_server)
+asyncio.get_event_loop().run_forever()
 
-        except Exception as e:
-            #print(e)
-            traceback.print_exc(file=sys.stdout)
-            conn.close()
-            break
